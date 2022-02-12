@@ -1,0 +1,17 @@
+{
+  "name": "gif-cropper",
+  "version": "1.0.0",
+  "main": "src/index.js",
+  "repository": "git@github.com:STDSuperman/gif-cropper.git",
+  "author": "STDSuperman <2750556766@qq.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/cropperjs": "^1.3.0",
+    "@types/gif.js": "^0.2.2"
+  },
+  "dependencies": {
+    "cropperjs": "^1.5.12",
+    "gif.js": "^0.2.0",
+    "gifuct-js": "^2.1.2"
+  }
+}

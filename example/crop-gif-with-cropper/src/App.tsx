@@ -1,0 +1,56 @@
+import { useState, useEffect, useCallback, useRef } from 'react'
+import './App.css'
+import Crop from 'react-cropper';
+import 'cropperjs/dist/cropper.css';
+import { GIFCropper } from 'gif-cropper'
+
+function App() {
+  const cropperInstanceRef = useRef<Cropper>();
+  const [targetGif] = useState('http://img.soogif.com/pGyqIgTKa0Q6AgwVqz4fmNu45wdM7wNC.gif_s400x0');
+  const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
+  const isCroppedRef = useRef(false);
+  
+  const onCrop = useCallback(() => {
+    const cropperInstance = cropperInstanceRef.current;
+    if (cropperInstance && !isCroppedRef.current) {
+      isCroppedRef.current = true;
+      console.log(cropperInstance);
+      const gifCropper = new GIFCropper({
+        // cropperInstance: cropperInstance
+        src: targetGif
+      });
+      setGifCropperInstance(gifCropper);
+      gifCropper.crop();
+    }
+  }, [cropperInstanceRef.current, isCroppedRef.current])
+
+  useEffect(() => {
+    if (cropperInstanceRef.current) {
+      cropperInstanceRef.current.crop();
+    }
+  }, [cropperInstanceRef.current]);
+
+  return (
+    <div className="App">
+      <Crop
+        style={{ height: 400, width: '100%' }}
+        initialAspectRatio={1}
+        src={targetGif}
+        viewMode={1}
+        guides={true}
+        minCropBoxHeight={10}
+        minCropBoxWidth={10}
+        background={false}
+        responsive={true}
+        autoCropArea={1}
+        checkOrientation={false}
+        crop={onCrop}
+        onInitialized={(instance) => {
+          cropperInstanceRef.current = instance;
+        }}
+      />
+    </div>
+  )
+}
+
+export default App
