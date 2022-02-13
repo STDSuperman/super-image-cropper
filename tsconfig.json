@@ -12,7 +12,8 @@
     "module": "ESNext",
     "moduleResolution": "Node",
     "resolveJsonModule": true,
-    "declaration": true
+    "declaration": true,
+    "outDir": "dist"
   },
   "include": ["src"]
 }

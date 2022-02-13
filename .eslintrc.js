@@ -7,7 +7,7 @@ module.exports = {
       modules: true
     },
     warnOnUnsupportedTypeScriptVersion: false,
-    project: "./tsconfig.json"
+    project: './tsconfig.json'
   },
   env: {
     node: true,
@@ -19,4 +19,4 @@ module.exports = {
     'no-unused-vars': [1, { varsIgnorePattern: '.*', args: 'none' }]
   },
   overrides: []
-}
+};

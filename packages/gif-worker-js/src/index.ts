@@ -1,11 +1,11 @@
-import worker from './lib/gif.worker'
+import worker from './lib/gif.worker';
 
 export const transformToUrl = (): string => {
   const gifWorker2Blob = new Blob([GifWorker], {
     type: 'application/javascript'
-  })
-  const workerScript = URL.createObjectURL(gifWorker2Blob)
-  return workerScript
-}
+  });
+  const workerScript = URL.createObjectURL(gifWorker2Blob);
+  return workerScript;
+};
 
-export const GifWorker = worker
+export const GifWorker = worker;
