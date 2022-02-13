@@ -1,34 +1,39 @@
 import { useState, useEffect, useCallback, useRef } from 'react'
 import './App.css'
-import Crop from 'react-cropper';
-import 'cropperjs/dist/cropper.css';
-import { GIFCropper } from 'gif-cropper'
+import Crop from 'react-cropper'
+import 'cropperjs/dist/cropper.css'
+import { GIFCropper, CustomCropper } from 'gif-cropper'
 
 function App() {
-  const cropperInstanceRef = useRef<Cropper>();
-  const [targetGif] = useState('http://img.soogif.com/pGyqIgTKa0Q6AgwVqz4fmNu45wdM7wNC.gif_s400x0');
-  const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
-  const isCroppedRef = useRef(false);
+  const cropperInstanceRef = useRef<Cropper>()
+  const [targetGif] = useState(
+    'http://img.soogif.com/pGyqIgTKa0Q6AgwVqz4fmNu45wdM7wNC.gif_s400x0'
+  )
+  const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>()
+  const isCroppedRef = useRef(false)
 
-  const onCrop = useCallback(() => {
-    const cropperInstance = cropperInstanceRef.current;
-    if (cropperInstance && !isCroppedRef.current) {
-      isCroppedRef.current = true;
-      console.log(cropperInstance);
-      const gifCropper = new GIFCropper({
-        // cropperInstance: cropperInstance
-        src: targetGif
-      });
-      setGifCropperInstance(gifCropper);
-      gifCropper.crop();
-    }
-  }, [cropperInstanceRef.current, isCroppedRef.current])
+  const onCrop = useCallback(
+    (isManual = false) => {
+      const cropperInstance = cropperInstanceRef.current
+      if (cropperInstance && (!isCroppedRef.current || isManual)) {
+        isCroppedRef.current = true
+        console.log(cropperInstance)
+        const gifCropper = new GIFCropper({
+          cropperInstance: cropperInstance as CustomCropper,
+          src: targetGif
+        })
+        setGifCropperInstance(gifCropper)
+        gifCropper.crop()
+      }
+    },
+    [cropperInstanceRef.current, isCroppedRef.current]
+  )
 
   useEffect(() => {
     if (cropperInstanceRef.current) {
-      cropperInstanceRef.current.crop();
+      cropperInstanceRef.current.crop()
     }
-  }, [cropperInstanceRef.current]);
+  }, [cropperInstanceRef.current])
 
   return (
     <div className="App">
@@ -44,11 +49,12 @@ function App() {
         responsive={true}
         autoCropArea={1}
         checkOrientation={false}
-        crop={onCrop}
-        onInitialized={(instance) => {
-          cropperInstanceRef.current = instance;
+        crop={() => onCrop()}
+        onInitialized={instance => {
+          cropperInstanceRef.current = instance
         }}
       />
+      <button onClick={() => onCrop(true)}>裁剪</button>
     </div>
   )
 }
