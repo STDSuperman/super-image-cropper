@@ -23,7 +23,7 @@ export interface ICropOpts {
   scaleY?: number;
   left?: number;
   top?: number;
-  background?: boolean;
+  background?: string;
   compress?: boolean;
 }
 
@@ -58,8 +58,8 @@ export class GIFCropper {
 
   public async crop() {
     await this.decodeGIF();
-    await this.cropFrames();
-    await this.saveGif();
+    const { resultFrames, frameDelays } = await this.cropFrames();
+    await this.saveGif(resultFrames, frameDelays);
   }
 
   private createCropperInstance(options: ICropperOptions): CustomCropper {
@@ -82,7 +82,7 @@ export class GIFCropper {
     }
     return new CustomCropper(this.imageInstance, {
       viewMode: 1,
-      background: options.cropOpts?.background,
+      background: !!options.cropOpts?.background,
       data: options.cropOpts,
       autoCrop: true
     });
@@ -104,8 +104,13 @@ export class GIFCropper {
     return frameCropper.bootstrap();
   }
 
-  private async saveGif() {
-    const syntheticGIF = new SyntheticGIF(this.frames);
+  private async saveGif(resultFrames: ImageData[], frameDelays: number[]) {
+    const syntheticGIF = new SyntheticGIF({
+      frames: resultFrames,
+      cropperInstance: this.cropperInstance,
+      cropperOptions: this.cropperOptions,
+      frameDelays
+    });
     return syntheticGIF.bootstrap();
   }
 }

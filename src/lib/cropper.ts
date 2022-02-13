@@ -11,23 +11,23 @@ export class FrameCropper {
   private frames: ParsedFrame[];
   private cropperInstance: CustomCropper;
   private cropperOptions: ICropperOptions;
-  private convertCanvas!: HTMLCanvasElement;
+  private convertorCanvas!: HTMLCanvasElement;
   private containerCanvas!: HTMLCanvasElement;
   private convertCtx!: CanvasRenderingContext2D;
   private containerCtx!: CanvasRenderingContext2D;
-  private cropBoxData;
   private canvasBoxData;
   private cropArea;
   private offsetX = 0;
   private offsetY = 0;
   private containerCenterX = 0;
   private containerCenterY = 0;
+  private resultFrames: ImageData[] = [];
+  private frameDelays: number[] = [];
 
   constructor({ cropperOptions, cropperInstance, frames }: IFrameCropperProps) {
     this.frames = frames;
     this.cropperInstance = cropperInstance;
     this.cropperOptions = cropperOptions;
-    this.cropBoxData = this.cropperInstance.getCropBoxData();
     this.canvasBoxData = this.cropperInstance.getCanvasData();
     this.cropArea = this.cropperInstance.getData();
     console.log(this.cropperInstance.getData());
@@ -39,24 +39,49 @@ export class FrameCropper {
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
       const frameImgData = this.frameToImgData(this.convertCtx, currentFrame);
+
+      // 添加gif背景颜色
+      if(frameIdx == 0 && this.containerCtx.globalCompositeOperation) {
+        this.containerCtx.fillStyle = this.cropperOptions.cropOpts?.background || "";
+        this.containerCtx.globalCompositeOperation = "destination-over";
+        this.containerCtx.fillRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
+        this.containerCtx.globalCompositeOperation = "source-over";
+      }
+      // 裁剪转换当前帧
       this.transformFrame(currentFrame, frameImgData);
       frameIdx++;
     }
+
+    return {
+      resultFrames: this.resultFrames,
+      frameDelays: this.frameDelays
+    };
   }
+
 
   private transformFrame(frame: ParsedFrame, frameImgData: ImageData | undefined): void {
     if (!frameImgData) return;
     const cropOutputData = this.cropperInstance.getData();
     this.containerCtx.save();
-    this.containerCtx.translate(0, 0);
+    this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
     this.containerCtx.rotate((cropOutputData.rotate * Math.PI) / 180);
     this.containerCtx.scale(cropOutputData.scaleX, cropOutputData.scaleY);
     this.containerCtx.drawImage(
       this.drawImgDataToCanvas(frame, frameImgData),
-      -cropOutputData.x,
-      -cropOutputData.y
+      -this.convertorCanvas.width / 2,
+      -this.convertorCanvas.height / 2
     );
     this.containerCtx.restore();
+
+    const imageData = this.containerCtx.getImageData(
+      this.cropArea.x + this.offsetX,
+      this.cropArea.y + this.offsetY,
+      this.cropArea.width,
+      this.cropArea.height
+    );
+
+    this.resultFrames.push(imageData);
+    this.frameDelays.push(frame.delay);
   }
 
   private drawImgDataToCanvas(frame: ParsedFrame, frameImgData: ImageData): CanvasImageSource {
@@ -67,21 +92,21 @@ export class FrameCropper {
       this.canvasBoxData.naturalHeight
     );
     this.convertCtx.putImageData(frameImgData, frame.dims.left, frame.dims.top);
-    return this.convertCanvas;
+    return this.convertorCanvas;
   }
 
   private setupCanvas() {
     const containerCanvas = (this.containerCanvas = document.createElement('canvas'));
-    const convertCanvas = (this.convertCanvas = document.createElement('canvas'));
+    const convertorCanvas = (this.convertorCanvas = document.createElement('canvas'));
 
     const containerCtx = containerCanvas.getContext('2d');
-    const convertCtx = convertCanvas.getContext('2d');
+    const convertCtx = convertorCanvas.getContext('2d');
     containerCtx && (this.containerCtx = containerCtx);
     convertCtx && (this.convertCtx = convertCtx);
 
     this.setCanvasWH();
 
-    document.body.appendChild(convertCanvas);
+    document.body.appendChild(convertorCanvas);
     document.body.appendChild(containerCanvas);
   }
 
@@ -111,8 +136,8 @@ export class FrameCropper {
     );
     this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
 
-    this.convertCanvas.width = this.canvasBoxData.naturalWidth;
-    this.convertCanvas.height = this.canvasBoxData.naturalHeight;
+    this.convertorCanvas.width = this.canvasBoxData.naturalWidth;
+    this.convertorCanvas.height = this.canvasBoxData.naturalHeight;
   }
 
   private frameToImgData(ctx: CanvasRenderingContext2D | null, frame: ParsedFrame) {
