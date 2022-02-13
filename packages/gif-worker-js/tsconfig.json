@@ -3,7 +3,6 @@
     "target": "ES5",
     "lib": ["DOM", "DOM.Iterable", "ESNext"],
     "allowJs": true,
-    "skipLibCheck": false,
     "esModuleInterop": false,
     "allowSyntheticDefaultImports": true,
     "strict": true,
@@ -12,7 +11,8 @@
     "moduleResolution": "Node",
     "noEmit": false,
     "outDir": "dist",
-    "declaration": true
+    "declaration": true,
+    "skipLibCheck": true,
   },
-  "include": ["src"]
+  "include": ["./src"]
 }

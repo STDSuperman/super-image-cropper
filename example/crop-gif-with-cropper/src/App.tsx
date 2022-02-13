@@ -9,7 +9,7 @@ function App() {
   const [targetGif] = useState('http://img.soogif.com/pGyqIgTKa0Q6AgwVqz4fmNu45wdM7wNC.gif_s400x0');
   const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
   const isCroppedRef = useRef(false);
-  
+
   const onCrop = useCallback(() => {
     const cropperInstance = cropperInstanceRef.current;
     if (cropperInstance && !isCroppedRef.current) {

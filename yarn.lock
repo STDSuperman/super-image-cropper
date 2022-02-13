@@ -19,6 +19,11 @@ cropperjs@*, cropperjs@^1.5.12:
   resolved "https://registry.npmmirror.com/cropperjs/-/cropperjs-1.5.12.tgz#d9c0db2bfb8c0d769d51739e8f916bbc44e10f50"
   integrity sha512-re7UdjE5UnwdrovyhNzZ6gathI4Rs3KGCBSc8HCIjUo5hO42CtzyblmWLj6QWVw7huHyDMfpKxhiO2II77nhDw==
 
+gif-build-worker-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
+  integrity sha512-LmWDYwHJ75dQgrwdfgGfN0H3BN1YGR2dvKIFVCK6JEs03ZBBwGBxLMydwWN/TbDi0DnagV202250VQ4DMTZIrA==
+
 gif.js@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npmmirror.com/gif.js/-/gif.js-0.2.0.tgz#615e6e3788850cd3a20c85fe9f09539e784903e8"

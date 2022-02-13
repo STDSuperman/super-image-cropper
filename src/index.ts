@@ -1,7 +1,8 @@
 import Cropper from 'cropperjs'
-import { Decoder, IFrames } from './lib/decoder'
-import GIF from 'gif.js';
-import { transformToUrl as gifWorkerTransformToUrl } from 'gif-worker-js'
+import { Decoder } from './lib/decoder'
+import { SyntheticGIF } from './lib/synthetic-gif'
+import { FrameCropper } from './lib/cropper';
+import { ParsedFrame } from 'gifuct-js'
 
 export class CustomCropper extends Cropper {
   public url = '';
@@ -39,7 +40,7 @@ export class GIFCropper {
   private cropperInstance: CustomCropper
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';
-  private frames: IFrames = [];
+  private frames: ParsedFrame[] = [];
   constructor(cropperOptions: ICropperOptions) {
     let options = cropperOptions;
 
@@ -55,6 +56,7 @@ export class GIFCropper {
 
   public async crop() {
     await this.decodeGIF();
+    await this.cropFrames();
     await this.saveGif();
   }
 
@@ -86,18 +88,22 @@ export class GIFCropper {
 
   private async decodeGIF() {
     const decoder = new Decoder(this.cropperOptions.src || this.cropperInstance.url);
-    const decodedGIFData = await decoder.decode();
-    this.frames = decodedGIFData.frames;
+    const decodedGIFFrames = await decoder.decompressFrames();
+    this.frames = decodedGIFFrames;
+    return decodedGIFFrames;
+  }
+
+  private async cropFrames() {
+    const frameCropper = new FrameCropper({
+      cropperOptions: this.cropperOptions,
+      cropperInstance: this.cropperInstance,
+      frames: this.frames
+    });
+    return frameCropper.bootstrap();
   }
 
   private async saveGif() {
-    const gifWorkerUrl = gifWorkerTransformToUrl();
-    const gif = new GIF({
-      workers: 2,
-      quality: 10,
-      workerScript: gifWorkerUrl
-    });
-    this.frames.forEach(frame => {});
-    console.log(gif);
+    const syntheticGIF = new SyntheticGIF(this.frames);
+    return syntheticGIF.bootstrap();
   }
 }
