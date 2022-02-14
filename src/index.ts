@@ -13,7 +13,8 @@ export class CustomCropper extends Cropper {
 export interface ICropperOptions {
   cropperInstance?: CustomCropper;
   src?: string;
-  cropOpts?: ICropOpts;
+  cropperJsOpts?: ICropOpts;
+  compress?: boolean;
 }
 
 export interface ICropOpts {
@@ -24,20 +25,21 @@ export interface ICropOpts {
   left?: number;
   top?: number;
   background?: string;
-  compress?: boolean;
+  rotate?: number;
 }
 
 export class GIFCropper {
   private cropperOptions: ICropperOptions = {
-    cropOpts: {
+    cropperJsOpts: {
       width: 100,
       height: 100,
       scaleX: 1,
       scaleY: 1,
       left: 0,
       top: 0,
-      compress: false
-    }
+      rotate: 0
+    },
+    compress: false
   };
   private cropperInstance: CustomCropper;
   private imageInstance?: HTMLImageElement;
@@ -56,10 +58,10 @@ export class GIFCropper {
     this.cropperOptions = Object.assign(this.cropperOptions, options);
   }
 
-  public async crop() {
+  public async crop(): Promise<string> {
     await this.decodeGIF();
     const { resultFrames, frameDelays } = await this.cropFrames();
-    await this.saveGif(resultFrames, frameDelays);
+    return this.saveGif(resultFrames, frameDelays);
   }
 
   private createCropperInstance(options: ICropperOptions): CustomCropper {
@@ -80,12 +82,15 @@ export class GIFCropper {
       this.preImageSrc = options.src;
       this.imageInstance.src = options.src;
     }
-    return new CustomCropper(this.imageInstance, {
+    const newInstance = new CustomCropper(this.imageInstance, {
       viewMode: 1,
-      background: !!options.cropOpts?.background,
-      data: options.cropOpts,
+      background: !!options.cropperJsOpts?.background,
+      data: options.cropperJsOpts,
       autoCrop: true
     });
+    newInstance.setData(this.cropperOptions.cropperJsOpts || {});
+    console.log(newInstance.getData(), newInstance)
+    return newInstance;
   }
 
   private async decodeGIF() {

@@ -26,27 +26,26 @@ export class SyntheticGIF {
     this.cropperInstance = cropperInstance;
   }
 
-  public async bootstrap() {
-    const gifWorkerUrl = gifWorkerTransformToUrl();
-    const gif = new GIF({
-      workers: 2,
-      quality: 10,
-      workerScript: gifWorkerUrl,
-      width: this.cropArea.width,
-      height: this.cropArea.height
-    });
+  public bootstrap(): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const gifWorkerUrl = gifWorkerTransformToUrl();
+      const gif = new GIF({
+        workers: 2,
+        quality: 10,
+        workerScript: gifWorkerUrl,
+        width: this.cropArea.width,
+        height: this.cropArea.height
+      });
+      gif.on('finished', (blob: Blob) => {
+        const blobUrl = window.URL.createObjectURL(blob);
+        resolve(blobUrl);
+      })
 
-    gif.on('finished', (blob: Blob) => {
-      const img = document.createElement('img');
-      img.src = window.URL.createObjectURL(blob);
-      document.body.appendChild(img);
-      console.log(blob);
+      this.frames.forEach((frame, idx) => {
+        gif.addFrame(frame, { delay: this.frameDelays[idx] });
+      });
+
+      gif.render();
     })
-
-    this.frames.forEach((frame, idx) => {
-      gif.addFrame(frame, { delay: this.frameDelays[idx] });
-    });
-
-    gif.render();
   }
 }

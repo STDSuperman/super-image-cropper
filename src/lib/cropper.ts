@@ -28,9 +28,13 @@ export class FrameCropper {
     this.frames = frames;
     this.cropperInstance = cropperInstance;
     this.cropperOptions = cropperOptions;
-    this.canvasBoxData = this.cropperInstance.getCanvasData();
-    this.cropArea = this.cropperInstance.getData();
-    console.log(this.cropperInstance.getData());
+    // 兼容未配合 cropperJs 场景
+    this.canvasBoxData = Object.assign({
+      naturalHeight: this.cropperOptions.cropperJsOpts?.height,
+      naturalWidth: this.cropperOptions.cropperJsOpts?.width
+    }, this.cropperInstance.getCanvasData());
+
+    this.cropArea = Object.assign(this.cropperOptions.cropperJsOpts, this.cropperInstance.getData());
     this.setupCanvas();
   }
 
@@ -42,7 +46,7 @@ export class FrameCropper {
 
       // 添加gif背景颜色
       if(frameIdx == 0 && this.containerCtx.globalCompositeOperation) {
-        this.containerCtx.fillStyle = this.cropperOptions.cropOpts?.background || "";
+        this.containerCtx.fillStyle = this.cropperOptions.cropperJsOpts?.background || "";
         this.containerCtx.globalCompositeOperation = "destination-over";
         this.containerCtx.fillRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
         this.containerCtx.globalCompositeOperation = "source-over";
@@ -61,7 +65,7 @@ export class FrameCropper {
 
   private transformFrame(frame: ParsedFrame, frameImgData: ImageData | undefined): void {
     if (!frameImgData) return;
-    const cropOutputData = this.cropperInstance.getData();
+    const cropOutputData = this.cropArea;
     this.containerCtx.save();
     this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
     this.containerCtx.rotate((cropOutputData.rotate * Math.PI) / 180);

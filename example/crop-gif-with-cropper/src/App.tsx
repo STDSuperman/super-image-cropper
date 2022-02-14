@@ -17,11 +17,19 @@ function App() {
         isCroppedRef.current = true;
         console.log(cropperInstance);
         const gifCropper = new GIFCropper({
-          cropperInstance: cropperInstance as CustomCropper,
-          src: targetGif
+          // cropperInstance: cropperInstance as CustomCropper,
+          src: targetGif,
+          cropperJsOpts: {
+            width: 50,
+            height: 50,
+          }
         });
         setGifCropperInstance(gifCropper);
-        gifCropper.crop();
+        gifCropper.crop().then(blobUrl => {
+          const img = document.createElement('img');
+          img.src = blobUrl;
+          document.body.appendChild(img);
+        });
       }
     },
     [cropperInstanceRef.current, isCroppedRef.current]
