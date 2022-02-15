@@ -20,8 +20,9 @@ function App() {
           // cropperInstance: cropperInstance as CustomCropper,
           src: targetGif,
           cropperJsOpts: {
-            width: 50,
-            height: 50,
+            width: 200,
+            height: 200,
+            rotate: 90
           }
         });
         setGifCropperInstance(gifCropper);

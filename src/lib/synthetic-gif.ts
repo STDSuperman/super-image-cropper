@@ -21,6 +21,10 @@ export class SyntheticGIF {
     frameDelays
   }: IFrameCropperProps) {
     this.cropArea = cropperInstance.getData();
+    // 兼容未结合 cropperJs 场景
+    if (!this.cropArea.width) this.cropArea.width = cropperOptions.cropperJsOpts?.width || 0;
+    if (!this.cropArea.height) this.cropArea.height = cropperOptions.cropperJsOpts?.height || 0;
+
     this.frames = frames;
     this.frameDelays = frameDelays;
     this.cropperInstance = cropperInstance;

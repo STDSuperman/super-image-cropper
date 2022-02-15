@@ -46,16 +46,16 @@ export class GIFCropper {
   private preImageSrc = '';
   private frames: ParsedFrame[] = [];
   constructor(cropperOptions: ICropperOptions) {
-    let options = cropperOptions;
 
     // ensure cropperInstance exist.
-    if (!options.cropperInstance) {
+    if (!cropperOptions.cropperInstance) {
       this.cropperInstance = this.createCropperInstance(cropperOptions);
     } else {
-      this.cropperInstance = options.cropperInstance;
+      this.cropperInstance = cropperOptions.cropperInstance;
     }
+    // this.cropperOptions.cropperJsOpts = Object.assign({}, this.cropperOptions.cropperJsOpts, cropperOptions.cropperJsOpts);
 
-    this.cropperOptions = Object.assign(this.cropperOptions, options);
+    console.log(this.cropperOptions);
   }
 
   public async crop(): Promise<string> {
