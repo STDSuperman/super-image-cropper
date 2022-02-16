@@ -3,6 +3,7 @@ import './App.css';
 import Crop from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
 import { GIFCropper, CustomCropper } from 'gif-cropper';
+import Cropper from 'cropperjs';
 
 function App() {
   const cropperInstanceRef = useRef<Cropper>();
@@ -21,8 +22,7 @@ function App() {
           src: targetGif,
           cropperJsOpts: {
             width: 200,
-            height: 200,
-            rotate: 90
+            height: 200
           }
         });
         setGifCropperInstance(gifCropper);

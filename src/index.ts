@@ -4,10 +4,11 @@ import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
 import { ParsedFrame } from 'gifuct-js';
 
-export class CustomCropper extends Cropper {
-  public url = '';
-  public cropBoxData!: Cropper.ImageData;
-  public canvasData!: Cropper.ImageData;
+export interface CustomCropper extends Cropper {
+  url: '';
+  cropBoxData: Cropper.ImageData;
+  canvasData: Cropper.ImageData;
+  cropper?: HTMLDivElement
 }
 
 export interface ICropperOptions {
@@ -41,56 +42,72 @@ export class GIFCropper {
     },
     compress: false
   };
-  private cropperInstance: CustomCropper;
+  private cropperInstance!: CustomCropper;
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';
   private frames: ParsedFrame[] = [];
-  constructor(cropperOptions: ICropperOptions) {
-
-    // ensure cropperInstance exist.
-    if (!cropperOptions.cropperInstance) {
-      this.cropperInstance = this.createCropperInstance(cropperOptions);
-    } else {
-      this.cropperInstance = cropperOptions.cropperInstance;
-    }
-    // this.cropperOptions.cropperJsOpts = Object.assign({}, this.cropperOptions.cropperJsOpts, cropperOptions.cropperJsOpts);
-
-    console.log(this.cropperOptions);
-  }
+  constructor(private inputCropperOptions: ICropperOptions) {}
 
   public async crop(): Promise<string> {
+    await this.init();
     await this.decodeGIF();
+    console.log('解码完毕')
     const { resultFrames, frameDelays } = await this.cropFrames();
+    console.log('裁剪完毕', resultFrames)
     return this.saveGif(resultFrames, frameDelays);
   }
 
-  private createCropperInstance(options: ICropperOptions): CustomCropper {
-    if (!options.src) {
-      throw new Error('Option src must be specified.');
+  private async init() {
+    // 合并初始值
+    this.cropperOptions.cropperJsOpts = Object.assign(this.cropperOptions.cropperJsOpts, this.inputCropperOptions.cropperJsOpts);
+    this.cropperOptions = Object.assign(this.inputCropperOptions, this.cropperOptions);
+
+    // ensure cropperInstance exist.
+    if (!this.inputCropperOptions.cropperInstance) {
+      this.cropperInstance = await this.createCropperInstance(this.cropperOptions);
+    } else {
+      this.cropperInstance = this.inputCropperOptions.cropperInstance;
     }
-    const img = document.createElement('img');
-    img.src = options.src;
-    if (this.imageInstance) {
-      document.body.removeChild(this.imageInstance);
-      this.cropperInstance?.destroy();
-    }
-    this.imageInstance = document.createElement('img');
-    this.imageInstance.src = options.src;
-    this.imageInstance.style.display = 'none';
-    document.body.append(this.imageInstance);
-    if (this.preImageSrc !== options.src) {
-      this.preImageSrc = options.src;
+  }
+
+  private createCropperInstance(options: ICropperOptions): Promise<CustomCropper> {
+    return new Promise<CustomCropper>((resolve, reject) => {
+      if (!options.src) {
+        throw new Error('Option src must be specified.');
+      }
+      const img = document.createElement('img');
+      img.src = options.src;
+      if (this.imageInstance) {
+        document.body.removeChild(this.imageInstance);
+        this.cropperInstance?.destroy();
+      }
+      // 创建新的 image 图片 DOM
+      this.imageInstance = document.createElement('img');
       this.imageInstance.src = options.src;
-    }
-    const newInstance = new CustomCropper(this.imageInstance, {
-      viewMode: 1,
-      background: !!options.cropperJsOpts?.background,
-      data: options.cropperJsOpts,
-      autoCrop: true
-    });
-    newInstance.setData(this.cropperOptions.cropperJsOpts || {});
-    console.log(newInstance.getData(), newInstance)
-    return newInstance;
+      this.imageInstance.style.display = 'none';
+      document.body.append(this.imageInstance);
+      if (this.preImageSrc !== options.src) {
+        this.preImageSrc = options.src;
+        this.imageInstance.src = options.src;
+      }
+
+      // 实例化一个 cropper
+      const newInstance = new Cropper(this.imageInstance, {
+        viewMode: 1,
+        background: !!options.cropperJsOpts?.background,
+        data: options.cropperJsOpts,
+        autoCrop: true
+      }) as CustomCropper;
+
+      // 隐藏裁剪 DOM
+      this.imageInstance.addEventListener('ready', function () {
+        if (newInstance.cropper) {
+          newInstance.cropper.style.display = 'none';
+          resolve(newInstance);
+        }
+      });
+
+    })
   }
 
   private async decodeGIF() {

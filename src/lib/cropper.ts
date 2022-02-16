@@ -33,11 +33,7 @@ export class FrameCropper {
       naturalHeight: this.cropperOptions.cropperJsOpts?.height,
       naturalWidth: this.cropperOptions.cropperJsOpts?.width
     }, this.cropperInstance.getCanvasData());
-
     this.cropArea = this.cropperInstance.getData();
-    // 兼容未结合 cropperJs 场景
-    if (!this.cropArea.width) this.cropArea.width = this.cropperOptions.cropperJsOpts?.width || 0;
-    if (!this.cropArea.height) this.cropArea.height = this.cropperOptions.cropperJsOpts?.height || 0;
 
     this.setupCanvas();
   }
@@ -72,7 +68,6 @@ export class FrameCropper {
     const cropOutputData = this.cropArea;
     this.containerCtx.save();
     this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
-    console.log(cropOutputData)
     this.containerCtx.rotate((cropOutputData.rotate * Math.PI) / 180);
     this.containerCtx.scale(cropOutputData.scaleX, cropOutputData.scaleY);
     this.containerCtx.drawImage(
