@@ -17,13 +17,18 @@ function App() {
       if (cropperInstance && (!isCroppedRef.current || isManual)) {
         isCroppedRef.current = true;
         console.log(cropperInstance);
+        (window as any).cropperInstance = cropperInstance;
+        cropperInstance.rotateTo(90)
         const gifCropper = new GIFCropper({
-          // cropperInstance: cropperInstance as CustomCropper,
+          cropperInstance: cropperInstance as CustomCropper,
           src: targetGif,
-          cropperJsOpts: {
-            width: 200,
-            height: 200
-          }
+          // cropperJsOpts: {
+          //   width: 500,
+          //   height: 500,
+          //   // rotate: 45,
+          //   y: 50,
+          //   x: 50,
+          // }
         });
         setGifCropperInstance(gifCropper);
         gifCropper.crop().then(blobUrl => {
@@ -45,15 +50,15 @@ function App() {
   return (
     <div className="App">
       <Crop
-        style={{ height: 400, width: '100%' }}
-        initialAspectRatio={1}
+        style={{ height: 240, width: 400 }}
+        aspectRatio={400 / 240}
         src={targetGif}
         viewMode={1}
         guides={true}
         minCropBoxHeight={10}
         minCropBoxWidth={10}
         background={false}
-        responsive={true}
+        responsive={false}
         autoCropArea={1}
         checkOrientation={false}
         crop={() => onCrop()}

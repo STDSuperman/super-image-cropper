@@ -23,8 +23,8 @@ export interface ICropOpts {
   height: number;
   scaleX?: number;
   scaleY?: number;
-  left?: number;
-  top?: number;
+  x?: number;
+  y?: number;
   background?: string;
   rotate?: number;
 }
@@ -36,8 +36,8 @@ export class GIFCropper {
       height: 100,
       scaleX: 1,
       scaleY: 1,
-      left: 0,
-      top: 0,
+      x: 0,
+      y: 0,
       rotate: 0
     },
     compress: false
@@ -58,10 +58,19 @@ export class GIFCropper {
   }
 
   private async init() {
+    // this.cropperInstance = this.inputCropperOptions.cropperInstance;
     // 合并初始值
-    this.cropperOptions.cropperJsOpts = Object.assign(this.cropperOptions.cropperJsOpts, this.inputCropperOptions.cropperJsOpts);
-    this.cropperOptions = Object.assign(this.inputCropperOptions, this.cropperOptions);
+    Object.assign(
+      this.cropperOptions.cropperJsOpts,
+      this.inputCropperOptions.cropperJsOpts,
+      this.cropperInstance?.getData()
+    );
+    this.cropperOptions = Object.assign(
+      this.inputCropperOptions,
+      this.cropperOptions
+    );
 
+    console.log('fullConfig', this.cropperOptions, this.cropperInstance?.getData());
     // ensure cropperInstance exist.
     if (!this.inputCropperOptions.cropperInstance) {
       this.cropperInstance = await this.createCropperInstance(this.cropperOptions);
@@ -100,9 +109,13 @@ export class GIFCropper {
       }) as CustomCropper;
 
       // 隐藏裁剪 DOM
-      this.imageInstance.addEventListener('ready', function () {
+      this.imageInstance.addEventListener('ready', () => {
         if (newInstance.cropper) {
           newInstance.cropper.style.display = 'none';
+          if (options.cropperJsOpts?.width && this.imageInstance) {
+            this.imageInstance.style.width = options.cropperJsOpts.width + 'px';
+          }
+          console.log(newInstance.getData(), options.cropperJsOpts, this.imageInstance)
           resolve(newInstance);
         }
       });

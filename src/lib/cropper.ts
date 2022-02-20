@@ -29,10 +29,7 @@ export class FrameCropper {
     this.cropperInstance = cropperInstance;
     this.cropperOptions = cropperOptions;
     // 兼容未配合 cropperJs 场景
-    this.canvasBoxData = Object.assign({
-      naturalHeight: this.cropperOptions.cropperJsOpts?.height,
-      naturalWidth: this.cropperOptions.cropperJsOpts?.width
-    }, this.cropperInstance.getCanvasData());
+    this.canvasBoxData = this.cropperInstance.getCanvasData();
     this.cropArea = this.cropperInstance.getData();
 
     this.setupCanvas();
@@ -65,23 +62,25 @@ export class FrameCropper {
 
   private transformFrame(frame: ParsedFrame, frameImgData: ImageData | undefined): void {
     if (!frameImgData) return;
-    const cropOutputData = this.cropArea;
     this.containerCtx.save();
+    console.log('center', this.containerCenterX, this.containerCenterY, this.convertorCanvas.width, this.convertorCanvas.height)
     this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
-    this.containerCtx.rotate((cropOutputData.rotate * Math.PI) / 180);
-    this.containerCtx.scale(cropOutputData.scaleX, cropOutputData.scaleY);
+    this.containerCtx.rotate((this.cropArea.rotate * Math.PI) / 180);
+    this.containerCtx.scale(this.cropArea.scaleX, this.cropArea.scaleY);
+    console.log(this.containerCenterX + -this.convertorCanvas.width / 2,
+      this.containerCenterY + -this.convertorCanvas.height / 2)
     this.containerCtx.drawImage(
       this.drawImgDataToCanvas(frame, frameImgData),
-      -this.convertorCanvas.width / 2,
-      -this.convertorCanvas.height / 2
+      // -this.convertorCanvas.width / 2,
+      // -this.convertorCanvas.height / 2
+      -200,-120
     );
     this.containerCtx.restore();
-
     const imageData = this.containerCtx.getImageData(
-      cropOutputData.x + this.offsetX,
-      cropOutputData.y + this.offsetY,
-      cropOutputData.width,
-      cropOutputData.height
+      this.cropArea.x + this.offsetX,
+      this.cropArea.y + this.offsetY,
+      this.cropArea.width,
+      this.cropArea.height
     );
 
     this.resultFrames.push(imageData);
@@ -102,6 +101,8 @@ export class FrameCropper {
   private setupCanvas() {
     const containerCanvas = (this.containerCanvas = document.createElement('canvas'));
     const convertorCanvas = (this.convertorCanvas = document.createElement('canvas'));
+    containerCanvas.className = 'containerCanvas';
+    convertorCanvas.className = 'convertorCanvas';
 
     const containerCtx = containerCanvas.getContext('2d');
     const convertCtx = convertorCanvas.getContext('2d');
@@ -115,19 +116,25 @@ export class FrameCropper {
   }
 
   private setCanvasWH() {
+    // 计算弧度
     const radian = (Math.PI / 180) * this.cropArea.rotate;
+    const imageData = this.cropperInstance.getImageData();
+    // 计算旋转后的容器宽高
     const rotatedBoxWidth =
-      this.canvasBoxData.naturalWidth * Math.cos(radian) +
-      this.canvasBoxData.naturalHeight * Math.sin(radian);
+      imageData.naturalWidth * Math.cos(radian) +
+      imageData.naturalHeight * Math.sin(radian);
     const rotatedBoxHeight =
-      this.canvasBoxData.naturalHeight * Math.cos(radian) +
-      this.canvasBoxData.naturalWidth * Math.sin(radian);
+      imageData.naturalHeight * Math.cos(radian) +
+      imageData.naturalWidth * Math.sin(radian);
 
+    // 计算偏移量
     this.offsetX = -Math.min(this.cropArea.x, 0);
     this.offsetY = -Math.min(this.cropArea.y, 0);
+    // 计算容器中心位置
     this.containerCenterX = this.offsetX + rotatedBoxWidth / 2;
     this.containerCenterY = this.offsetY + rotatedBoxHeight / 2;
 
+    // 设置容器宽高
     this.containerCanvas.width = Math.max(
       this.offsetX + rotatedBoxWidth,
       this.offsetX + this.cropArea.width,
@@ -138,10 +145,12 @@ export class FrameCropper {
       this.offsetY + this.cropArea.height,
       this.cropArea.y + this.cropArea.height
     );
+    // 清理画布
     this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
 
-    this.convertorCanvas.width = this.canvasBoxData.naturalWidth;
-    this.convertorCanvas.height = this.canvasBoxData.naturalHeight;
+    this.convertorCanvas.width = imageData.naturalWidth;
+    this.convertorCanvas.height = imageData.naturalHeight;
+    console.log(rotatedBoxWidth, rotatedBoxHeight);
   }
 
   private frameToImgData(ctx: CanvasRenderingContext2D | null, frame: ParsedFrame) {
