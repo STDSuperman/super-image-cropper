@@ -14,7 +14,8 @@
     "husky-pre-commit": "husky set .husky/_/pre-commit 'npm run test'",
     "husky-commit-msg": "husky set .husky/_/commit-msg 'npm run commitlint --edit $1'",
     "clean": "rimraf dist",
-    "build": "npm run clean && tsc --build",
+    "prebuild": "npm run clean",
+    "build": "npm run clean && tsc",
     "build:watch": "tsc --watch",
     "check": "tsc --noEmit",
     "format": "prettier --check src/**/*.ts"
@@ -31,6 +32,7 @@
     "commitlint-config-cz": "^0.13.2",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
+    "esbuild": "^0.14.23",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.24.2",
     "husky": "^7.0.2",

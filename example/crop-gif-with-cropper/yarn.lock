@@ -532,6 +532,33 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.npmmirror.com/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
+gif-build-worker-js@^1.0.2:
+  version "1.0.2"
+  resolved "https://registry.npmjs.org/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
+  integrity sha512-LmWDYwHJ75dQgrwdfgGfN0H3BN1YGR2dvKIFVCK6JEs03ZBBwGBxLMydwWN/TbDi0DnagV202250VQ4DMTZIrA==
+
+gif-cropper@^1.0.0:
+  version "1.0.0"
+  resolved "https://registry.npmjs.org/gif-cropper/-/gif-cropper-1.0.0.tgz#b7bb093501982a4847d78be503663f3f405029e0"
+  integrity sha512-45MvfGDI1B6BZt3sR0z7oTk70RdN3hqtnGBIsTdMRhphfIZLkw66ATnb+y5536+bZxW2x1G5gfndHsverQxKvQ==
+  dependencies:
+    cropperjs "^1.5.12"
+    gif-build-worker-js "^1.0.2"
+    gif.js "^0.2.0"
+    gifuct-js "^2.1.2"
+
+gif.js@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.npmjs.org/gif.js/-/gif.js-0.2.0.tgz#615e6e3788850cd3a20c85fe9f09539e784903e8"
+  integrity sha1-YV5uN4iFDNOiDIX+nwlTnnhJA+g=
+
+gifuct-js@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.npmjs.org/gifuct-js/-/gifuct-js-2.1.2.tgz#06152437ba30ec914db8398bd838bd0fbc8a6ecd"
+  integrity sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==
+  dependencies:
+    js-binary-schema-parser "^2.0.3"
+
 globals@^11.1.0:
   version "11.12.0"
   resolved "https://registry.npmmirror.com/globals/-/globals-11.12.0.tgz#ab8795338868a0babd8525758018c2a7eb95c42e"
@@ -555,6 +582,11 @@ is-core-module@^2.8.1:
   integrity sha512-SdNCUs284hr40hFTFP6l0IfZ/RSrMXF3qgoRHd3/79unUTvrFO/JoXwkGm+5J/Oe3E/b5GsnG330uUNgRpu1PA==
   dependencies:
     has "^1.0.3"
+
+js-binary-schema-parser@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.npmjs.org/js-binary-schema-parser/-/js-binary-schema-parser-2.0.3.tgz#3d7848748e8586e63b34e8911b643f59cfb6396e"
+  integrity sha512-xezGJmOb4lk/M1ZZLTR/jaBHQ4gG/lqQnJqdIv4721DMggsa1bDVlHXNeHYogaIEHD9vCRv0fcL4hMA+Coarkg==
 
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"

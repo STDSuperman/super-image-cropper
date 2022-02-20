@@ -7,7 +7,7 @@ import Cropper from 'cropperjs';
 
 function App() {
   const cropperInstanceRef = useRef<Cropper>();
-  const [targetGif] = useState('http://img.soogif.com/pGyqIgTKa0Q6AgwVqz4fmNu45wdM7wNC.gif_s400x0');
+  const [targetGif] = useState('/test.gif');
   const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
   const isCroppedRef = useRef(false);
 
@@ -22,13 +22,13 @@ function App() {
         const gifCropper = new GIFCropper({
           cropperInstance: cropperInstance as CustomCropper,
           src: targetGif,
-          cropperJsOpts: {
-            width: 400,
-            height: 240,
-            rotate: 545,
-            y: 0,
-            x: 0,
-          }
+          // cropperJsOpts: {
+          //   width: 400,
+          //   height: 240,
+          //   rotate: 545,
+          //   y: 0,
+          //   x: 0,
+          // }
         });
         setGifCropperInstance(gifCropper);
         gifCropper.crop().then(blobUrl => {
@@ -51,7 +51,7 @@ function App() {
     <div className="App">
       <Crop
         style={{ height: 500, width: '100%' }}
-        initialAspectRatio={400 / 240}
+        initialAspectRatio={1}
         src={targetGif}
         viewMode={1}
         guides={true}
@@ -61,7 +61,7 @@ function App() {
         responsive={false}
         autoCropArea={1}
         checkOrientation={false}
-        crop={() => onCrop()}
+        // crop={() => onCrop()}
         onInitialized={instance => {
           cropperInstanceRef.current = instance;
         }}
