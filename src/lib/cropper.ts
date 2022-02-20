@@ -97,6 +97,8 @@ export class FrameCropper {
     const convertorCanvas = (this.convertorCanvas = document.createElement('canvas'));
     containerCanvas.className = 'containerCanvas';
     convertorCanvas.className = 'convertorCanvas';
+    containerCanvas.style.display = 'none';
+    convertorCanvas.style.display = 'none';
 
     const containerCtx = containerCanvas.getContext('2d');
     const convertCtx = convertorCanvas.getContext('2d');

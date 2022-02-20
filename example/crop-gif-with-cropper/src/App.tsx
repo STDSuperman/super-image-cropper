@@ -18,9 +18,9 @@ function App() {
         isCroppedRef.current = true;
         console.log(cropperInstance);
         (window as any).cropperInstance = cropperInstance;
-        cropperInstance.rotateTo(545)
+        // cropperInstance.rotateTo(545)
         const gifCropper = new GIFCropper({
-          // cropperInstance: cropperInstance as CustomCropper,
+          cropperInstance: cropperInstance as CustomCropper,
           src: targetGif,
           cropperJsOpts: {
             width: 400,
@@ -50,8 +50,8 @@ function App() {
   return (
     <div className="App">
       <Crop
-        style={{ height: 240, width: 400 }}
-        aspectRatio={400 / 240}
+        style={{ height: 500, width: '100%' }}
+        initialAspectRatio={400 / 240}
         src={targetGif}
         viewMode={1}
         guides={true}
