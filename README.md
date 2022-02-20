@@ -41,11 +41,14 @@ const gifCropper = new GIFCropper({
     x: 0,
   }
 });
-gifCropper.crop().then(blobUrl => {
-  const img = document.createElement('img');
-  img.src = blobUrl;
-  document.body.appendChild(img);
-});
+
+gifCropper
+  .crop()
+  .then(blobUrl => {
+    const img = document.createElement('img');
+    img.src = blobUrl;
+    document.body.appendChild(img);
+  });
 ```
 
 #### Working With CropperJs
@@ -58,9 +61,11 @@ const gifCropper = new GIFCropper({
   src: gifUrl
 });
 
-gifCropper.crop().then(blobUrl => {
-  const img = document.createElement('img');
-  img.src = blobUrl;
-  document.body.appendChild(img);
-});
+gifCropper
+  .crop()
+  .then(blobUrl => {
+    const img = document.createElement('img');
+    img.src = blobUrl;
+    document.body.appendChild(img);
+  });
 ```
