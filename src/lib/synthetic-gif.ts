@@ -1,29 +1,25 @@
 import { transformToUrl as gifWorkerTransformToUrl } from 'gif-build-worker-js';
 import GIF from 'gif.js';
-import { ICropperOptions, CustomCropper } from '../index'
+import { ICommonCropOptions } from '../index'
 
 export interface IFrameCropperProps {
-  cropperOptions: ICropperOptions;
-  cropperInstance: CustomCropper;
+  commonCropOptions: ICommonCropOptions,
   frames: ImageData[];
   frameDelays: number[]
 }
 export class SyntheticGIF {
-  private cropArea;
+  private cropperJsOpts;
   private frames;
   private frameDelays;
-  private cropperInstance;
 
   constructor({
-    cropperInstance,
     frames,
-    cropperOptions,
+    commonCropOptions,
     frameDelays
   }: IFrameCropperProps) {
-    this.cropArea = cropperInstance.getData();
+    this.cropperJsOpts = commonCropOptions.cropperJsOpts;
     this.frames = frames;
     this.frameDelays = frameDelays;
-    this.cropperInstance = cropperInstance;
   }
 
   public bootstrap(): Promise<string> {
@@ -33,8 +29,8 @@ export class SyntheticGIF {
         workers: 2,
         quality: 10,
         workerScript: gifWorkerUrl,
-        width: this.cropArea.width,
-        height: this.cropArea.height
+        width: this.cropperJsOpts.width,
+        height: this.cropperJsOpts.height
       });
       gif.on('finished', (blob: Blob) => {
         const blobUrl = window.URL.createObjectURL(blob);

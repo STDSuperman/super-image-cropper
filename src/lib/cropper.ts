@@ -1,22 +1,19 @@
-import { ICropperOptions, CustomCropper } from '../index';
+import { ICommonCropOptions } from '../index';
 import { ParsedFrame } from 'gifuct-js';
 
 export interface IFrameCropperProps {
-  cropperOptions: ICropperOptions;
-  cropperInstance: CustomCropper;
+  commonCropOptions: ICommonCropOptions;
   frames: ParsedFrame[];
 }
 
 export class FrameCropper {
   private frames: ParsedFrame[];
-  private cropperInstance: CustomCropper;
-  private cropperOptions: ICropperOptions;
+  private commonCropOptions: ICommonCropOptions;
   private convertorCanvas!: HTMLCanvasElement;
   private containerCanvas!: HTMLCanvasElement;
   private convertCtx!: CanvasRenderingContext2D;
   private containerCtx!: CanvasRenderingContext2D;
-  private canvasBoxData;
-  private cropArea;
+  private cropperJsOpts;
   private offsetX = 0;
   private offsetY = 0;
   private containerCenterX = 0;
@@ -24,13 +21,10 @@ export class FrameCropper {
   private resultFrames: ImageData[] = [];
   private frameDelays: number[] = [];
 
-  constructor({ cropperOptions, cropperInstance, frames }: IFrameCropperProps) {
+  constructor({ commonCropOptions, frames }: IFrameCropperProps) {
     this.frames = frames;
-    this.cropperInstance = cropperInstance;
-    this.cropperOptions = cropperOptions;
-    // 兼容未配合 cropperJs 场景
-    this.canvasBoxData = this.cropperInstance.getCanvasData();
-    this.cropArea = this.cropperInstance.getData();
+    this.commonCropOptions = commonCropOptions;
+    this.cropperJsOpts = commonCropOptions.cropperJsOpts;
 
     this.setupCanvas();
   }
@@ -43,7 +37,7 @@ export class FrameCropper {
 
       // 添加gif背景颜色
       if(frameIdx == 0 && this.containerCtx.globalCompositeOperation) {
-        this.containerCtx.fillStyle = this.cropperOptions.cropperJsOpts?.background || "";
+        this.containerCtx.fillStyle = this.cropperJsOpts?.background || "";
         this.containerCtx.globalCompositeOperation = "destination-over";
         this.containerCtx.fillRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
         this.containerCtx.globalCompositeOperation = "source-over";
@@ -63,24 +57,24 @@ export class FrameCropper {
   private transformFrame(frame: ParsedFrame, frameImgData: ImageData | undefined): void {
     if (!frameImgData) return;
     this.containerCtx.save();
-    console.log('center', this.containerCenterX, this.containerCenterY, this.convertorCanvas.width, this.convertorCanvas.height)
-    this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
-    this.containerCtx.rotate((this.cropArea.rotate * Math.PI) / 180);
-    this.containerCtx.scale(this.cropArea.scaleX, this.cropArea.scaleY);
-    console.log(this.containerCenterX + -this.convertorCanvas.width / 2,
-      this.containerCenterY + -this.convertorCanvas.height / 2)
+    // 判断偏移方向
+    const translateDirection = (this.cropperJsOpts.rotate % 360) >= 180 ? -1 : 1;
+    this.containerCtx.translate(this.containerCenterX * translateDirection, this.containerCenterY * translateDirection);
+    this.containerCtx.rotate((this.cropperJsOpts.rotate * Math.PI) / 180);
+    this.containerCtx.scale(this.cropperJsOpts.scaleX, this.cropperJsOpts.scaleY);
+
     this.containerCtx.drawImage(
       this.drawImgDataToCanvas(frame, frameImgData),
-      // -this.convertorCanvas.width / 2,
-      // -this.convertorCanvas.height / 2
-      -200,-120
+      -this.convertorCanvas.width / 2,
+      -this.convertorCanvas.height / 2
     );
     this.containerCtx.restore();
+    const moveCropBoxDirection = this.commonCropOptions.withoutCropperJs ? -1 : 1;
     const imageData = this.containerCtx.getImageData(
-      this.cropArea.x + this.offsetX,
-      this.cropArea.y + this.offsetY,
-      this.cropArea.width,
-      this.cropArea.height
+      moveCropBoxDirection * this.cropperJsOpts.x + this.offsetX,
+      moveCropBoxDirection * this.cropperJsOpts.y + this.offsetY,
+      this.cropperJsOpts.width,
+      this.cropperJsOpts.height
     );
 
     this.resultFrames.push(imageData);
@@ -91,8 +85,8 @@ export class FrameCropper {
     this.convertCtx.clearRect(
       0,
       0,
-      this.canvasBoxData.naturalWidth,
-      this.canvasBoxData.naturalHeight
+      this.commonCropOptions.imageData.naturalWidth,
+      this.commonCropOptions.imageData.naturalHeight
     );
     this.convertCtx.putImageData(frameImgData, frame.dims.left, frame.dims.top);
     return this.convertorCanvas;
@@ -117,8 +111,8 @@ export class FrameCropper {
 
   private setCanvasWH() {
     // 计算弧度
-    const radian = (Math.PI / 180) * this.cropArea.rotate;
-    const imageData = this.cropperInstance.getImageData();
+    const radian = (Math.PI / 180) * this.cropperJsOpts.rotate;
+    const imageData = this.commonCropOptions.imageData;
     // 计算旋转后的容器宽高
     const rotatedBoxWidth =
       imageData.naturalWidth * Math.cos(radian) +
@@ -128,8 +122,8 @@ export class FrameCropper {
       imageData.naturalWidth * Math.sin(radian);
 
     // 计算偏移量
-    this.offsetX = -Math.min(this.cropArea.x, 0);
-    this.offsetY = -Math.min(this.cropArea.y, 0);
+    this.offsetX = -Math.min(this.cropperJsOpts.x, 0);
+    this.offsetY = -Math.min(this.cropperJsOpts.y, 0);
     // 计算容器中心位置
     this.containerCenterX = this.offsetX + rotatedBoxWidth / 2;
     this.containerCenterY = this.offsetY + rotatedBoxHeight / 2;
@@ -137,20 +131,19 @@ export class FrameCropper {
     // 设置容器宽高
     this.containerCanvas.width = Math.max(
       this.offsetX + rotatedBoxWidth,
-      this.offsetX + this.cropArea.width,
-      this.cropArea.x + this.cropArea.width
+      this.offsetX + this.cropperJsOpts.width,
+      this.cropperJsOpts.x + this.cropperJsOpts.width
     );
     this.containerCanvas.height = Math.max(
       this.offsetY + rotatedBoxHeight,
-      this.offsetY + this.cropArea.height,
-      this.cropArea.y + this.cropArea.height
+      this.offsetY + this.cropperJsOpts.height,
+      this.cropperJsOpts.y + this.cropperJsOpts.height
     );
     // 清理画布
     this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
 
     this.convertorCanvas.width = imageData.naturalWidth;
     this.convertorCanvas.height = imageData.naturalHeight;
-    console.log(rotatedBoxWidth, rotatedBoxHeight);
   }
 
   private frameToImgData(ctx: CanvasRenderingContext2D | null, frame: ParsedFrame) {

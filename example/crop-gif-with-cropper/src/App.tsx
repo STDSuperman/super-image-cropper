@@ -18,17 +18,17 @@ function App() {
         isCroppedRef.current = true;
         console.log(cropperInstance);
         (window as any).cropperInstance = cropperInstance;
-        cropperInstance.rotateTo(90)
+        cropperInstance.rotateTo(545)
         const gifCropper = new GIFCropper({
-          cropperInstance: cropperInstance as CustomCropper,
+          // cropperInstance: cropperInstance as CustomCropper,
           src: targetGif,
-          // cropperJsOpts: {
-          //   width: 500,
-          //   height: 500,
-          //   // rotate: 45,
-          //   y: 50,
-          //   x: 50,
-          // }
+          cropperJsOpts: {
+            width: 400,
+            height: 240,
+            rotate: 545,
+            y: 0,
+            x: 0,
+          }
         });
         setGifCropperInstance(gifCropper);
         gifCropper.crop().then(blobUrl => {

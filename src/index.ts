@@ -3,6 +3,7 @@ import { Decoder } from './lib/decoder';
 import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
 import { ParsedFrame } from 'gifuct-js';
+import { getImageData } from './lib/helper'
 
 export interface CustomCropper extends Cropper {
   url: '';
@@ -29,23 +30,26 @@ export interface ICropOpts {
   rotate?: number;
 }
 
+export interface IImageData {
+  width: number;
+  height: number;
+  naturalWidth: number;
+  naturalHeight: number;
+}
+
+export interface ICommonCropOptions {
+  cropperJsOpts: Required<ICropOpts>;
+  imageData: IImageData;
+  cropBoxData: Cropper.CropBoxData
+  withoutCropperJs: boolean;
+}
+
 export class GIFCropper {
-  private cropperOptions: ICropperOptions = {
-    cropperJsOpts: {
-      width: 100,
-      height: 100,
-      scaleX: 1,
-      scaleY: 1,
-      x: 0,
-      y: 0,
-      rotate: 0
-    },
-    compress: false
-  };
-  private cropperInstance!: CustomCropper;
+  private cropperInstance?: CustomCropper;
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';
   private frames: ParsedFrame[] = [];
+  private commonCropOptions!: ICommonCropOptions;
   constructor(private inputCropperOptions: ICropperOptions) {}
 
   public async crop(): Promise<string> {
@@ -58,25 +62,40 @@ export class GIFCropper {
   }
 
   private async init() {
-    // this.cropperInstance = this.inputCropperOptions.cropperInstance;
+    this.cropperInstance = this.inputCropperOptions.cropperInstance;
     // 合并初始值
-    Object.assign(
-      this.cropperOptions.cropperJsOpts,
+    const defaultOptions = {
+      width: 100,
+      height: 100,
+      scaleX: 1,
+      scaleY: 1,
+      x: 0,
+      y: 0,
+      rotate: 0,
+      left: 0,
+      top: 0
+    }
+    const mergedCropperJsOpts = Object.assign(
+      defaultOptions,
       this.inputCropperOptions.cropperJsOpts,
       this.cropperInstance?.getData()
     );
-    this.cropperOptions = Object.assign(
-      this.inputCropperOptions,
-      this.cropperOptions
-    );
+    mergedCropperJsOpts.left = mergedCropperJsOpts.x;
+    mergedCropperJsOpts.top = mergedCropperJsOpts.y;
 
-    console.log('fullConfig', this.cropperOptions, this.cropperInstance?.getData());
-    // ensure cropperInstance exist.
-    if (!this.inputCropperOptions.cropperInstance) {
-      this.cropperInstance = await this.createCropperInstance(this.cropperOptions);
-    } else {
-      this.cropperInstance = this.inputCropperOptions.cropperInstance;
+    this.commonCropOptions = {
+      cropperJsOpts: mergedCropperJsOpts as Required<ICropOpts>,
+      imageData: this.cropperInstance?.getImageData() || await getImageData(this.inputCropperOptions.src),
+      cropBoxData: this.cropperInstance?.getCropBoxData() || mergedCropperJsOpts,
+      withoutCropperJs: !this.cropperInstance
     }
+
+    // ensure cropperInstance exist.
+    // if (!this.inputCropperOptions.cropperInstance) {
+    //   this.cropperInstance = await this.createCropperInstance(this.cropperOptions);
+    // } else {
+    //   this.cropperInstance = this.inputCropperOptions.cropperInstance;
+    // }
   }
 
   private createCropperInstance(options: ICropperOptions): Promise<CustomCropper> {
@@ -124,7 +143,7 @@ export class GIFCropper {
   }
 
   private async decodeGIF() {
-    const decoder = new Decoder(this.cropperOptions.src || this.cropperInstance.url);
+    const decoder = new Decoder(this.inputCropperOptions.src || this.cropperInstance?.url || '');
     const decodedGIFFrames = await decoder.decompressFrames();
     this.frames = decodedGIFFrames;
     return decodedGIFFrames;
@@ -132,8 +151,7 @@ export class GIFCropper {
 
   private async cropFrames() {
     const frameCropper = new FrameCropper({
-      cropperOptions: this.cropperOptions,
-      cropperInstance: this.cropperInstance,
+      commonCropOptions: this.commonCropOptions,
       frames: this.frames
     });
     return frameCropper.bootstrap();
@@ -142,8 +160,7 @@ export class GIFCropper {
   private async saveGif(resultFrames: ImageData[], frameDelays: number[]) {
     const syntheticGIF = new SyntheticGIF({
       frames: resultFrames,
-      cropperInstance: this.cropperInstance,
-      cropperOptions: this.cropperOptions,
+      commonCropOptions: this.commonCropOptions,
       frameDelays
     });
     return syntheticGIF.bootstrap();
