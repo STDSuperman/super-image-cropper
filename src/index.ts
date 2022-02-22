@@ -3,7 +3,8 @@ import { Decoder } from './lib/decoder';
 import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
 import { ParsedFrame } from 'gifuct-js';
-import { getImageData } from './lib/helper'
+import { getImageInfo, loadImage } from './lib/helper'
+import imageType from 'image-type'
 
 export interface CustomCropper extends Cropper {
   url: '';
@@ -55,10 +56,15 @@ export class GIFCropper {
   public async crop(): Promise<string> {
     await this.init();
     await this.decodeGIF();
-    console.log('解码完毕')
-    const { resultFrames, frameDelays } = await this.cropFrames();
-    console.log('裁剪完毕', resultFrames)
-    return this.saveGif(resultFrames, frameDelays);
+    if (this.checkIsStaticImage()) {
+      return this.handleStaticImage()
+    } else {
+      console.log(this.cropperInstance)
+      console.log('解码完毕')
+      const { resultFrames, frameDelays } = await this.cropFrames();
+      console.log('裁剪完毕', resultFrames)
+      return this.saveGif(resultFrames, frameDelays);
+    }
   }
 
   private async init() {
@@ -85,7 +91,7 @@ export class GIFCropper {
 
     this.commonCropOptions = {
       cropperJsOpts: mergedCropperJsOpts as Required<ICropOpts>,
-      imageData: this.cropperInstance?.getImageData() || await getImageData(this.inputCropperOptions.src),
+      imageData: this.cropperInstance?.getImageData() || await getImageInfo(this.inputCropperOptions.src),
       cropBoxData: this.cropperInstance?.getCropBoxData() || mergedCropperJsOpts,
       withoutCropperJs: !this.cropperInstance
     }
@@ -164,5 +170,19 @@ export class GIFCropper {
       frameDelays
     });
     return syntheticGIF.bootstrap();
+  }
+
+  private checkIsStaticImage() {
+    const url = this.cropperInstance?.url ?? this.inputCropperOptions?.src;
+    loadImage(url).then(({imageInstance}) => {
+      // @ts-ignore
+      console.log(imageInstance)
+    });
+    return false;
+  }
+
+  private async handleStaticImage(): Promise<string> {
+    const imageData = await loadImage(this.inputCropperOptions.src);
+    return new Promise((resolve) => {resolve('')})
   }
 }

@@ -45,7 +45,8 @@
     "cropperjs": "^1.5.12",
     "gif-build-worker-js": "^1.0.2",
     "gif.js": "^0.2.0",
-    "gifuct-js": "^2.1.2"
+    "gifuct-js": "^2.1.2",
+    "image-type": "^4.1.0"
   },
   "config": {
     "commitizen": {
