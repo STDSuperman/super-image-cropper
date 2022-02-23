@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
 import Crop from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import { GIFCropper, CustomCropper } from 'super-image-cropper';
+import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 function App() {
@@ -11,13 +11,13 @@ function App() {
     '/test.gif'
     // "/kvy.jpg"
   );
-  const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
+  const [gifCropperInstance, setGifCropperInstance] = useState<SuperImageCropper>();
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
     const cropperInstance = cropperInstanceRef.current;
     (window as any).cropperInstance = cropperInstance;
-    const gifCropper = new GIFCropper({
+    const gifCropper = new SuperImageCropper({
       cropperInstance: cropperInstance as CustomCropper,
       src: targetGif,
       // cropperJsOpts: {

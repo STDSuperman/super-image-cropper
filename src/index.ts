@@ -44,7 +44,7 @@ export interface ICommonCropOptions {
   withoutCropperJs: boolean;
 }
 
-export class GIFCropper {
+export class SuperImageCropper {
   private cropperInstance?: CustomCropper;
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';

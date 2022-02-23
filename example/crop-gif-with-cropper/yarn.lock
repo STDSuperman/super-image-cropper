@@ -736,7 +736,7 @@ source-map@^0.5.0:
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
-super-image-cropper@1.0.0:
+super-image-cropper@1.0.1:
   version "1.0.0"
   resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.0.tgz#ac838b9ebcc539c8e56c307f060fc9f4df17dce0"
   integrity sha512-8R89WjNHEI5K/BposSzc9/0K3oZfKwVKHdpYcY+pDYEzC0VRQBiQUSf14S2eloentavu+YI19147CXMWJFPt2Q==

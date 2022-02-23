@@ -35,9 +35,9 @@ npm i super-image-cropper
 ### Usage
 
 ```ts
-import { GIFCropper } from 'super-image-cropper';
+import { SuperImageCropper } from 'super-image-cropper';
 
-const imageCropper = new GIFCropper({
+const imageCropper = new SuperImageCropper({
   src: gifUrl,
   cropperJsOpts: {
     width: 400,
@@ -58,9 +58,9 @@ imageCropper.crop().then(blobUrl => {
 #### Working With CropperJs
 
 ```ts
-import { GIFCropper, CustomCropper } from 'super-image-cropper';
+import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
 
-const imageCropper = new GIFCropper({
+const imageCropper = new SuperImageCropper({
   cropperInstance: cropperInstance as CustomCropper,
   src: gifUrl
 });
