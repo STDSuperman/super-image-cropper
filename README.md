@@ -37,7 +37,7 @@ npm i gif-cropper
 ```ts
 import { GIFCropper } from 'gif-cropper';
 
-const gifCropper = new GIFCropper({
+const imageCropper = new GIFCropper({
   src: gifUrl,
   cropperJsOpts: {
     width: 400,
@@ -48,13 +48,11 @@ const gifCropper = new GIFCropper({
   }
 });
 
-gifCropper
-  .crop()
-  .then(blobUrl => {
-    const img = document.createElement('img');
-    img.src = blobUrl;
-    document.body.appendChild(img);
-  });
+imageCropper.crop().then(blobUrl => {
+  const img = document.createElement('img');
+  img.src = blobUrl;
+  document.body.appendChild(img);
+});
 ```
 
 #### Working With CropperJs
@@ -62,16 +60,14 @@ gifCropper
 ```ts
 import { GIFCropper, CustomCropper } from 'gif-cropper';
 
-const gifCropper = new GIFCropper({
+const imageCropper = new GIFCropper({
   cropperInstance: cropperInstance as CustomCropper,
   src: gifUrl
 });
 
-gifCropper
-  .crop()
-  .then(blobUrl => {
-    const img = document.createElement('img');
-    img.src = blobUrl;
-    document.body.appendChild(img);
-  });
+imageCropper.crop().then(blobUrl => {
+  const img = document.createElement('img');
+  img.src = blobUrl;
+  document.body.appendChild(img);
+});
 ```

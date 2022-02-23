@@ -517,6 +517,11 @@ estree-walker@^2.0.1:
   resolved "https://registry.npmmirror.com/estree-walker/-/estree-walker-2.0.2.tgz#52f010178c2a4c117a7757cfe942adb7d2da4cac"
   integrity sha512-Rfkk/Mp/DL7JVje3u18FxFujQlTNR2q6QfMSMB7AvCBx91NGj/ba3kCfza0f6dVDbw7YlRf/nDrn7pQrCCyQ/w==
 
+file-type@^10.10.0:
+  version "10.11.0"
+  resolved "https://registry.npmjs.org/file-type/-/file-type-10.11.0.tgz#2961d09e4675b9fb9a3ee6b69e9cd23f43fd1890"
+  integrity sha512-uzk64HRpUZyTGZtVuvrjP0FYxzQrBf4rojot6J65YMEbwBLB0CWm0CLojVpwpmFmxcE/lkvYICgfcGozbBq6rw==
+
 fsevents@~2.3.2:
   version "2.3.2"
   resolved "https://registry.npmmirror.com/fsevents/-/fsevents-2.3.2.tgz#8a526f78b8fdf4623b709e0b975c52c24c02fd1a"
@@ -537,15 +542,16 @@ gif-build-worker-js@^1.0.2:
   resolved "https://registry.npmjs.org/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
   integrity sha512-LmWDYwHJ75dQgrwdfgGfN0H3BN1YGR2dvKIFVCK6JEs03ZBBwGBxLMydwWN/TbDi0DnagV202250VQ4DMTZIrA==
 
-gif-cropper@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/gif-cropper/-/gif-cropper-1.0.0.tgz#b7bb093501982a4847d78be503663f3f405029e0"
-  integrity sha512-45MvfGDI1B6BZt3sR0z7oTk70RdN3hqtnGBIsTdMRhphfIZLkw66ATnb+y5536+bZxW2x1G5gfndHsverQxKvQ==
+gif-cropper@1.0.1:
+  version "1.0.1"
+  resolved "https://registry.npmjs.org/gif-cropper/-/gif-cropper-1.0.1.tgz#5f78e7a737ccdf1a4629b748d3e20df62ba152ce"
+  integrity sha512-TAEg17QgH7ybtoljiTfwYMtz/9Ps3VnXzf26IWjXmKiDc2X9hoq8597k6c9/AEAP9vYAAN5WZZ3rvokCpXPDsw==
   dependencies:
     cropperjs "^1.5.12"
     gif-build-worker-js "^1.0.2"
     gif.js "^0.2.0"
     gifuct-js "^2.1.2"
+    image-type "^4.1.0"
 
 gif.js@^0.2.0:
   version "0.2.0"
@@ -575,6 +581,13 @@ has@^1.0.3:
   integrity sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
   dependencies:
     function-bind "^1.1.1"
+
+image-type@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.npmjs.org/image-type/-/image-type-4.1.0.tgz#72a88d64ff5021371ed67b9a466442100be57cd1"
+  integrity sha512-CFJMJ8QK8lJvRlTCEgarL4ro6hfDQKif2HjSvYCdQZESaIPV4v9imrf7BQHK+sQeTeNeMpWciR9hyC/g8ybXEg==
+  dependencies:
+    file-type "^10.10.0"
 
 is-core-module@^2.8.1:
   version "2.8.1"

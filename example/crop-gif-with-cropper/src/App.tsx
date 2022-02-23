@@ -15,7 +15,6 @@ function App() {
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
-    console.log('进来')
     const cropperInstance = cropperInstanceRef.current;
     (window as any).cropperInstance = cropperInstance;
     const gifCropper = new GIFCropper({
@@ -61,7 +60,7 @@ function App() {
           cropperInstanceRef.current = instance;
         }}
       />
-      <button onClick={() => onCrop(true)} className="btn">裁剪</button>
+      <button onClick={() => onCrop()} className="btn">裁剪</button>
       <div className='image-container'>
         {
           croppedImageList.map(url => {
