@@ -190,6 +190,8 @@ export class GIFCropper {
     });
     const croppedImageData = await frameCropper.cropStaticImage(canvas);
     ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    canvas.width = croppedImageData.width;
+    canvas.height = croppedImageData.height;
     ctx?.putImageData(croppedImageData, 0, 0);
 
     return new Promise((resolve, reject) => {

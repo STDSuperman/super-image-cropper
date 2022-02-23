@@ -15,7 +15,13 @@ Crop GIF images using Javascript.
 
 ### Preview
 
-[![Preview Image](https://s4.ax1x.com/2022/02/20/HOBew4.png)](https://imgtu.com/i/HOBew4)
+#### GIF
+<img src="https://s4.ax1x.com/2022/02/23/bPaYwt.png" width="500">
+
+#### Static Image
+
+<img src="https://s4.ax1x.com/2022/02/23/bPUoIf.png" width="500">
+<!-- [![Static Image](https://s4.ax1x.com/2022/02/23/bPUoIf.png)](https://imgtu.com/i/bPUoIf) -->
 
 ## Getting started
 

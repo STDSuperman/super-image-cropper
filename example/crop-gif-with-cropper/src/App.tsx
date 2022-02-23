@@ -8,48 +8,39 @@ import Cropper from 'cropperjs';
 function App() {
   const cropperInstanceRef = useRef<Cropper>();
   const [targetGif] = useState(
-    // '/test.gif'
-    "/kvy.jpg"
+    '/test.gif'
+    // "/kvy.jpg"
   );
   const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
-  const isCroppedRef = useRef(false);
-
-  const onCrop = useCallback(
-    (isManual = false) => {
-      const cropperInstance = cropperInstanceRef.current;
-      if (cropperInstance && (!isCroppedRef.current || isManual)) {
-        isCroppedRef.current = true;
-        console.log(cropperInstance);
-        (window as any).cropperInstance = cropperInstance;
-        // cropperInstance.rotateTo(545)
-        const gifCropper = new GIFCropper({
-          cropperInstance: cropperInstance as CustomCropper,
-          src: targetGif,
-          // cropperJsOpts: {
-          //   width: 400,
-          //   height: 240,
-          //   rotate: 545,
-          //   y: 0,
-          //   x: 0,
-          // }
-        });
-        setGifCropperInstance(gifCropper);
-        gifCropper.crop().then(blobUrl => {
-          const img = document.createElement('img');
-          img.src = blobUrl;
-          img.style.height = '500px';
-          document.body.appendChild(img);
-        });
-      }
-    },
-    [cropperInstanceRef.current, isCroppedRef.current]
-  );
+  const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
-    if (cropperInstanceRef.current) {
-      cropperInstanceRef.current.crop();
-    }
+    console.log('进来')
+    const cropperInstance = cropperInstanceRef.current;
+    (window as any).cropperInstance = cropperInstance;
+    const gifCropper = new GIFCropper({
+      cropperInstance: cropperInstance as CustomCropper,
+      src: targetGif,
+      // cropperJsOpts: {
+      //   width: 400,
+      //   height: 240,
+      //   rotate: 545,
+      //   y: 0,
+      //   x: 0,
+      // }
+    });
+    setGifCropperInstance(gifCropper);
   }, [cropperInstanceRef.current]);
+
+  const onCrop = useCallback(
+    () => {
+      gifCropperInstance?.crop().then(blobUrl => {
+        console.log(croppedImageList.concat(blobUrl));
+        setCroppedImageList(croppedImageList.concat(blobUrl));
+      });
+    },
+    [croppedImageList, gifCropperInstance]
+  );
 
   return (
     <div className="App">
@@ -70,7 +61,18 @@ function App() {
           cropperInstanceRef.current = instance;
         }}
       />
-      <button onClick={() => onCrop(true)}>裁剪</button>
+      <button onClick={() => onCrop(true)} className="btn">裁剪</button>
+      <div className='image-container'>
+        {
+          croppedImageList.map(url => {
+            return (
+              <div className='item' key={url}>
+                <img src={url}></img>
+              </div>
+            )
+          })
+        }
+      </div>
     </div>
   );
 }
