@@ -6,7 +6,7 @@ Crop GIF images using Javascript.
 
 - [x] Support for GIF cropping.
 - [x] Support for collaboration with cropperjs.
-- [ ] Support for PNG / JPG /JPEG cropping.
+- [x] Support for PNG / JPG /JPEG cropping.
 
 
 ## Demo

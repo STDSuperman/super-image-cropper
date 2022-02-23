@@ -3,11 +3,10 @@ import { ParsedFrame } from 'gifuct-js';
 
 export interface IFrameCropperProps {
   commonCropOptions: ICommonCropOptions;
-  frames: ParsedFrame[];
 }
 
 export class FrameCropper {
-  private frames: ParsedFrame[];
+  private frames!: ParsedFrame[];
   private commonCropOptions: ICommonCropOptions;
   private convertorCanvas!: HTMLCanvasElement;
   private containerCanvas!: HTMLCanvasElement;
@@ -21,15 +20,15 @@ export class FrameCropper {
   private resultFrames: ImageData[] = [];
   private frameDelays: number[] = [];
 
-  constructor({ commonCropOptions, frames }: IFrameCropperProps) {
-    this.frames = frames;
+  constructor({ commonCropOptions }: IFrameCropperProps) {
     this.commonCropOptions = commonCropOptions;
     this.cropperJsOpts = commonCropOptions.cropperJsOpts;
 
     this.setupCanvas();
   }
 
-  public async bootstrap() {
+  public async cropGif(frames: ParsedFrame[]) {
+    this.frames = frames;
     let frameIdx = 0;
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
@@ -43,7 +42,10 @@ export class FrameCropper {
         this.containerCtx.globalCompositeOperation = "source-over";
       }
       // 裁剪转换当前帧
-      this.transformFrame(currentFrame, frameImgData);
+      if (!frameImgData) continue;
+      const imageData = this.transformFrame(this.drawImgDataToCanvas(currentFrame, frameImgData));
+      this.resultFrames.push(imageData);
+      this.frameDelays.push(currentFrame.delay);
       frameIdx++;
     }
 
@@ -53,9 +55,11 @@ export class FrameCropper {
     };
   }
 
+  public cropStaticImage(canvasImageContainer: CanvasImageSource): ImageData {
+    return this.transformFrame(canvasImageContainer);
+  }
 
-  private transformFrame(frame: ParsedFrame, frameImgData: ImageData | undefined): void {
-    if (!frameImgData) return;
+  private transformFrame(canvasImageContainer: CanvasImageSource): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
     const translateDirection = (this.cropperJsOpts.rotate % 360) >= 180 ? -1 : 1;
@@ -64,7 +68,7 @@ export class FrameCropper {
     this.containerCtx.scale(this.cropperJsOpts.scaleX, this.cropperJsOpts.scaleY);
 
     this.containerCtx.drawImage(
-      this.drawImgDataToCanvas(frame, frameImgData),
+      canvasImageContainer,
       -this.convertorCanvas.width / 2,
       -this.convertorCanvas.height / 2
     );
@@ -76,9 +80,7 @@ export class FrameCropper {
       this.cropperJsOpts.width,
       this.cropperJsOpts.height
     );
-
-    this.resultFrames.push(imageData);
-    this.frameDelays.push(frame.delay);
+    return imageData;
   }
 
   private drawImgDataToCanvas(frame: ParsedFrame, frameImgData: ImageData): CanvasImageSource {

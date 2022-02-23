@@ -7,7 +7,10 @@ import Cropper from 'cropperjs';
 
 function App() {
   const cropperInstanceRef = useRef<Cropper>();
-  const [targetGif] = useState('/test.gif');
+  const [targetGif] = useState(
+    // '/test.gif'
+    "/kvy.jpg"
+  );
   const [gifCropperInstance, setGifCropperInstance] = useState<GIFCropper>();
   const isCroppedRef = useRef(false);
 
@@ -34,6 +37,7 @@ function App() {
         gifCropper.crop().then(blobUrl => {
           const img = document.createElement('img');
           img.src = blobUrl;
+          img.style.height = '500px';
           document.body.appendChild(img);
         });
       }

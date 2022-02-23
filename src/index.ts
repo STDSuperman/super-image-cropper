@@ -3,8 +3,7 @@ import { Decoder } from './lib/decoder';
 import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
 import { ParsedFrame } from 'gifuct-js';
-import { getImageInfo, loadImage } from './lib/helper'
-import imageType from 'image-type'
+import { getImageInfo, loadImage, getImageType } from './lib/helper'
 
 export interface CustomCropper extends Cropper {
   url: '';
@@ -56,7 +55,7 @@ export class GIFCropper {
   public async crop(): Promise<string> {
     await this.init();
     await this.decodeGIF();
-    if (this.checkIsStaticImage()) {
+    if (await this.checkIsStaticImage()) {
       return this.handleStaticImage()
     } else {
       console.log(this.cropperInstance)
@@ -157,10 +156,9 @@ export class GIFCropper {
 
   private async cropFrames() {
     const frameCropper = new FrameCropper({
-      commonCropOptions: this.commonCropOptions,
-      frames: this.frames
+      commonCropOptions: this.commonCropOptions
     });
-    return frameCropper.bootstrap();
+    return frameCropper.cropGif(this.frames);
   }
 
   private async saveGif(resultFrames: ImageData[], frameDelays: number[]) {
@@ -172,17 +170,34 @@ export class GIFCropper {
     return syntheticGIF.bootstrap();
   }
 
-  private checkIsStaticImage() {
+  private async checkIsStaticImage(): Promise<boolean> {
     const url = this.cropperInstance?.url ?? this.inputCropperOptions?.src;
-    loadImage(url).then(({imageInstance}) => {
-      // @ts-ignore
-      console.log(imageInstance)
-    });
-    return false;
+    const imageDataInfo = await getImageType(url);
+    return imageDataInfo?.mime !== 'image/gif';
   }
 
   private async handleStaticImage(): Promise<string> {
-    const imageData = await loadImage(this.inputCropperOptions.src);
-    return new Promise((resolve) => {resolve('')})
+    const imageInfo = await loadImage(this.inputCropperOptions.src);
+    const canvas = document.createElement('canvas');
+    const ctx = canvas.getContext('2d');
+
+    canvas.width = imageInfo.imageInstance.width;
+    canvas.height = imageInfo.imageInstance.height;
+    ctx?.drawImage(imageInfo.imageInstance, 0, 0);
+
+    const frameCropper = new FrameCropper({
+      commonCropOptions: this.commonCropOptions
+    });
+    const croppedImageData = await frameCropper.cropStaticImage(canvas);
+    ctx?.clearRect(0, 0, canvas.width, canvas.height);
+    ctx?.putImageData(croppedImageData, 0, 0);
+
+    return new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => {
+        if (!blob) return reject(null);
+        const blobUrl = window.URL.createObjectURL(blob);
+        resolve(blobUrl);
+      })
+    })
   }
 }
