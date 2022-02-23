@@ -1,4 +1,4 @@
-# GIF Cropper
+# Super Image Cropper
 
 Crop GIF / PNG / JPG / JPEG images using Javascript.
 
