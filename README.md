@@ -1,6 +1,6 @@
 # GIF Cropper
 
-Crop GIF images using Javascript.
+Crop GIF / PNG / JPG / JPEG images using Javascript.
 
 ## Features
 
@@ -28,14 +28,14 @@ Crop GIF images using Javascript.
 ### Installation
 
 ```shell
-npm i gif-cropper
+npm i super-image-cropper
 ```
 
 
 ### Usage
 
 ```ts
-import { GIFCropper } from 'gif-cropper';
+import { GIFCropper } from 'super-image-cropper';
 
 const imageCropper = new GIFCropper({
   src: gifUrl,
@@ -58,7 +58,7 @@ imageCropper.crop().then(blobUrl => {
 #### Working With CropperJs
 
 ```ts
-import { GIFCropper, CustomCropper } from 'gif-cropper';
+import { GIFCropper, CustomCropper } from 'super-image-cropper';
 
 const imageCropper = new GIFCropper({
   cropperInstance: cropperInstance as CustomCropper,

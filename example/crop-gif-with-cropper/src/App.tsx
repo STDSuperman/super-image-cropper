@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import './App.css';
 import Crop from 'react-cropper';
 import 'cropperjs/dist/cropper.css';
-import { GIFCropper, CustomCropper } from 'gif-cropper';
+import { GIFCropper, CustomCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 function App() {
