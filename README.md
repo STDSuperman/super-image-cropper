@@ -64,14 +64,15 @@ imageCropper.crop({
 
 #### Properties
 
-- cropperJsOpts:
-  `x`: the offset left of the cropped area
-  `y`: the offset top of the cropped area
-  `width`: the width of the cropped area
-  `height`: the height of the cropped area
-  `rotate`: the rotated degrees of the image
-  `scaleX`: the scaling factor to apply on the abscissa of the image
-  `scaleY`: the scaling factor to apply on the ordinate of the image
+- `src`: image url.
+- `cropperJsOpts`:
+  - `x`: the offset left of the cropped area.
+  - `y`: the offset top of the cropped area.
+  - `width`: the width of the cropped area
+  - `height`: the height of the cropped area.
+  - `rotate`: the rotated degrees of the image.
+  - `scaleX`: the scaling factor to apply on the abscissa of the image.
+  - `scaleY`: the scaling factor to apply on the ordinate of the image.
 
 #### Working with CropperJs
 
