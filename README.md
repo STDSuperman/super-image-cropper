@@ -44,7 +44,9 @@ Recommend for use with cropperjs.
 ```ts
 import { SuperImageCropper } from 'super-image-cropper';
 
-const imageCropper = new SuperImageCropper({
+const imageCropper = new SuperImageCropper();
+
+imageCropper.crop({
   src: gifUrl,
   cropperJsOpts: {
     width: 400,
@@ -53,9 +55,7 @@ const imageCropper = new SuperImageCropper({
     y: 0,
     x: 0,
   }
-});
-
-imageCropper.crop().then(blobUrl => {
+}).then(blobUrl => {
   const img = document.createElement('img');
   img.src = blobUrl;
   document.body.appendChild(img);
@@ -96,12 +96,12 @@ const cropperInstance = new Cropper(image, {
   guides: true
 });
 
-const imageCropper = new SuperImageCropper({
+const imageCropper = new SuperImageCropper();
+
+imageCropper.crop({
   cropperInstance: cropperInstance as CustomCropper,
   src: 'xxx.gif'
-});
-
-imageCropper.crop().then(blobUrl => {
+}).then(blobUrl => {
   const img = document.createElement('img');
   img.src = blobUrl;
   document.body.appendChild(img);
