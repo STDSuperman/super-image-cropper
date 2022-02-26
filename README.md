@@ -65,6 +65,7 @@ imageCropper.crop({
 #### Properties
 
 - `src`: image url.
+- `cropperInstance`: cropperjs instance.
 - `cropperJsOpts`:
   - `x`: the offset left of the cropped area.
   - `y`: the offset top of the cropped area.
