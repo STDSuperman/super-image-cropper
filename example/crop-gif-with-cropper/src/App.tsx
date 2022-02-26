@@ -17,24 +17,24 @@ function App() {
   useEffect(() => {
     const cropperInstance = cropperInstanceRef.current;
     (window as any).cropperInstance = cropperInstance;
-    const gifCropper = new SuperImageCropper({
-      cropperInstance: cropperInstance as CustomCropper,
-      src: targetGif,
-      // cropperJsOpts: {
-      //   width: 400,
-      //   height: 240,
-      //   rotate: 545,
-      //   y: 0,
-      //   x: 0,
-      // }
-    });
+    const gifCropper = new SuperImageCropper();
     setGifCropperInstance(gifCropper);
   }, [cropperInstanceRef.current]);
 
   const onCrop = useCallback(
     () => {
-      gifCropperInstance?.crop().then(blobUrl => {
-        console.log(croppedImageList.concat(blobUrl));
+      gifCropperInstance?.crop({
+        cropperInstance: cropperInstanceRef.current as CustomCropper,
+        src: targetGif,
+        // cropperJsOpts: {
+        //   width: 400,
+        //   height: 240,
+        //   rotate: 545,
+        //   y: 0,
+        //   x: 0,
+        // }
+      }).then(blobUrl => {
+        // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
       });
     },

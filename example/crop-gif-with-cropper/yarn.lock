@@ -737,9 +737,9 @@ source-map@^0.5.0:
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
 super-image-cropper@1.0.1:
-  version "1.0.0"
-  resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.0.tgz#ac838b9ebcc539c8e56c307f060fc9f4df17dce0"
-  integrity sha512-8R89WjNHEI5K/BposSzc9/0K3oZfKwVKHdpYcY+pDYEzC0VRQBiQUSf14S2eloentavu+YI19147CXMWJFPt2Q==
+  version "1.0.1"
+  resolved "https://registry.npm.alibaba-inc.com/super-image-cropper/download/super-image-cropper-1.0.1.tgz#4926b629b8e157ccf695a6e82dbd0be4924791d6"
+  integrity sha512-p+lPPHrHKvPrjfrCGDAnfYO6in6jMWI17e6Ig0p2Z1dzr5zvGX5Pn5OeMw7KbxhVLj+VRobslSQdB+dqrBAV3g==
   dependencies:
     cropperjs "^1.5.12"
     gif-build-worker-js "^1.0.2"
