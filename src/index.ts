@@ -28,6 +28,8 @@ export interface ICropOpts {
   y?: number;
   background?: string;
   rotate?: number;
+  left: number;
+  top: number;
 }
 
 export interface IImageData {
@@ -70,7 +72,7 @@ export class SuperImageCropper {
   private async init() {
     this.cropperInstance = this.inputCropperOptions.cropperInstance;
     // 合并初始值
-    const defaultOptions = {
+    const defaultOptions: ICropOpts = {
       width: 100,
       height: 100,
       scaleX: 1,
@@ -86,12 +88,14 @@ export class SuperImageCropper {
       this.inputCropperOptions.cropperJsOpts,
       this.cropperInstance?.getData()
     );
-    mergedCropperJsOpts.left = mergedCropperJsOpts.x;
-    mergedCropperJsOpts.top = mergedCropperJsOpts.y;
+
+    const imageData = this.cropperInstance?.getImageData() ||
+      await getImageInfo(this.inputCropperOptions.src)
+    ;
 
     this.commonCropOptions = {
-      cropperJsOpts: mergedCropperJsOpts as Required<ICropOpts>,
-      imageData: this.cropperInstance?.getImageData() || await getImageInfo(this.inputCropperOptions.src),
+      cropperJsOpts: this.cropDataAdapter(mergedCropperJsOpts, imageData),
+      imageData,
       cropBoxData: this.cropperInstance?.getCropBoxData() || mergedCropperJsOpts,
       withoutCropperJs: !this.cropperInstance
     }
@@ -102,6 +106,17 @@ export class SuperImageCropper {
     // } else {
     //   this.cropperInstance = this.inputCropperOptions.cropperInstance;
     // }
+  }
+
+  private cropDataAdapter(
+    mergedCropperJsOpts: ICropOpts & Cropper.Data,
+    imageData: IImageData
+  ): Required<ICropOpts> {
+    mergedCropperJsOpts.left = mergedCropperJsOpts.x;
+    mergedCropperJsOpts.top = mergedCropperJsOpts.y;
+    mergedCropperJsOpts.width = mergedCropperJsOpts.width || imageData.naturalWidth;
+    mergedCropperJsOpts.height = mergedCropperJsOpts.height || imageData.naturalHeight;
+    return mergedCropperJsOpts as Required<ICropOpts>;
   }
 
   private createCropperInstance(options: ICropperOptions): Promise<CustomCropper> {

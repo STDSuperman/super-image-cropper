@@ -32,7 +32,7 @@ export class FrameCropper {
     if (!this.containerCanvas || !this.convertorCanvas) {
       this.setupCanvas();
     }
-    this.setCanvasConfig();
+    this.setCanvasWH();
   }
 
   public async cropGif(frames: ParsedFrame[]) {
@@ -119,7 +119,7 @@ export class FrameCropper {
     document.body.appendChild(containerCanvas);
   }
 
-  private setCanvasConfig() {
+  private setCanvasWH() {
     // 计算弧度
     const radian = (Math.PI / 180) * this.cropperJsOpts.rotate;
     const imageData = this.commonCropOptions.imageData;
