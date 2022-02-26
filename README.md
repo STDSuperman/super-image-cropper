@@ -1,6 +1,6 @@
 # Super Image Cropper
 
-[![version](https://img.shields.io/badge/version-1.0.1-yellow.svg)](https://semver.org)
+[![version](https://img.shields.io/badge/version-1.0.3-yellow.svg)](https://semver.org)
 [![GitHub license](https://img.shields.io/github/license/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/blob/master/LICENSE)
 
 Crop GIF / PNG / JPG / JPEG images using Javascript.
