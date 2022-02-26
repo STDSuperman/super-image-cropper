@@ -9,19 +9,19 @@ function ReactCropperjs() {
     '/test.gif'
     // "/kvy.jpg"
   );
-  const [gifCropperInstance, setGifCropperInstance] = useState<SuperImageCropper>();
+  const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
     const cropperInstance = cropperInstanceRef.current;
     (window as any).cropperInstance = cropperInstance;
     const gifCropper = new SuperImageCropper();
-    setGifCropperInstance(gifCropper);
+    setSuperImageCropperInstance(gifCropper);
   }, [cropperInstanceRef.current]);
 
   const onCrop = useCallback(
     () => {
-      gifCropperInstance?.crop({
+      superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current as CustomCropper,
         src: targetGif,
         // cropperJsOpts: {
@@ -36,7 +36,7 @@ function ReactCropperjs() {
         setCroppedImageList(croppedImageList.concat(blobUrl));
       });
     },
-    [croppedImageList, gifCropperInstance]
+    [croppedImageList, superImageCropperInstance]
   );
 
   return (

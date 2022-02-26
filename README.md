@@ -37,6 +37,10 @@ npm i super-image-cropper
 
 ### Usage
 
+Recommend for use with cropperjs.
+
+> If not used with cropperjs, the src parameter must be passed.
+
 ```ts
 import { SuperImageCropper } from 'super-image-cropper';
 
@@ -58,14 +62,43 @@ imageCropper.crop().then(blobUrl => {
 });
 ```
 
-#### Working With CropperJs
+#### Properties
+
+- cropperJsOpts:
+  `x`: the offset left of the cropped area
+  `y`: the offset top of the cropped area
+  `width`: the width of the cropped area
+  `height`: the height of the cropped area
+  `rotate`: the rotated degrees of the image
+  `scaleX`: the scaling factor to apply on the abscissa of the image
+  `scaleY`: the scaling factor to apply on the ordinate of the image
+
+#### Working with CropperJs
+
+```html
+  <img id="cropperJsRoot" src="xxx.gif"></img>
+```
 
 ```ts
 import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
+import Cropper from 'cropperjs';
+
+const image = document.getElementById('image') as HTMLImageElement;
+const cropperInstance = new Cropper(image, {
+  aspectRatio: 16 / 9,
+  autoCrop: false,
+  autoCropArea: 1,
+  minCropBoxHeight: 10,
+  minCropBoxWidth: 10,
+  viewMode: 1,
+  initialAspectRatio: 1,
+  responsive: false,
+  guides: true
+});
 
 const imageCropper = new SuperImageCropper({
   cropperInstance: cropperInstance as CustomCropper,
-  src: gifUrl
+  src: 'xxx.gif'
 });
 
 imageCropper.crop().then(blobUrl => {
@@ -74,3 +107,7 @@ imageCropper.crop().then(blobUrl => {
   document.body.appendChild(img);
 });
 ```
+
+### Example
+
+- Use with react-cropper or cropperjs in react: [React App](https://github.com/STDSuperman/super-image-cropper/tree/master/example/crop-gif-with-cropper).
