@@ -31,9 +31,13 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 ### Installation
 
 ```shell
-npm i super-image-cropper
+npm i super-image-cropper -S
 ```
+or
 
+```shell
+yarn add super-image-cropper -S
+```
 
 ### Usage
 
