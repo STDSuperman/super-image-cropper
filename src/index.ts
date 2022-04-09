@@ -13,7 +13,7 @@ export interface CustomCropper extends Cropper {
 }
 
 export interface ICropperOptions {
-  cropperInstance?: CustomCropper;
+  cropperInstance?: CustomCropper | Cropper;
   src?: string;
   cropperJsOpts?: ICropOpts;
   compress?: boolean;
@@ -47,7 +47,7 @@ export interface ICommonCropOptions {
 }
 
 export class SuperImageCropper {
-  private cropperInstance?: CustomCropper;
+  private cropperJsInstance?: CustomCropper;
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';
   private frames: ParsedFrame[] = [];
@@ -70,7 +70,7 @@ export class SuperImageCropper {
   }
 
   private async init() {
-    this.cropperInstance = this.inputCropperOptions.cropperInstance;
+    this.cropperJsInstance = this.inputCropperOptions.cropperInstance as CustomCropper;
     // 合并初始值
     const defaultOptions: ICropOpts = {
       width: 100,
@@ -83,21 +83,21 @@ export class SuperImageCropper {
       left: 0,
       top: 0
     }
-    const mergedCropperJsOpts = Object.assign(
+    const targetConfig = Object.assign(
       defaultOptions,
       this.inputCropperOptions.cropperJsOpts,
-      this.cropperInstance?.getData()
+      this.cropperJsInstance?.getData()
     );
 
-    const imageData = this.cropperInstance?.getImageData() ||
+    const imageData = this.cropperJsInstance?.getImageData() ||
       await getImageInfo(this.inputCropperOptions.src)
     ;
 
     this.commonCropOptions = {
-      cropperJsOpts: this.cropDataAdapter(mergedCropperJsOpts, imageData),
+      cropperJsOpts: this.cropDataInfoAdapter(targetConfig, imageData),
       imageData,
-      cropBoxData: this.cropperInstance?.getCropBoxData() || mergedCropperJsOpts,
-      withoutCropperJs: !this.cropperInstance
+      cropBoxData: this.cropperJsInstance?.getCropBoxData() || targetConfig,
+      withoutCropperJs: !this.cropperJsInstance
     }
 
     // ensure cropperInstance exist.
@@ -108,15 +108,15 @@ export class SuperImageCropper {
     // }
   }
 
-  private cropDataAdapter(
-    mergedCropperJsOpts: ICropOpts & Cropper.Data,
+  private cropDataInfoAdapter(
+    targetConfig: ICropOpts & Cropper.Data,
     imageData: IImageData
   ): Required<ICropOpts> {
-    mergedCropperJsOpts.left = mergedCropperJsOpts.x;
-    mergedCropperJsOpts.top = mergedCropperJsOpts.y;
-    mergedCropperJsOpts.width = mergedCropperJsOpts.width || imageData.naturalWidth;
-    mergedCropperJsOpts.height = mergedCropperJsOpts.height || imageData.naturalHeight;
-    return mergedCropperJsOpts as Required<ICropOpts>;
+    targetConfig.left = targetConfig.x;
+    targetConfig.top = targetConfig.y;
+    targetConfig.width = targetConfig.width || imageData.naturalWidth;
+    targetConfig.height = targetConfig.height || imageData.naturalHeight;
+    return targetConfig as Required<ICropOpts>;
   }
 
   private createCropperInstance(options: ICropperOptions): Promise<CustomCropper> {
@@ -128,7 +128,7 @@ export class SuperImageCropper {
       img.src = options.src;
       if (this.imageInstance) {
         document.body.removeChild(this.imageInstance);
-        this.cropperInstance?.destroy();
+        this.cropperJsInstance?.destroy();
       }
       // 创建新的 image 图片 DOM
       this.imageInstance = document.createElement('img');
@@ -163,7 +163,7 @@ export class SuperImageCropper {
   }
 
   private async decodeGIF() {
-    const decoder = new Decoder(this.inputCropperOptions.src || this.cropperInstance?.url || '');
+    const decoder = new Decoder(this.inputCropperOptions.src || this.cropperJsInstance?.url || '');
     const decodedGIFFrames = await decoder.decompressFrames();
     this.frames = decodedGIFFrames;
     return decodedGIFFrames;
@@ -195,7 +195,7 @@ export class SuperImageCropper {
   }
 
   private async checkIsStaticImage(): Promise<boolean> {
-    const url = this.cropperInstance?.url ?? this.inputCropperOptions?.src;
+    const url = this.cropperJsInstance?.url ?? this.inputCropperOptions?.src;
     const imageDataInfo = await getImageType(url);
     return imageDataInfo?.mime !== 'image/gif';
   }

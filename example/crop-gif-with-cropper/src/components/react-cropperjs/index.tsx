@@ -22,7 +22,7 @@ function ReactCropperjs() {
   const onCrop = useCallback(
     () => {
       superImageCropperInstance?.crop({
-        cropperInstance: cropperInstanceRef.current as CustomCropper,
+        cropperInstance: cropperInstanceRef.current,
         src: targetGif,
         // cropperJsOpts: {
         //   width: 400,

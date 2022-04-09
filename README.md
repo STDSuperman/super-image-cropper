@@ -104,7 +104,7 @@ const cropperInstance = new Cropper(image, {
 const imageCropper = new SuperImageCropper();
 
 imageCropper.crop({
-  cropperInstance: cropperInstance as CustomCropper,
+  cropperInstance: cropperInstance,
   src: 'xxx.gif'
 }).then(blobUrl => {
   const img = document.createElement('img');
