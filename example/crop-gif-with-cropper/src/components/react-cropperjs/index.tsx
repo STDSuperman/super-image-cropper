@@ -31,7 +31,7 @@ function ReactCropperjs() {
         //   y: 0,
         //   x: 0,
         // }
-      }).then(blobUrl => {
+      }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
       });

@@ -736,10 +736,10 @@ source-map@^0.5.0:
   resolved "https://registry.npmjs.org/source-map/-/source-map-0.5.7.tgz#8a039d2d1021d22d1ea14c80d8ea468ba2ef3fcc"
   integrity sha1-igOdLRAh0i0eoUyA2OpGi6LvP8w=
 
-super-image-cropper@1.0.2:
-  version "1.0.2"
-  resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.2.tgz#453acf56879d89f9f95578cae9087dea9754fd20"
-  integrity sha512-n1ZJRkT4mNwQl8hC+o49ycLiqFJor+1oqfYhP2IuF+14qkkMJ+fVKYO+Zis4cglKQ3ZSE17XiI2QJ73fLrptaw==
+super-image-cropper@1.0.6:
+  version "1.0.6"
+  resolved "https://registry.npmmirror.com/super-image-cropper/-/super-image-cropper-1.0.6.tgz#b2b41110de28c77711f37ea667907aac1a60c258"
+  integrity sha512-cfqtB99A8RJszNUQxTHUr+89WAqG3lNc1cP0TWNmXoigvVaAFCWWQFMjIpGcg8ynt5r5TjJYyCWakdZQEuj+QA==
   dependencies:
     cropperjs "^1.5.12"
     gif-build-worker-js "^1.0.2"
