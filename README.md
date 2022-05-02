@@ -41,31 +41,7 @@ yarn add super-image-cropper -S
 
 ### Usage
 
-Recommend for use with cropperjs.
-
-> If not used with cropperjs, the src parameter must be passed.
-
-```ts
-import { SuperImageCropper } from 'super-image-cropper';
-
-const imageCropper = new SuperImageCropper();
-
-imageCropper.crop({
-  src: gifUrl,
-  cropperJsOpts: {
-    width: 400,
-    height: 240,
-    rotate: 45,
-    y: 0,
-    x: 0,
-  }
-}).then(blobUrl => {
-  const img = document.createElement('img');
-  img.src = blobUrl;
-  document.body.appendChild(img);
-});
-```
-
+Recommend for use with cropper.
 #### Properties
 
 - `src`: image url.
@@ -79,7 +55,7 @@ imageCropper.crop({
   - `scaleX`: the scaling factor to apply on the abscissa of the image.
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
 
-#### Working with CropperJs
+#### Working with cropperjs
 
 ```html
   <img id="cropperJsRoot" src="xxx.gif"></img>
@@ -107,6 +83,31 @@ const imageCropper = new SuperImageCropper();
 imageCropper.crop({
   cropperInstance: cropperInstance,
   src: 'xxx.gif'
+}).then(blobUrl => {
+  const img = document.createElement('img');
+  img.src = blobUrl;
+  document.body.appendChild(img);
+});
+```
+
+#### Stand-alone use
+
+If not used with cropperjs, the src parameter must be passed.
+
+```ts
+import { SuperImageCropper } from 'super-image-cropper';
+
+const imageCropper = new SuperImageCropper();
+
+imageCropper.crop({
+  src: gifUrl,
+  cropperJsOpts: {
+    width: 400,
+    height: 240,
+    rotate: 45,
+    y: 0,
+    x: 0,
+  }
 }).then(blobUrl => {
   const img = document.createElement('img');
   img.src = blobUrl;
