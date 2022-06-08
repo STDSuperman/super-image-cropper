@@ -54,6 +54,7 @@ Recommend for use with cropper.
   - `rotate`: the rotated degrees of the image.
   - `scaleX`: the scaling factor to apply on the abscissa of the image.
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
+  - `background`: GIF background color.
 
 #### Working with cropperjs
 
