@@ -19,7 +19,7 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 ### Preview
 
 #### GIF
-<img src="[https://s4.ax1x.com/2022/02/23/bPaYwt.png](https://blog-images-1257398419.cos.ap-nanjing.myqcloud.com/github%2Fgif-transparent.png?q-sign-algorithm=sha1&q-ak=AKIDfTacYwRCoJ-kgctpXG1bwojPyiJ-aSCRkD9oJrNVBwJ7yrlr7QRzE5nq7nWTwkna&q-sign-time=1654794331;1654797931&q-key-time=1654794331;1654797931&q-header-list=&q-url-param-list=&q-signature=3c57e2ccb5660d3d1d2b74e3ec6932258d0ab83b&x-cos-security-token=3oM4D54KP7X9DbpVlj36pniS9ErNQCFaa15729165f9407b84ef0d73ba239d54d-a9NL99gufQf4PkP2plEoBW92QUQyf2QET0lxEQ6FHd8ilgdBypfsmdYMyLkkCS-z-HZn4g409HbRm3v1YYCaR3tD0MZFBnPHFPjGbMcLnhF-4R1WsZ4AMkb69ByCVRQ6D_h0dNeHL1MZlWhmo2ReA4yFGG_J2XtUSAr0HPF1-6x8XHwj2FJbfigA2-ZAkZdRzEzDBL4a0Zc4aYdYlgDTA)" width="500">
+<img src="https://blog-images-1257398419.cos.ap-nanjing.myqcloud.com/github/gif-transparent.png" width="500">
 
 #### Static Image
 
