@@ -41,14 +41,16 @@ export class FrameCropper {
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
       const frameImgData = this.frameToImgData(this.convertCtx, currentFrame);
-
+      // 清理一下画板
+      this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
       // 添加gif背景颜色
-      if(frameIdx == 0 && this.containerCtx.globalCompositeOperation) {
+      if(this.containerCtx.globalCompositeOperation && this.cropperJsOpts?.background) {
         this.containerCtx.fillStyle = this.cropperJsOpts?.background || "";
         this.containerCtx.globalCompositeOperation = "destination-over";
         this.containerCtx.fillRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
         this.containerCtx.globalCompositeOperation = "source-over";
       }
+
       // 裁剪转换当前帧
       if (!frameImgData) continue;
       const imageData = this.transformFrame(this.drawImgDataToCanvas(currentFrame, frameImgData));
@@ -92,12 +94,7 @@ export class FrameCropper {
   }
 
   private drawImgDataToCanvas(frame: ParsedFrame, frameImgData: ImageData): CanvasImageSource {
-    this.convertCtx.clearRect(
-      0,
-      0,
-      this.commonCropOptions.imageData.naturalWidth,
-      this.commonCropOptions.imageData.naturalHeight
-    );
+    this.convertCtx.clearRect(0, 0, this.convertorCanvas.width, this.convertorCanvas.height);
     this.convertCtx.putImageData(frameImgData, frame.dims.left, frame.dims.top);
     return this.convertorCanvas;
   }

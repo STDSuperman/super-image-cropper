@@ -16,7 +16,7 @@
     "clean": "rimraf dist",
     "prebuild": "npm run clean",
     "build": "npm run clean && tsc",
-    "build:watch": "tsc --watch",
+    "dev": "tsc --watch",
     "check": "tsc --noEmit",
     "format": "prettier --check src/**/*.ts"
   },

@@ -31,7 +31,8 @@ export class SyntheticGIF {
             quality: 10,
             workerScript: gifWorkerUrl,
             width: this.cropperJsOpts.width,
-            height: this.cropperJsOpts.height
+            height: this.cropperJsOpts.height,
+            transparent: 'transparent',
           },
           this.gifJsOptions || {}
         )

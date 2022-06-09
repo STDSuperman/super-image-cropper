@@ -25,10 +25,11 @@ function ReactCropperjs() {
         cropperInstance: cropperInstanceRef.current,
         src: targetGif,
         cropperJsOpts: {
-          background: "#fff",
+          // background: "#fff",
         },
         gifJsOptions: {
-          background: "#fff",
+          // background: "#000",
+          // transparent: null
         }
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));

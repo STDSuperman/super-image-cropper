@@ -27,7 +27,7 @@ export interface IGifOpts {
   background?: string;
   width?: number;
   height?: number;
-  transparent?: string;
+  transparent?: string | null;
   dither?: boolean;
   debug?: boolean;
 }
