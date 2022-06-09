@@ -3,27 +3,31 @@ import Crop from 'react-cropper';
 import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
+const imgList = [
+  '/dog.gif',
+  '/kvy.jpg',
+  // 'test.gif'
+]
+
+let activeImageIndex = 0;
+
 function ReactCropperjs() {
   const cropperInstanceRef = useRef<Cropper>();
-  const [targetGif] = useState(
-    '/dog.gif'
-    // "/kvy.jpg"
-  );
+  const [sourceImage, setSourceImage] = useState(imgList[0]);
   const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
-    const cropperInstance = cropperInstanceRef.current;
-    (window as any).cropperInstance = cropperInstance;
     const gifCropper = new SuperImageCropper();
     setSuperImageCropperInstance(gifCropper);
-  }, [cropperInstanceRef.current]);
+    console.log('产生新实例')
+  }, [cropperInstanceRef.current, sourceImage]);
 
   const onCrop = useCallback(
     () => {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
-        src: targetGif,
+        src: sourceImage,
         cropperJsOpts: {
           // background: "#fff",
         },
@@ -39,35 +43,12 @@ function ReactCropperjs() {
     [croppedImageList, superImageCropperInstance]
   );
 
-  useEffect(() => {
-    const testCanvas = document.getElementById('testCanvas') as HTMLCanvasElement;
-    const ctx = testCanvas.getContext('2d');
-    const image = new Image();
-    image.onload = function(data) {
-      ctx?.drawImage(image, 0, 0, 200, 200);
-      const data1 = testCanvas.toDataURL();
-      const imgData = ctx?.createImageData(300, 300);
-      for (let i = 0; i < 1000; i++) {
-        const pos = i * 4;
-        (imgData as any)[pos] = 0;;
-        (imgData as any)[pos + 1] = 224;
-        (imgData as any)[pos + 2] = 232;
-        (imgData as any)[pos + 3] = 222;
-      }
-      ctx?.putImageData(imgData as any, 0, 0);
-      const img = document.createElement('img');
-      img.src = data1 as unknown as string;
-      document.body.appendChild(img);
-    }
-    image.src = '/dog.gif';
-  }, []);
-
   return (
     <div className="App">
       <Crop
         style={{ height: 500, width: '100%' }}
         initialAspectRatio={1}
-        src={targetGif}
+        src={sourceImage}
         viewMode={1}
         guides={true}
         minCropBoxHeight={10}
@@ -82,6 +63,14 @@ function ReactCropperjs() {
         }}
       />
       <button onClick={() => onCrop()} className="btn">裁剪</button>
+      <button onClick={() => {
+        if (activeImageIndex >= imgList.length - 1) {
+          activeImageIndex = 0;
+        } else {
+          activeImageIndex += 1;
+        }
+        setSourceImage(imgList[activeImageIndex]);
+      }} className="btn-change">换图</button>
       <div className='image-container'>
         {
           croppedImageList.map(url => {
@@ -93,11 +82,6 @@ function ReactCropperjs() {
           })
         }
       </div>
-      <canvas style={{
-        width: '500px',
-        height: '500px',
-        border: '1px solid black',
-      }} id='testCanvas'></canvas>
     </div>
   );
 }

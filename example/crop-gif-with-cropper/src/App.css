@@ -29,3 +29,13 @@
   display: block;
   cursor: pointer;
 }
+.btn-change {
+  width: 200px;
+  height: 50px;
+  background-color: #ceb64a;
+  border-radius: 5px;
+  border: none;
+  margin: 20px auto;
+  display: block;
+  cursor: pointer;
+}
