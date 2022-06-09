@@ -6,7 +6,7 @@ import Cropper from 'cropperjs';
 function ReactCropperjs() {
   const cropperInstanceRef = useRef<Cropper>();
   const [targetGif] = useState(
-    '/test.gif'
+    '/dog.gif'
     // "/kvy.jpg"
   );
   const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
@@ -24,13 +24,12 @@ function ReactCropperjs() {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
         src: targetGif,
-        // cropperJsOpts: {
-        //   width: 400,
-        //   height: 240,
-        //   rotate: 545,
-        //   y: 0,
-        //   x: 0,
-        // }
+        cropperJsOpts: {
+          background: "#fff",
+        },
+        gifJsOptions: {
+          background: "#fff",
+        }
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
@@ -38,6 +37,29 @@ function ReactCropperjs() {
     },
     [croppedImageList, superImageCropperInstance]
   );
+
+  useEffect(() => {
+    const testCanvas = document.getElementById('testCanvas') as HTMLCanvasElement;
+    const ctx = testCanvas.getContext('2d');
+    const image = new Image();
+    image.onload = function(data) {
+      ctx?.drawImage(image, 0, 0, 200, 200);
+      const data1 = testCanvas.toDataURL();
+      const imgData = ctx?.createImageData(300, 300);
+      for (let i = 0; i < 1000; i++) {
+        const pos = i * 4;
+        (imgData as any)[pos] = 0;;
+        (imgData as any)[pos + 1] = 224;
+        (imgData as any)[pos + 2] = 232;
+        (imgData as any)[pos + 3] = 222;
+      }
+      ctx?.putImageData(imgData as any, 0, 0);
+      const img = document.createElement('img');
+      img.src = data1 as unknown as string;
+      document.body.appendChild(img);
+    }
+    image.src = '/dog.gif';
+  }, []);
 
   return (
     <div className="App">
@@ -70,6 +92,11 @@ function ReactCropperjs() {
           })
         }
       </div>
+      <canvas style={{
+        width: '500px',
+        height: '500px',
+        border: '1px solid black',
+      }} id='testCanvas'></canvas>
     </div>
   );
 }

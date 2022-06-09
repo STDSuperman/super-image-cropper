@@ -16,20 +16,33 @@ export interface ICropperOptions {
   cropperInstance?: CustomCropper | Cropper;
   src?: string;
   cropperJsOpts?: ICropOpts;
-  compress?: boolean;
+  gifJsOptions?: IGifOpts;
+}
+
+export interface IGifOpts {
+  repeat?: number;
+  quality?: number;
+  workers?: number;
+  workerScript?: string;
+  background?: string;
+  width?: number;
+  height?: number;
+  transparent?: string;
+  dither?: boolean;
+  debug?: boolean;
 }
 
 export interface ICropOpts {
-  width: number;
-  height: number;
+  width?: number;
+  height?: number;
   scaleX?: number;
   scaleY?: number;
   x?: number;
   y?: number;
   background?: string;
   rotate?: number;
-  left: number;
-  top: number;
+  left?: number;
+  top?: number;
 }
 
 export interface IImageData {
@@ -85,12 +98,13 @@ export class SuperImageCropper {
     }
     const targetConfig = Object.assign(
       defaultOptions,
-      this.inputCropperOptions.cropperJsOpts,
-      this.cropperJsInstance?.getData()
+      this.inputCropperOptions.cropperJsOpts || {},
+      this.cropperJsInstance?.getData() || {}
     );
 
-    const imageData = this.cropperJsInstance?.getImageData() ||
-      await getImageInfo(this.inputCropperOptions.src)
+    const imageData = this.cropperJsInstance?.getImageData()
+      || await getImageInfo(this.inputCropperOptions.src)
+      || {}
     ;
 
     this.commonCropOptions = {
@@ -189,7 +203,8 @@ export class SuperImageCropper {
     const syntheticGIF = new SyntheticGIF({
       frames: resultFrames,
       commonCropOptions: this.commonCropOptions,
-      frameDelays
+      frameDelays,
+      gifJsOptions: this.inputCropperOptions.gifJsOptions
     });
     return syntheticGIF.bootstrap();
   }
