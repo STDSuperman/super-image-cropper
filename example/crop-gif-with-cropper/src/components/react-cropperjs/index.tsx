@@ -3,40 +3,43 @@ import Crop from 'react-cropper';
 import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
+const imgList = [
+  '/dog.gif',
+  '/kvy.jpg',
+  // 'test.gif'
+]
+
+let activeImageIndex = 0;
+
 function ReactCropperjs() {
   const cropperInstanceRef = useRef<Cropper>();
-  const [targetGif] = useState(
-    '/test.gif'
-    // "/kvy.jpg"
-  );
+  const [sourceImage, setSourceImage] = useState(imgList[0]);
   const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
-    const cropperInstance = cropperInstanceRef.current;
-    (window as any).cropperInstance = cropperInstance;
-    const gifCropper = new SuperImageCropper();
-    setSuperImageCropperInstance(gifCropper);
+    const superImageCropper = new SuperImageCropper();
+    setSuperImageCropperInstance(superImageCropper);
   }, [cropperInstanceRef.current]);
 
   const onCrop = useCallback(
     () => {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
-        src: targetGif,
+        src: sourceImage,
         // cropperJsOpts: {
-        //   width: 400,
-        //   height: 240,
-        //   rotate: 545,
-        //   y: 0,
-        //   x: 0,
+          // background: "#fff",
+        // },
+        // gifJsOptions: {
+          // background: "#000",
+          // transparent: null
         // }
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
       });
     },
-    [croppedImageList, superImageCropperInstance]
+    [croppedImageList, superImageCropperInstance, sourceImage]
   );
 
   return (
@@ -44,7 +47,7 @@ function ReactCropperjs() {
       <Crop
         style={{ height: 500, width: '100%' }}
         initialAspectRatio={1}
-        src={targetGif}
+        src={sourceImage}
         viewMode={1}
         guides={true}
         minCropBoxHeight={10}
@@ -59,6 +62,14 @@ function ReactCropperjs() {
         }}
       />
       <button onClick={() => onCrop()} className="btn">裁剪</button>
+      <button onClick={() => {
+        if (activeImageIndex >= imgList.length - 1) {
+          activeImageIndex = 0;
+        } else {
+          activeImageIndex += 1;
+        }
+        setSourceImage(imgList[activeImageIndex]);
+      }} className="btn-change">换图</button>
       <div className='image-container'>
         {
           croppedImageList.map(url => {

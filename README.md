@@ -55,6 +55,7 @@ Recommend for use with cropper.
   - `scaleX`: the scaling factor to apply on the abscissa of the image.
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
   - `background`: GIF background color.
+- `gifJsOptions`: [gif.js](https://github.com/jnordberg/gif.js) options.
 
 #### Working with cropperjs
 
