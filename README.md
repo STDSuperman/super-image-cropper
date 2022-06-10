@@ -19,7 +19,7 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 ### Preview
 
 #### GIF
-<img src="https://s4.ax1x.com/2022/02/23/bPaYwt.png" width="500">
+<img src="https://blog-images-1257398419.cos.ap-nanjing.myqcloud.com/github/gif-transparent.png" width="500">
 
 #### Static Image
 
@@ -54,6 +54,7 @@ Recommend for use with cropper.
   - `rotate`: the rotated degrees of the image.
   - `scaleX`: the scaling factor to apply on the abscissa of the image.
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
+  - `background`: GIF background color.
 - `gifJsOptions`: [gif.js](https://github.com/jnordberg/gif.js) options.
 
 #### Working with cropperjs
