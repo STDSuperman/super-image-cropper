@@ -18,29 +18,28 @@ function ReactCropperjs() {
   const [croppedImageList, setCroppedImageList] = useState<string[]>([])
 
   useEffect(() => {
-    const gifCropper = new SuperImageCropper();
-    setSuperImageCropperInstance(gifCropper);
-    console.log('产生新实例')
-  }, [cropperInstanceRef.current, sourceImage]);
+    const superImageCropper = new SuperImageCropper();
+    setSuperImageCropperInstance(superImageCropper);
+  }, [cropperInstanceRef.current]);
 
   const onCrop = useCallback(
     () => {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
-        cropperJsOpts: {
+        // cropperJsOpts: {
           // background: "#fff",
-        },
-        gifJsOptions: {
+        // },
+        // gifJsOptions: {
           // background: "#000",
           // transparent: null
-        }
+        // }
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
       });
     },
-    [croppedImageList, superImageCropperInstance]
+    [croppedImageList, superImageCropperInstance, sourceImage]
   );
 
   return (
