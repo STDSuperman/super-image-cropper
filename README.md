@@ -119,4 +119,10 @@ imageCropper.crop({
 
 ### Example
 
-- Use with react-cropper or cropperjs in react: [React App](https://github.com/STDSuperman/super-image-cropper/tree/master/example/crop-gif-with-cropper).
+#### CodeSandbox
+
+Link: [Used with cropperjs.](https://codesandbox.io/s/fragrant-field-rxvitm?file=/src/components/pure-cropperjs/index.tsx)
+
+#### Github File Link
+
+- Used with react-cropper or cropperjs in react: [React App](https://github.com/STDSuperman/super-image-cropper/tree/master/example/crop-gif-with-cropper).
