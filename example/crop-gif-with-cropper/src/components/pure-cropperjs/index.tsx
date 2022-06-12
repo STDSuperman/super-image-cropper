@@ -1,11 +1,11 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
-import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
+import { SuperImageCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 function PureCropperJs() {
   const cropperInstanceRef = useRef<Cropper>();
   const [targetGif] = useState(
-    '/test.gif'
+    '/dog.gif',
     // "/kvy.jpg"
   );
   const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
@@ -15,7 +15,7 @@ function PureCropperJs() {
     const image = document.getElementById('cropperJsRoot') as HTMLImageElement;
     if (!image) return;
     const cropperInstance = new Cropper(image, {
-      aspectRatio: 16 / 9,
+      aspectRatio: 20 / 8,
       autoCrop: false,
       autoCropArea: 1,
       minCropBoxHeight: 10,
@@ -23,10 +23,13 @@ function PureCropperJs() {
       viewMode: 1,
       initialAspectRatio: 1,
       responsive: false,
-      guides: true
+      guides: true,
+      restore: true,
+      modal: true,
+      center: true,
+      highlight: true,
     });
     cropperInstanceRef.current = cropperInstance;
-    (window as any).cropperInstance = cropperInstance;
     const superImageCropper = new SuperImageCropper();
     setSuperImageCropperInstance(superImageCropper);
   }, []);
@@ -53,7 +56,10 @@ function PureCropperJs() {
 
   return (
     <div className="App">
-      <img id="cropperJsRoot" src={targetGif}></img>
+      <img id="cropperJsRoot" src={targetGif} style={{
+        width: '100%',
+        height: '400px'
+      }}></img>
       <button onClick={() => onCrop()} className="btn">裁剪</button>
       <div className='image-container'>
         {
