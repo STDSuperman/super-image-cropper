@@ -12,9 +12,9 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 - [x] Support for PNG / JPG / JPEG cropping.
 
 
-## Demo
+## Experience
 
-[Online Demo](https://gif-cropper-stdsuperman.vercel.app/)
+[Online Link](https://gif-cropper-stdsuperman.vercel.app/)
 
 ### Preview
 
