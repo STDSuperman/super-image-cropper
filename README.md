@@ -19,11 +19,11 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 ### Preview
 
 #### GIF
-<img src="https://blog-images-1257398419.cos.ap-nanjing.myqcloud.com/github/gif-transparent.png" width="500">
+<img src="https://blog-images-1257398419.cos.ap-nanjing.myqcloud.com/github/gif-transparent.png" width="657">
 
 #### Static Image
 
-<img src="https://s4.ax1x.com/2022/02/23/bPUoIf.png" width="500">
+<img src="https://s4.ax1x.com/2022/02/23/bPUoIf.png" width="657">
 <!-- [![Static Image](https://s4.ax1x.com/2022/02/23/bPUoIf.png)](https://imgtu.com/i/bPUoIf) -->
 
 ## Getting started
