@@ -743,10 +743,10 @@ source-map-js@^1.0.2:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-super-image-cropper@1.0.8:
-  version "1.0.8"
-  resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.8.tgz#96a3518a6db6436c9f16bdaab3c7070ab9deae47"
-  integrity sha512-zSkRKZfvHz5dBaSFwZZDJEFHf8HMZvBbwgp6fM6yLMi4U6qfYSH3aMvHM70cN8+lDZsxmIw20qGsGFK0IhWGhA==
+super-image-cropper@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.9.tgz#fc3ada2943616536cfcec28fda3ef68bcb017365"
+  integrity sha512-q6W/ik0Zs3wv7fCye5MTtBgdxmhkzgLcoVqWH4Gk5VWyzO3wZXWWvzuqcjb3Wjn8X2Elb8Dec6a2unjwBCHPVA==
   dependencies:
     cropperjs "^1.5.12"
     gif-build-worker-js "^1.0.2"
