@@ -3,7 +3,7 @@ import { Decoder } from './lib/decoder';
 import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
 import { ParsedFrame } from 'gifuct-js';
-import { getImageInfo, loadImage, getImageType } from './lib/helper'
+import { getImageInfo, loadImage, getImageType, IImageTypeInfo } from './lib/helper';
 
 export interface CustomCropper extends Cropper {
   url: '';
@@ -67,6 +67,7 @@ export class SuperImageCropper {
   private commonCropOptions!: ICommonCropOptions;
   private frameCropperInstance!: FrameCropper;
   private inputCropperOptions!: ICropperOptions;
+  private imageTypeInfo: IImageTypeInfo | null = null;
 
   public async crop(
     inputCropperOptions: ICropperOptions
@@ -211,8 +212,8 @@ export class SuperImageCropper {
 
   private async checkIsStaticImage(): Promise<boolean> {
     const url = this.cropperJsInstance?.url ?? this.inputCropperOptions?.src;
-    const imageDataInfo = await getImageType(url);
-    return imageDataInfo?.mime !== 'image/gif';
+    this.imageTypeInfo = await getImageType(url);
+    return this.imageTypeInfo?.mime !== 'image/gif';
   }
 
   private async handleStaticImage(): Promise<string> {
@@ -240,7 +241,7 @@ export class SuperImageCropper {
         if (!blob) return reject(null);
         const blobUrl = window.URL.createObjectURL(blob);
         resolve(blobUrl);
-      })
+      }, this.imageTypeInfo?.mime)
     })
   }
 }
