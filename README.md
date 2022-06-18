@@ -14,7 +14,9 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 
 ## Experience
 
-[Online Website](https://gif-cropper-stdsuperman.vercel.app/)
+- [Online Demo](https://gif-cropper-stdsuperman.vercel.app/)
+
+- CodeSandbox: [Used with cropperjs.](https://codesandbox.io/s/fragrant-field-rxvitm?file=/src/components/pure-cropperjs/index.tsx)
 
 ### Preview
 
@@ -41,7 +43,7 @@ yarn add super-image-cropper -S
 
 ### Usage
 
-Recommend for use with cropper.
+Recommend for use with [cropperjs](https://github.com/fengyuanchen/cropperjs).
 #### Properties
 
 - `src`: image url.
@@ -118,11 +120,5 @@ imageCropper.crop({
 ```
 
 ### Example
-
-#### CodeSandbox
-
-Link: [Used with cropperjs.](https://codesandbox.io/s/fragrant-field-rxvitm?file=/src/components/pure-cropperjs/index.tsx)
-
-#### Example Code Link
 
 - Used with react-cropper or cropperjs in react: [React App](https://github.com/STDSuperman/super-image-cropper/tree/master/example/crop-gif-with-cropper).
