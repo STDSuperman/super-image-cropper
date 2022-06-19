@@ -94,7 +94,7 @@ imageCropper.crop({
 });
 ```
 
-#### Stand-alone use
+#### Use alone
 
 If not used with cropperjs, the src parameter must be passed.
 
