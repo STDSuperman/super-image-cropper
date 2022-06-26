@@ -7,9 +7,9 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 [![GitHub license](https://img.shields.io/github/license/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/blob/master/LICENSE)
 ## Features
 
-- [x] Support for GIF cropping.
-- [x] Support for collaboration with cropperjs.
-- [x] Support for PNG / JPG / JPEG cropping.
+- Support for GIF cropping.
+- Support for collaboration with cropperjs.
+- Support for PNG / JPG / JPEG cropping.
 
 
 ## Experience
