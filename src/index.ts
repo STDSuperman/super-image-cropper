@@ -15,6 +15,7 @@ export interface CustomCropper extends Cropper {
 export interface ICropperOptions {
   cropperInstance?: CustomCropper | Cropper;
   src?: string;
+  crossOrigin?: '' | 'anonymous' | 'use-credentials';
   cropperJsOpts?: ICropOpts;
   gifJsOptions?: IGifOpts;
 }

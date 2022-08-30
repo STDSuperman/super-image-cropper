@@ -11,14 +11,20 @@ export interface IImageTypeInfo {
   mime: string;
 }
 
-export const getImageInfo = async (src: string = ''): Promise<IImageData> => {
+export interface IGetImageParams {
+  src: string;
+  crossOrigin?: '' | 'anonymous' | 'use-credentials';
+}
+
+export const getImageInfo = async (params: IGetImageParams): Promise<IImageData> => {
+    const { src = '' } = params;
     if (!src) return {
       width: 0,
       height: 0,
       naturalWidth: 0,
       naturalHeight: 0,
     };
-    const { imageInstance } = await loadImage(src);
+    const { imageInstance } = await loadImage(params);
     return {
       width: imageInstance.width,
       height: imageInstance.height,
@@ -27,9 +33,13 @@ export const getImageInfo = async (src: string = ''): Promise<IImageData> => {
     };
 }
 
-export const loadImage = (src: string = ''): Promise<IImageLoadData> => {
+export const loadImage = (params: IGetImageParams): Promise<IImageLoadData> => {
+  const { src = '', crossOrigin } = params;
   return new Promise((resolve, reject) => {
     const image = new Image();
+    if (crossOrigin !== undefined) {
+      image.crossOrigin = crossOrigin;
+    }
     image.onload = function(data) {
       resolve({
         imageInstance: image,
