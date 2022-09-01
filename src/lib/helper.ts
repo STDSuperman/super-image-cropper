@@ -12,7 +12,7 @@ export interface IImageTypeInfo {
 }
 
 export interface IGetImageParams {
-  src: string;
+  src?: string;
   crossOrigin?: '' | 'anonymous' | 'use-credentials';
 }
 
