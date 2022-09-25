@@ -15,6 +15,7 @@ export interface CustomCropper extends Cropper {
 export interface ICropperOptions {
   cropperInstance?: CustomCropper | Cropper;
   src?: string;
+  crossOrigin?: '' | 'anonymous' | 'use-credentials';
   cropperJsOpts?: ICropOpts;
   gifJsOptions?: IGifOpts;
 }
@@ -104,7 +105,10 @@ export class SuperImageCropper {
     );
 
     const imageData = this.cropperJsInstance?.getImageData()
-      || await getImageInfo(this.inputCropperOptions.src)
+      || await getImageInfo({
+        src: this.inputCropperOptions.src,
+        crossOrigin: this.inputCropperOptions.crossOrigin
+      })
       || {}
     ;
 
@@ -217,7 +221,10 @@ export class SuperImageCropper {
   }
 
   private async handleStaticImage(): Promise<string> {
-    const imageInfo = await loadImage(this.inputCropperOptions.src);
+    const imageInfo = await loadImage({
+      src: this.inputCropperOptions.src,
+      crossOrigin: this.inputCropperOptions.crossOrigin,
+    });
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
