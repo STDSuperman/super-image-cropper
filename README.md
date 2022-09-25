@@ -47,7 +47,7 @@ Recommend for use with [cropperjs](https://github.com/fengyuanchen/cropperjs).
 #### Properties
 
 - `src`: image url.
-- `crossOrigin`: Image crossOrigin property.
+- `crossOrigin`: set image crossOrigin strategy.
 - `cropperInstance`: cropperjs instance.
 - `cropperJsOpts`:
   - `x`: the offset left of the cropped area.

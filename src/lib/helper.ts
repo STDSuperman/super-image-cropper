@@ -37,7 +37,7 @@ export const loadImage = (params: IGetImageParams): Promise<IImageLoadData> => {
   const { src = '', crossOrigin } = params;
   return new Promise((resolve, reject) => {
     const image = new Image();
-    if (crossOrigin !== undefined) {
+    if (typeof crossOrigin !== 'undefined') {
       image.crossOrigin = crossOrigin;
     }
     image.onload = function(data) {
