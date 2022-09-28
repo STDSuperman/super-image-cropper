@@ -4,9 +4,9 @@ import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
-  '/dog.gif',
-  '/kvy.jpg',
-  // 'test.gif'
+  // '/dog.gif',
+  // '/kvy.jpg',
+  'test.gif'
 ]
 
 let activeImageIndex = 0;

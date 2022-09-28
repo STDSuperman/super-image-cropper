@@ -1,8 +1,13 @@
-import { parseGIF, decompressFrames, ParsedGif } from 'gifuct-js';
+import { parseGIF, decompressFrames, ParsedGif, ParsedFrame } from 'gifuct-js';
 import { GetArrTypeUnion } from './helper';
 
 export type IFrames = Pick<ParsedGif, 'frames'>['frames'];
 export type IFrame = GetArrTypeUnion<IFrames>;
+export interface IParsedFrameInfo {
+  frames: ImageData[];
+  delays: number[];
+  parsedFrames: ParsedFrame[]
+}
 
 export class Decoder {
   private parseGIF!: ParsedGif;
@@ -11,12 +16,54 @@ export class Decoder {
   public async decode(): Promise<ParsedGif> {
     const imageData = await this.fetchImageData(this.url);
     this.parseGIF = parseGIF(imageData);
+    this.validateAndFixFrame(this.parseGIF);
     return this.parseGIF;
   }
 
-  public async decompressFrames() {
+  public async decompressFrames(): Promise<IParsedFrameInfo> {
     if (!this.parseGIF) await this.decode();
-    return decompressFrames(this.parseGIF, true);
+    const parsedFrames = await decompressFrames(this.parseGIF, true);
+    const frames = this.generate2ImageData(
+      this.handlePixels(parsedFrames),
+      parsedFrames
+    );
+    return {
+      frames,
+      delays: parsedFrames.map(item => item.delay),
+      parsedFrames,
+    };
+  }
+
+  /**
+   * 修复部分帧像素丢失
+   * @param gif 
+   */
+  private validateAndFixFrame = (gif:  any) => {
+    let currentGce = null;
+    for (const frame of gif.frames) {
+      currentGce = frame.gce ? frame.gce : currentGce;
+  
+      // fix loosing graphic control extension for same frames
+      if ("image" in frame && !("gce" in frame)) {
+        frame.gce = currentGce;
+      }
+    }
+  };
+
+  /**
+   * 包装生成 imageData
+   * @param frames 
+   */
+  private generate2ImageData(
+    frames: Uint8ClampedArray[],
+    parsedFrames: ParsedFrame[],
+  ): ImageData[] {
+    return frames.map((item, index) => {
+      const frameDims = parsedFrames[index]?.dims;
+      const image = new ImageData(frameDims.width, frameDims.height);
+      image.data.set(new Uint8ClampedArray(item));
+      return image;
+    })
   }
 
   /**
@@ -46,5 +93,41 @@ export class Decoder {
       };
       xhr.send();
     });
+  }
+
+  private handlePixels(frames: ParsedFrame[]) {
+    const options = this.parseGIF.lsd;
+    const size = options.width * options.height * 4;
+    const readyFrames: Uint8ClampedArray[] = [];
+    for (let i = 0; i < frames.length; ++i) {
+      const frame = frames[i];
+      const typedArray =
+        i === 0 || frames[i - 1].disposalType === 2
+          ? new Uint8ClampedArray(size)
+          : readyFrames[i - 1].slice();
+      readyFrames.push(this.putPixels(typedArray, frame, options));
+    }
+    return readyFrames;
+  }
+
+  private putPixels(typedArray: any, frame: any, gifSize: any) {
+    if (!frame.dims) return;
+    const { width, height, top: dy, left: dx } = frame.dims;
+    const offset = dy * gifSize.width + dx;
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const pPos = y * width + x;
+        const colorIndex = frame.pixels[pPos];
+        if (colorIndex !== frame.transparentIndex) {
+          const taPos = offset + y * gifSize.width + x;
+          const color = frame.colorTable[colorIndex] || [0, 0, 0];
+          typedArray[taPos * 4] = color[0];
+          typedArray[taPos * 4 + 1] = color[1];
+          typedArray[taPos * 4 + 2] = color[2];
+          typedArray[taPos * 4 + 3] = 255;
+        }
+      }
+    }
+    return typedArray;
   }
 }

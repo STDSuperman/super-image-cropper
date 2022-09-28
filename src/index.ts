@@ -2,9 +2,8 @@ import Cropper from 'cropperjs';
 import { Decoder } from './lib/decoder';
 import { SyntheticGIF } from './lib/synthetic-gif';
 import { FrameCropper } from './lib/cropper';
-import { ParsedFrame } from 'gifuct-js';
 import { getImageInfo, loadImage, getImageType, IImageTypeInfo } from './lib/helper';
-
+import type { IParsedFrameInfo } from './lib/decoder';
 export interface CustomCropper extends Cropper {
   url: '';
   cropBoxData: Cropper.ImageData;
@@ -64,7 +63,7 @@ export class SuperImageCropper {
   private cropperJsInstance?: CustomCropper;
   private imageInstance?: HTMLImageElement;
   private preImageSrc = '';
-  private frames: ParsedFrame[] = [];
+  private parsedFrameInfo!: IParsedFrameInfo;
   private commonCropOptions!: ICommonCropOptions;
   private frameCropperInstance!: FrameCropper;
   private inputCropperOptions!: ICropperOptions;
@@ -79,8 +78,8 @@ export class SuperImageCropper {
     if (await this.checkIsStaticImage()) {
       return this.handleStaticImage()
     } else {
-      const { resultFrames, frameDelays } = await this.cropFrames();
-      return this.saveGif(resultFrames, frameDelays);
+      const resultFrames = await this.cropFrames();
+      return this.saveGif(resultFrames, this.parsedFrameInfo?.delays || []);
     }
   }
 
@@ -181,11 +180,10 @@ export class SuperImageCropper {
     })
   }
 
-  private async decodeGIF() {
+  private async decodeGIF(): Promise<void> {
     const decoder = new Decoder(this.inputCropperOptions.src || this.cropperJsInstance?.url || '');
-    const decodedGIFFrames = await decoder.decompressFrames();
-    this.frames = decodedGIFFrames;
-    return decodedGIFFrames;
+    const parsedFrameInfo = await decoder.decompressFrames();
+    this.parsedFrameInfo = parsedFrameInfo;
   }
 
   private ensureFrameCropperExist() {
@@ -201,7 +199,7 @@ export class SuperImageCropper {
     this.frameCropperInstance.updateConfig({
       commonCropOptions: this.commonCropOptions
     });
-    return this.frameCropperInstance.cropGif(this.frames);
+    return this.frameCropperInstance.cropGif(this.parsedFrameInfo);
   }
 
   private async saveGif(resultFrames: ImageData[], frameDelays: number[]) {

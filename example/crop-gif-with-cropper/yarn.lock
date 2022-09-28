@@ -274,6 +274,13 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
+"@react-gifs/tools@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.npmmirror.com/@react-gifs/tools/-/tools-0.1.2.tgz#b2e2b03be1ba4d38d6d624c9d7f5b317f790fce3"
+  integrity sha512-KC4IXwoT/teTMlkLy8Qp6i/NlYx3kEJsPgRKlXwfTjjmhCLo2tCobnET2am0R7bB0KegDDTO7h10+NbBPRbs5A==
+  dependencies:
+    gifuct-js "^2.0.0"
+
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
@@ -566,7 +573,7 @@ gif.js@^0.2.0:
   resolved "https://registry.npmjs.org/gif.js/-/gif.js-0.2.0.tgz#615e6e3788850cd3a20c85fe9f09539e784903e8"
   integrity sha512-bYxCoT8OZKmbxY8RN4qDiYuj4nrQDTzgLRcFVovyona1PTWNePzI4nzOmotnlOFIzTk/ZxAHtv+TfVLiBWj/hw==
 
-gifuct-js@^2.1.2:
+gifuct-js@^2.0.0, gifuct-js@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/gifuct-js/-/gifuct-js-2.1.2.tgz#06152437ba30ec914db8398bd838bd0fbc8a6ecd"
   integrity sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==
