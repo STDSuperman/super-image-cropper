@@ -6,7 +6,7 @@ import Cropper from 'cropperjs';
 const imgList = [
   '/dog.gif',
   '/kvy.jpg',
-  // 'test.gif'
+  // '/test.gif'
 ]
 
 let activeImageIndex = 0;
@@ -27,13 +27,12 @@ function ReactCropperjs() {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
-        // cropperJsOpts: {
+        cropperJsOpts: {
           // background: "#fff",
-        // },
-        // gifJsOptions: {
-          // background: "#000",
+        },
+        gifJsOptions: {
           // transparent: null
-        // }
+        }
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));

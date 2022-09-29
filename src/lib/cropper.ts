@@ -1,12 +1,14 @@
 import { ICommonCropOptions, ICropOpts } from '../index';
 import { ParsedFrame } from 'gifuct-js';
+import type { IParsedFrameInfo } from './decoder';
 
 export interface IFrameCropperProps {
   commonCropOptions: ICommonCropOptions;
 }
 
 export class FrameCropper {
-  private frames!: ParsedFrame[];
+  private frames!: ImageData[];
+  private parsedFrames!: ParsedFrame[];
   private commonCropOptions!: ICommonCropOptions;
   private convertorCanvas!: HTMLCanvasElement;
   private containerCanvas!: HTMLCanvasElement;
@@ -18,7 +20,6 @@ export class FrameCropper {
   private containerCenterX = 0;
   private containerCenterY = 0;
   private resultFrames: ImageData[] = [];
-  private frameDelays: number[] = [];
   constructor(props: IFrameCropperProps) {
     this.updateConfig(props);
   }
@@ -28,19 +29,19 @@ export class FrameCropper {
     this.cropperJsOpts = commonCropOptions.cropperJsOpts;
     // 重置状态
     this.resultFrames = [];
-    this.frameDelays = [];
     if (!this.containerCanvas || !this.convertorCanvas) {
       this.setupCanvas();
     }
     this.setCanvasWH();
   }
 
-  public async cropGif(frames: ParsedFrame[]) {
+  public async cropGif(parsedFrameInfo: IParsedFrameInfo) {
+    const { frames, parsedFrames } = parsedFrameInfo;
     this.frames = frames;
+    this.parsedFrames = parsedFrames;
     let frameIdx = 0;
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
-      const frameImgData = this.frameToImgData(this.convertCtx, currentFrame);
       // 清理一下画板
       this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
       // 添加gif背景颜色
@@ -52,17 +53,13 @@ export class FrameCropper {
       }
 
       // 裁剪转换当前帧
-      if (!frameImgData) continue;
-      const imageData = this.transformFrame(this.drawImgDataToCanvas(currentFrame, frameImgData));
+      if (!currentFrame) continue;
+      const imageData = this.transformFrame(this.drawImgDataToCanvas(currentFrame, frameIdx));
       this.resultFrames.push(imageData);
-      this.frameDelays.push(currentFrame.delay);
       frameIdx++;
     }
 
-    return {
-      resultFrames: this.resultFrames,
-      frameDelays: this.frameDelays
-    };
+    return this.resultFrames;
   }
 
   public cropStaticImage(canvasImageContainer: CanvasImageSource): ImageData {
@@ -93,9 +90,10 @@ export class FrameCropper {
     return imageData;
   }
 
-  private drawImgDataToCanvas(frame: ParsedFrame, frameImgData: ImageData): CanvasImageSource {
+  private drawImgDataToCanvas(frame: ImageData, index: number): CanvasImageSource {
+    const dims = this.parsedFrames[index]?.dims;
     this.convertCtx.clearRect(0, 0, this.convertorCanvas.width, this.convertorCanvas.height);
-    this.convertCtx.putImageData(frameImgData, frame.dims.left, frame.dims.top);
+    this.convertCtx.putImageData(frame, dims.left, dims.top);
     return this.convertorCanvas;
   }
 
