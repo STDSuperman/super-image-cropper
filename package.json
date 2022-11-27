@@ -22,26 +22,32 @@
     "@types/minimist": "^1.2.2",
     "@typescript-eslint/eslint-plugin": "^4.29.3",
     "@typescript-eslint/parser": "^4.29.3",
+    "chalk": "^5.1.2",
     "commitizen": "^4.2.4",
     "commitlint-config-cz": "^0.13.2",
+    "conventional-changelog-cli": "^2.2.2",
     "cz-conventional-changelog": "^3.3.0",
     "cz-customizable": "^6.3.0",
+    "enquirer": "^2.3.6",
     "esbuild": "^0.14.23",
     "eslint": "^7.32.0",
     "eslint-plugin-import": "^2.24.2",
+    "execa": "^6.1.0",
+    "fs-extra": "^10.1.0",
     "husky": "^7.0.2",
+    "minimist": "^1.2.7",
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
+    "semver": "^7.3.8",
     "tslib": "^2.3.1",
+    "tsx": "^3.12.1",
     "turbo": "^1.6.3",
+    "type-fest": "^3.2.0",
     "typescript": "^4.4.2"
   },
   "config": {
     "commitizen": {
       "path": "node_modules/cz-customizable"
     }
-  },
-  "dependencies": {
-    "conventional-changelog-cli": "^2.2.2"
   }
 }
