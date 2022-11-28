@@ -1,10 +1,10 @@
 import minimist from 'minimist';
 import { prompt } from 'enquirer';
-import fse from 'fs-extra';
 import path from 'path';
 import semver from 'semver';
 import type { IReleaseArgs, IProjectInfo } from './type';
 import type { PackageJson } from 'type-fest'
+import fse from 'fs-extra';
 
 const args = minimist(process.argv.slice(2)) as unknown as IReleaseArgs;
 
@@ -33,7 +33,8 @@ const selectWorkspaceProject = async () => {
 
   return {
     project,
-    curVersion: selectProjectInfo?.packageJson.version
+    curVersion: selectProjectInfo?.packageJson.version,
+    selectProjectInfo
   };
 }
 
@@ -41,11 +42,12 @@ const readWorkspaceProjectsInfo = (): IProjectInfo[] => {
   const packagesRootDir = path.resolve(__dirname, '../../packages');
   const projects = fse.readdirSync(packagesRootDir);
   return projects.map(project => {
-    const packageJsonPath = path.join(packagesRootDir, project, 'package.json');
-    const packageJson = fse.readJSONSync(packageJsonPath) as PackageJson;
+    const packageJsonFilePath = path.join(packagesRootDir, project, 'package.json');
+    const packageJson = fse.readJsonSync(packageJsonFilePath) as PackageJson;
     return {
       project,
       packageJson,
+      pkgFilePath: packageJsonFilePath
     }
   })
 }
@@ -97,10 +99,20 @@ const getReleaseTag = async (curVersion: string): Promise<string> => {
   process.exit(0);
 }
 
+const updatePackageVersion = async (
+  newVersion: string,
+  selectProjectInfo: IProjectInfo
+): Promise<void> => {
+  const { pkgFilePath, packageJson } = selectProjectInfo;
+  packageJson.version = newVersion;
+  fse.writeFileSync(pkgFilePath, JSON.stringify(packageJson, null, 2));
+}
+
 const main = async () => {
-  const { project, curVersion = '' } = await selectWorkspaceProject();
+  const { project, curVersion = '', selectProjectInfo } = await selectWorkspaceProject();
   const targetVersion = await selectTargetVersion(curVersion);
   const releaseTag = await getReleaseTag(curVersion);
+  await updatePackageVersion(targetVersion, selectProjectInfo!);
   console.log(project, targetVersion, releaseTag)
 }
 

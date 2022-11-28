@@ -7,4 +7,5 @@ export interface IReleaseArgs {
 export interface IProjectInfo {
   project: string;
   packageJson: PackageJson;
+  pkgFilePath: string;
 }
