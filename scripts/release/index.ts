@@ -141,7 +141,7 @@ const checkGitDiffAndCommit = async (
   await ExecaCommand.runCommand('git add --all', {
     cwd: process.cwd(),
   })
-  await ExecaCommand.runCommand(`pnpx git-cz --type=release --scope=${project} --subject=Release ${releaseTag} --non-interactive`, {
+  await ExecaCommand.runCommand(`pnpx git-cz --type=release --scope=${project} --subject="Release ${releaseTag}" --non-interactive`, {
     cwd: process.cwd(),
   });
 }
