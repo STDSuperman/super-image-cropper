@@ -5,6 +5,8 @@ import semver from 'semver';
 import type { IReleaseArgs, IProjectInfo } from './type';
 import type { PackageJson } from 'type-fest'
 import fse from 'fs-extra';
+import execa from 'execa';
+import { ExecaCommand } from '../utils/ExecCommand'
 
 const args = minimist(process.argv.slice(2)) as unknown as IReleaseArgs;
 
@@ -108,11 +110,51 @@ const updatePackageVersion = async (
   fse.writeFileSync(pkgFilePath, JSON.stringify(packageJson, null, 2));
 }
 
+const execBuildScript = async () => {
+  const task = ExecaCommand.runCommand('pnpm build', {
+    cwd: process.cwd(),
+  })
+
+  return task;
+}
+
+const checkGitDiffAndCommit = async (
+  project: string,
+  releaseTag: string,
+) => {
+  const { stdout } = await ExecaCommand.runCommand('git diff', {
+    cwd: process.cwd(),
+  })
+  
+  if (!stdout) {
+    console.warn('No commit changes found');
+    process.exit(0);
+  }
+
+  await ExecaCommand.runCommand('git add --all', {
+    cwd: process.cwd(),
+  })
+  await ExecaCommand.runCommand(`pnpx git-cz --type=release --scope=${project} --subject=Release ${releaseTag} --non-interactive`, {
+    cwd: process.cwd(),
+  });
+}
+
+const publishTagAndPush = async (releaseTag: string) => {
+  await ExecaCommand.runCommand(`git tag ${releaseTag}`, { cwd: process.cwd() });
+  await ExecaCommand.runCommand(`git push origin refs/tags/${releaseTag} --verbose --progress`, { cwd: process.cwd() });
+  await ExecaCommand.runCommand('git push', {
+    cwd: process.cwd(),
+  })
+}
+
 const main = async () => {
   const { project, curVersion = '', selectProjectInfo } = await selectWorkspaceProject();
   const targetVersion = await selectTargetVersion(curVersion);
   const releaseTag = await getReleaseTag(curVersion);
   await updatePackageVersion(targetVersion, selectProjectInfo!);
+  await execBuildScript();
+  await checkGitDiffAndCommit(project, releaseTag)
+  await publishTagAndPush(releaseTag);
   console.log(project, targetVersion, releaseTag)
 }
 
