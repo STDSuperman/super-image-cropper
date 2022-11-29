@@ -33,6 +33,11 @@ const selectWorkspaceProject = async () => {
 
   const selectProjectInfo = workspaceProjectsInfo.find(item => item.project === project);
 
+  if (!selectProjectInfo) {
+    console.log('Target project not found');
+    process.exit(0);
+  }
+
   return {
     project,
     curVersion: selectProjectInfo?.packageJson.version,
@@ -44,12 +49,14 @@ const readWorkspaceProjectsInfo = (): IProjectInfo[] => {
   const packagesRootDir = path.resolve(__dirname, '../../packages');
   const projects = fse.readdirSync(packagesRootDir);
   return projects.map(project => {
+    const packageRoot = path.join(packagesRootDir, project);
     const packageJsonFilePath = path.join(packagesRootDir, project, 'package.json');
     const packageJson = fse.readJsonSync(packageJsonFilePath) as PackageJson;
     return {
       project,
       packageJson,
-      pkgFilePath: packageJsonFilePath
+      pkgFilePath: packageJsonFilePath,
+      packageRoot
     }
   })
 }
@@ -87,8 +94,8 @@ const selectTargetVersion = async (curVersion: string): Promise<string> => {
   }
 }
 
-const getReleaseTag = async (curVersion: string): Promise<string> => {
-  const targetTag = `v${curVersion}`;
+const getReleaseTag = async (project, curVersion: string): Promise<string> => {
+  const targetTag = `${project}@${curVersion}`;
   
   const { confirm }: Record<'confirm', string> = await prompt({
     type: 'confirm',
@@ -139,7 +146,7 @@ const checkGitDiffAndCommit = async (
   });
 }
 
-const publishTagAndPush = async (releaseTag: string) => {
+const pushTagAndCommit = async (releaseTag: string) => {
   await ExecaCommand.runCommand(`git tag ${releaseTag}`, { cwd: process.cwd() });
   await ExecaCommand.runCommand(`git push origin refs/tags/${releaseTag} --verbose --progress`, { cwd: process.cwd() });
   await ExecaCommand.runCommand('git push', {
@@ -147,14 +154,30 @@ const publishTagAndPush = async (releaseTag: string) => {
   })
 }
 
+const publishPackage = async (selectProjectInfo: IProjectInfo, publishTag: string) => {
+  const publishArgs = [
+    'publish',
+    '--registry=https://registry.npmjs.org/',
+    '--access=public',
+    '--no-git-checks',
+    `--tag ${publishTag}`,
+  ]
+
+  await ExecaCommand.runCommand(`pnpm ${publishArgs.join(' ')}`, { cwd: selectProjectInfo.packageRoot })
+}
+
 const main = async () => {
   const { project, curVersion = '', selectProjectInfo } = await selectWorkspaceProject();
   const targetVersion = await selectTargetVersion(curVersion);
-  const releaseTag = await getReleaseTag(curVersion);
-  await updatePackageVersion(targetVersion, selectProjectInfo!);
+  const releaseTag = await getReleaseTag(project, curVersion);
+  await updatePackageVersion(targetVersion, selectProjectInfo);
   await execBuildScript();
   await checkGitDiffAndCommit(project, releaseTag)
-  await publishTagAndPush(releaseTag);
+  await pushTagAndCommit(releaseTag);
+
+  const publishTag = releaseTag.includes('beta') ? 'beta' : 'latest';
+
+  await publishPackage(selectProjectInfo, publishTag);
   console.log(project, targetVersion, releaseTag)
 }
 
