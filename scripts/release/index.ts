@@ -155,7 +155,7 @@ const checkGitDiffAndCommit = async (
   await ExecaCommand.runCommand('git add --all', {
     cwd: process.cwd(),
   })
-  await ExecaCommand.runCommand(`pnpx git-cz --type=release --scope=${project} --subject=Release:&nbsp;${releaseTag} --non-interactive`, {
+  await ExecaCommand.runCommand(`pnpx git-cz --type=release --scope=${project} --subject=Release:(${releaseTag}) --non-interactive`, {
     cwd: process.cwd(),
   });
 }
@@ -192,9 +192,8 @@ const publishPackage = async (selectProjectInfo: IProjectInfo, publishTag: strin
   await ExecaCommand.runCommand(`pnpm ${publishArgs.join(' ')}`, { cwd: selectProjectInfo.packageRoot })
 }
 
-const doLintAndChangelog = async () => {
+const doLint = async () => {
   await ExecaCommand.runCommand('pnpm lint:fix', { cwd: process.cwd() });
-  await ExecaCommand.runCommand('pnpm changelog', { cwd: process.cwd() });
 }
 
 const main = async () => {
@@ -203,8 +202,9 @@ const main = async () => {
   const releaseTag = await getReleaseTag(project, targetVersion);
   await updatePackageVersion(targetVersion, selectProjectInfo);
   await execBuildScript();
-  await doLintAndChangelog();
+  await doLint();
   await checkGitDiffAndCommit(project, releaseTag);
+  await ExecaCommand.runCommand('pnpm changelog', { cwd: process.cwd() });
   await pushTagAndCommit(releaseTag);
 
   const publishTag = releaseTag.includes('beta') ? 'beta' : 'latest';
