@@ -8,6 +8,16 @@
 
 
 
+# [](https://github.com/STDSuperman/super-image-cropper/compare/v1.0.11...v) (2022-12-04)
+
+
+### Features
+
+* change basic structure to monorepo, add changelog ([8fe38d0](https://github.com/STDSuperman/super-image-cropper/commit/8fe38d04a9500f5bb73f819e23b4e28dde82c031))
+* 补充自动提交提示 ([f0e2bb2](https://github.com/STDSuperman/super-image-cropper/commit/f0e2bb2061c1776baa338da47c7d8167e7cdce41))
+
+
+
 ## [1.0.11](https://github.com/STDSuperman/super-image-cropper/compare/v1.0.10...v1.0.11) (2022-09-30)
 
 
