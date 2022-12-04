@@ -106,6 +106,7 @@ const getReleaseTag = async (project, curVersion: string): Promise<string> => {
   })
 
   if (confirm) return targetTag;
+  Logger.warn('Cancel release.')
   process.exit(0);
 }
 
@@ -191,12 +192,18 @@ const publishPackage = async (selectProjectInfo: IProjectInfo, publishTag: strin
   await ExecaCommand.runCommand(`pnpm ${publishArgs.join(' ')}`, { cwd: selectProjectInfo.packageRoot })
 }
 
+const doLintAndChangelog = async () => {
+  await ExecaCommand.runCommand('pnpm lint:fix', { cwd: process.cwd() });
+  await ExecaCommand.runCommand('pnpm changelog', { cwd: process.cwd() });
+}
+
 const main = async () => {
   const { project, curVersion = '', selectProjectInfo } = await selectWorkspaceProject();
   const targetVersion = await selectTargetVersion(curVersion);
-  const releaseTag = await getReleaseTag(project, curVersion);
+  const releaseTag = await getReleaseTag(project, targetVersion);
   await updatePackageVersion(targetVersion, selectProjectInfo);
   await execBuildScript();
+  await doLintAndChangelog();
   await checkGitDiffAndCommit(project, releaseTag);
   await pushTagAndCommit(releaseTag);
 
