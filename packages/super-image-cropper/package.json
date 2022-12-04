@@ -1,6 +1,6 @@
 {
   "name": "super-image-cropper",
-  "version": "1.0.13-beta.2",
+  "version": "1.0.13-beta.3",
   "main": "dist/index.js",
   "repository": "git@github.com:STDSuperman/super-image-cropper.git",
   "author": "STDSuperman <2750556766@qq.com>",
