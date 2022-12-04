@@ -204,7 +204,6 @@ const main = async () => {
   await execBuildScript();
   await doLint();
   await checkGitDiffAndCommit(project, releaseTag);
-  await ExecaCommand.runCommand('pnpm changelog', { cwd: process.cwd() });
   await pushTagAndCommit(releaseTag);
 
   const publishTag = releaseTag.includes('beta') ? 'beta' : 'latest';
