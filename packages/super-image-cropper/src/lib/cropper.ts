@@ -62,11 +62,11 @@ export class FrameCropper {
     return this.resultFrames;
   }
 
-  public cropStaticImage(canvasImageContainer: CanvasImageSource): ImageData {
+  public cropStaticImage(canvasImageContainer: HTMLCanvasElement): ImageData {
     return this.transformFrame(canvasImageContainer);
   }
 
-  private transformFrame(canvasImageContainer: CanvasImageSource): ImageData {
+  private transformFrame(canvasImageContainer: HTMLCanvasElement): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
     const translateDirection = (this.cropperJsOpts.rotate % 360) >= 180 ? -1 : 1;
@@ -90,7 +90,7 @@ export class FrameCropper {
     return imageData;
   }
 
-  private drawImgDataToCanvas(frame: ImageData, index: number): CanvasImageSource {
+  private drawImgDataToCanvas(frame: ImageData, index: number): HTMLCanvasElement {
     const dims = this.parsedFrames[index]?.dims;
     this.convertCtx.clearRect(0, 0, this.convertorCanvas.width, this.convertorCanvas.height);
     this.convertCtx.putImageData(frame, dims.left, dims.top);

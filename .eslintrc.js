@@ -6,8 +6,7 @@ module.exports = {
     ecmaFeatures: {
       modules: true
     },
-    warnOnUnsupportedTypeScriptVersion: false,
-    project: './tsconfig.json'
+    warnOnUnsupportedTypeScriptVersion: false
   },
   env: {
     node: true,
