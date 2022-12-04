@@ -5,8 +5,9 @@ import semver from 'semver';
 import type { IReleaseArgs, IProjectInfo } from './type';
 import type { PackageJson } from 'type-fest'
 import fse from 'fs-extra';
-import execa from 'execa';
 import { ExecaCommand } from '../utils/ExecCommand'
+import { Logger } from '../utils/Logger';
+import chalk from 'chalk';
 
 const args = minimist(process.argv.slice(2)) as unknown as IReleaseArgs;
 
@@ -34,7 +35,7 @@ const selectWorkspaceProject = async () => {
   const selectProjectInfo = workspaceProjectsInfo.find(item => item.project === project);
 
   if (!selectProjectInfo) {
-    console.log('Target project not found');
+    Logger.log('Target project not found');
     process.exit(0);
   }
 
@@ -67,7 +68,7 @@ const getBetaVersion = (curVersion: string): string => {
   let targetVersion = '';
 
   if (isBeta) {
-    const preVersion = curVersion.split(betaKey)[1];
+    const preVersion = +curVersion.split(betaKey)[1];
     targetVersion = curVersion.replace(/(-beta.)\d+/, `$1${preVersion + 1}`)
   } else {
     targetVersion = `${curVersion}-beta.0`
@@ -100,7 +101,7 @@ const getReleaseTag = async (project, curVersion: string): Promise<string> => {
   const { confirm }: Record<'confirm', string> = await prompt({
     type: 'confirm',
     name: 'confirm',
-    message: `Release ${targetTag}. Confirm?`,
+    message: `Release ${chalk.cyan(targetTag)}. Confirm?`,
     initial: true,
   })
 
@@ -134,8 +135,20 @@ const checkGitDiffAndCommit = async (
   })
   
   if (!stdout) {
-    console.warn('No commit changes found');
+    Logger.warn('No commit changes found');
     process.exit(0);
+  }
+
+  const { confirm }: Record<'confirm', string> = await prompt({
+    type: 'confirm',
+    name: 'confirm',
+    message: `Will save to git. Confirm?`,
+    initial: true,
+  })
+
+  if (!confirm) {
+    Logger.warn('Skip git actions.');
+    return;
   }
 
   await ExecaCommand.runCommand('git add --all', {
@@ -155,6 +168,18 @@ const pushTagAndCommit = async (releaseTag: string) => {
 }
 
 const publishPackage = async (selectProjectInfo: IProjectInfo, publishTag: string) => {
+  const { confirm }: Record<'confirm', string> = await prompt({
+    type: 'confirm',
+    name: 'confirm',
+    message: `Will publish package. Confirm?`,
+    initial: true,
+  })
+
+  if (!confirm) {
+    Logger.warn('Do not publish package');
+    process.exit(0);
+  }
+  
   const publishArgs = [
     'publish',
     '--registry=https://registry.npmjs.org/',
@@ -172,13 +197,12 @@ const main = async () => {
   const releaseTag = await getReleaseTag(project, curVersion);
   await updatePackageVersion(targetVersion, selectProjectInfo);
   await execBuildScript();
-  await checkGitDiffAndCommit(project, releaseTag)
+  await checkGitDiffAndCommit(project, releaseTag);
   await pushTagAndCommit(releaseTag);
 
   const publishTag = releaseTag.includes('beta') ? 'beta' : 'latest';
-
   await publishPackage(selectProjectInfo, publishTag);
-  console.log(project, targetVersion, releaseTag)
+  Logger.log(project, targetVersion, releaseTag)
 }
 
 main();
