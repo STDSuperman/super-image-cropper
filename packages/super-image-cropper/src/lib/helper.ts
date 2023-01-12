@@ -68,6 +68,6 @@ export const getImageBufferFromRemote = (url: string = ''): Promise<ArrayBuffer>
 
 export const getImageType = async (url: string = ''): Promise<IImageTypeInfo | null> => {
   const imageBufferData = await getImageBufferFromRemote(url);
-  const imageTypeInfo = imageType(new Uint8Array(imageBufferData));
+  const imageTypeInfo = imageType(new Uint16Array(imageBufferData));
   return imageTypeInfo;
 }

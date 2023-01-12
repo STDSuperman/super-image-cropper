@@ -11,7 +11,7 @@ export interface IParsedFrameInfo {
 
 export class Decoder {
   private parseGIF!: ParsedGif;
-  constructor(private url: string) {}
+  constructor(private url: string) { }
 
   public async decode(): Promise<ParsedGif> {
     const imageData = await this.fetchImageData(this.url);
@@ -38,11 +38,11 @@ export class Decoder {
    * 修复部分帧像素丢失
    * @param gif 
    */
-  private validateAndFixFrame = (gif:  any) => {
+  private validateAndFixFrame = (gif: any) => {
     let currentGce = null;
     for (const frame of gif.frames) {
       currentGce = frame.gce ? frame.gce : currentGce;
-  
+
       // fix loosing graphic control extension for same frames
       if ("image" in frame && !("gce" in frame)) {
         frame.gce = currentGce;
@@ -55,13 +55,13 @@ export class Decoder {
    * @param frames 
    */
   private generate2ImageData(
-    frames: Uint8ClampedArray[],
+    frames: Uint16Array[],
     parsedFrames: ParsedFrame[],
   ): ImageData[] {
     return frames.map((item, index) => {
       const frameDims = parsedFrames[index]?.dims;
       const image = new ImageData(frameDims.width, frameDims.height);
-      image.data.set(new Uint8ClampedArray(item));
+      image.data.set(new Uint16Array(item));
       return image;
     })
   }
@@ -84,7 +84,7 @@ export class Decoder {
         }
         let data = e.target.response;
         if (data.toString().indexOf('ArrayBuffer') > 0) {
-          data = new Uint8Array(data);
+          data = new Uint16Array(data);
         }
         resolve(data);
       };
@@ -98,12 +98,12 @@ export class Decoder {
   private handlePixels(frames: ParsedFrame[]) {
     const options = this.parseGIF.lsd;
     const size = options.width * options.height * 4;
-    const readyFrames: Uint8ClampedArray[] = [];
+    const readyFrames: Uint16Array[] = [];
     for (let i = 0; i < frames.length; ++i) {
       const frame = frames[i];
       const typedArray =
         i === 0 || frames[i - 1].disposalType === 2
-          ? new Uint8ClampedArray(size)
+          ? new Uint16Array(size)
           : readyFrames[i - 1].slice();
       readyFrames.push(this.putPixels(typedArray, frame, options));
     }

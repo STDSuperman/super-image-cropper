@@ -71,7 +71,7 @@ export class SuperImageCropper {
 
   public async crop(
     inputCropperOptions: ICropperOptions
-  ): Promise<string> {
+  ): Promise<string | ArrayBuffer | null> {
     this.inputCropperOptions = inputCropperOptions;
     await this.init();
     await this.decodeGIF();
@@ -109,7 +109,7 @@ export class SuperImageCropper {
         crossOrigin: this.inputCropperOptions.crossOrigin
       })
       || {}
-    ;
+      ;
 
     this.commonCropOptions = {
       cropperJsOpts: this.cropDataInfoAdapter(targetConfig, imageData),
@@ -218,7 +218,7 @@ export class SuperImageCropper {
     return this.imageTypeInfo?.mime !== 'image/gif';
   }
 
-  private async handleStaticImage(): Promise<string> {
+  private async handleStaticImage(): Promise<string | ArrayBuffer | null> {
     const imageInfo = await loadImage({
       src: this.inputCropperOptions.src,
       crossOrigin: this.inputCropperOptions.crossOrigin,
@@ -244,8 +244,14 @@ export class SuperImageCropper {
     return new Promise((resolve, reject) => {
       canvas.toBlob((blob) => {
         if (!blob) return reject(null);
-        const blobUrl = window.URL.createObjectURL(blob);
-        resolve(blobUrl);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = function () {
+          const img = reader.result;
+          resolve(img);
+        };
+        // const blobUrl = window.URL.createObjectURL(blob);
+        // resolve(blobUrl);
       }, this.imageTypeInfo?.mime)
     })
   }

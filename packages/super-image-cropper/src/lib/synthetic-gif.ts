@@ -21,7 +21,7 @@ export class SyntheticGIF {
     this.gifJsOptions = gifJsOptions;
   }
 
-  public bootstrap(): Promise<string> {
+  public bootstrap(): Promise<string | ArrayBuffer | null> {
     return new Promise((resolve, reject) => {
       const gifWorkerUrl = gifWorkerTransformToUrl();
       const gif = new GIF(
@@ -38,8 +38,14 @@ export class SyntheticGIF {
         )
       );
       gif.on('finished', (blob: Blob) => {
-        const blobUrl = window.URL.createObjectURL(blob);
-        resolve(blobUrl);
+        var reader = new FileReader();
+        reader.readAsDataURL(blob);
+        reader.onload = function () {
+          const img = reader.result;
+          resolve(img);
+        };
+        // const blobUrl = window.URL.createObjectURL(blob);
+        // resolve(blobUrl);
       });
 
       this.frames.forEach((frame, idx) => {
