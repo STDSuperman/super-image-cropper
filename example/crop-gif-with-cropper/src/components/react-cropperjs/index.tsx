@@ -42,7 +42,7 @@ function ReactCropperjs() {
         xhr.onload = function() {
             const reader = new FileReader();
             reader.onloadend = function() {
-                console.log(reader.result);
+                console.log('base64:', reader.result);
             }
             reader.readAsDataURL(xhr.response);
         };
