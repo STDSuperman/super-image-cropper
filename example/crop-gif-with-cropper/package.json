@@ -11,7 +11,7 @@
     "react": "^17.0.2",
     "react-cropper": "^2.1.8",
     "react-dom": "^17.0.2",
-    "super-image-cropper": "../../packages/super-image-cropper"
+    "super-image-cropper": "1.0.9"
   },
   "devDependencies": {
     "@types/react": "^17.0.33",
