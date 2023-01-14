@@ -36,6 +36,19 @@ function ReactCropperjs() {
       }).then((blobUrl: string) => {
         // console.log(croppedImageList.concat(blobUrl));
         setCroppedImageList(croppedImageList.concat(blobUrl));
+
+        // blob url to base64
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function() {
+            const reader = new FileReader();
+            reader.onloadend = function() {
+                console.log(reader.result);
+            }
+            reader.readAsDataURL(xhr.response);
+        };
+        xhr.open('GET', blobUrl);
+        xhr.responseType = 'blob';
+        xhr.send();
       });
     },
     [croppedImageList, superImageCropperInstance, sourceImage]
