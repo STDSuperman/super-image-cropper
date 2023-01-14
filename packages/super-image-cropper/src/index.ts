@@ -11,19 +11,20 @@ export interface CustomCropper extends Cropper {
   cropper?: HTMLDivElement
 }
 
-export enum OutputTypeEnum {
+export enum OutputType {
   BASE64 = 'base64',
   BLOB = 'blob',
   BLOB_URL = 'blobURL',
 }
 
+export type IOutputTypeUnion = `${OutputType}`;
 export interface ICropperOptions {
   cropperInstance?: CustomCropper | Cropper;
   src?: string;
   crossOrigin?: '' | 'anonymous' | 'use-credentials';
   cropperJsOpts?: ICropOpts;
   gifJsOptions?: IGifOpts;
-  outputType?: OutputTypeEnum;
+  outputType?: IOutputTypeUnion;
 }
 
 export interface IGifOpts {
@@ -250,14 +251,14 @@ export class SuperImageCropper {
     ctx?.putImageData(croppedImageData, 0, 0);
 
     return new Promise((resolve, reject) => {
-      const { outputType = OutputTypeEnum.BLOB_URL } = this.inputCropperOptions;
+      const { outputType = OutputType.BLOB_URL } = this.inputCropperOptions;
 
-      if (outputType === OutputTypeEnum.BASE64) {
+      if (outputType === OutputType.BASE64) {
         resolve(canvas.toDataURL(this.imageTypeInfo?.mime));
       } else {
         canvas.toBlob((blob) => {
           if (!blob) return reject(null);
-          if (outputType === OutputTypeEnum.BLOB) {
+          if (outputType === OutputType.BLOB) {
             resolve(blob);
           } else {
             const blobUrl = window.URL.createObjectURL(blob);

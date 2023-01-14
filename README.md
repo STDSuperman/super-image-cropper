@@ -59,7 +59,10 @@ Recommend for use with [cropperjs](https://github.com/fengyuanchen/cropperjs).
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
   - `background`: GIF background color.
 - `gifJsOptions`: [gif.js](https://github.com/jnordberg/gif.js) options.
-
+- `outputType`: Set output type.
+  - `base64`: Output base64.
+  - `blob`: Output blob object.
+  - `blobURL`: Output blob url. (e.g: `blob:http://localhost:3000/8a583ca5-e87c-4750-93b0-da05f69b702a`)
 #### Working with cropperjs
 
 ```html
@@ -67,7 +70,7 @@ Recommend for use with [cropperjs](https://github.com/fengyuanchen/cropperjs).
 ```
 
 ```ts
-import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
+import { SuperImageCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 const image = document.getElementById('image') as HTMLImageElement;
@@ -87,7 +90,8 @@ const imageCropper = new SuperImageCropper();
 
 imageCropper.crop({
   cropperInstance: cropperInstance,
-  src: 'xxx.gif'
+  src: 'xxx.gif',
+  outputType: 'blobURL' // optional, default blob url
 }).then(blobUrl => {
   const img = document.createElement('img');
   img.src = blobUrl;

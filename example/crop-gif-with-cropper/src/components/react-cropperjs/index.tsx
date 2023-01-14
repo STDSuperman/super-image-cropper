@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Crop from 'react-cropper';
-import { SuperImageCropper, OutputTypeEnum } from '../../../../../packages/super-image-cropper';
+import { SuperImageCropper } from '../../../../../packages/super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
@@ -34,7 +34,7 @@ function ReactCropperjs() {
           // transparent: null
         },
         // eslint-disable-next-line
-        outputType: OutputTypeEnum.BLOB_URL
+        outputType: 'blobURL'
       }).then((blobUrl) => {
         setCroppedImageList(croppedImageList.concat(blobUrl as any));
         console.log('blobUrl', blobUrl);

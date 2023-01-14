@@ -1,14 +1,14 @@
 import { transformToUrl as gifWorkerTransformToUrl } from 'gif-build-worker-js';
 import GIF from 'gif.js';
 import { ICommonCropOptions, ICropperOptions } from '../index';
-import { OutputTypeEnum } from '../index';
+import { IOutputTypeUnion, OutputType } from '../index';
 
 export interface IFrameCropperProps {
   commonCropOptions: ICommonCropOptions;
   frames: ImageData[];
   frameDelays: number[];
   gifJsOptions?: ICropperOptions['gifJsOptions'];
-  outputType?: OutputTypeEnum;
+  outputType?: IOutputTypeUnion;
 }
 export class SyntheticGIF {
   private cropperJsOpts;
@@ -42,9 +42,9 @@ export class SyntheticGIF {
         )
       );
       gif.on('finished', (blob: Blob) => {
-        if (this.outputType === OutputTypeEnum.BLOB) {
+        if (this.outputType === OutputType.BLOB) {
           resolve(blob);
-        } else if (this.outputType === OutputTypeEnum.BASE64) {
+        } else if (this.outputType === OutputType.BASE64) {
           resolve(this.convertBlob2Base64(blob));
         } else {
           const blobUrl = window.URL.createObjectURL(blob);
