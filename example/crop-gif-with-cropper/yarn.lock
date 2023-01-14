@@ -274,13 +274,6 @@
     "@jridgewell/resolve-uri" "^3.0.3"
     "@jridgewell/sourcemap-codec" "^1.4.10"
 
-"@react-gifs/tools@^0.1.2":
-  version "0.1.2"
-  resolved "https://registry.npmmirror.com/@react-gifs/tools/-/tools-0.1.2.tgz#b2e2b03be1ba4d38d6d624c9d7f5b317f790fce3"
-  integrity sha512-KC4IXwoT/teTMlkLy8Qp6i/NlYx3kEJsPgRKlXwfTjjmhCLo2tCobnET2am0R7bB0KegDDTO7h10+NbBPRbs5A==
-  dependencies:
-    gifuct-js "^2.0.0"
-
 "@rollup/pluginutils@^4.2.1":
   version "4.2.1"
   resolved "https://registry.npmjs.org/@rollup/pluginutils/-/pluginutils-4.2.1.tgz#e6c6c3aba0744edce3fb2074922d3776c0af2a6d"
@@ -563,9 +556,9 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-gif-build-worker-js@^1.0.2:
+"gif-build-worker-js@workspace:*":
   version "1.0.2"
-  resolved "https://registry.npmjs.org/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
+  resolved "https://registry.npmmirror.com/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
   integrity sha512-LmWDYwHJ75dQgrwdfgGfN0H3BN1YGR2dvKIFVCK6JEs03ZBBwGBxLMydwWN/TbDi0DnagV202250VQ4DMTZIrA==
 
 gif.js@^0.2.0:
@@ -573,7 +566,7 @@ gif.js@^0.2.0:
   resolved "https://registry.npmjs.org/gif.js/-/gif.js-0.2.0.tgz#615e6e3788850cd3a20c85fe9f09539e784903e8"
   integrity sha512-bYxCoT8OZKmbxY8RN4qDiYuj4nrQDTzgLRcFVovyona1PTWNePzI4nzOmotnlOFIzTk/ZxAHtv+TfVLiBWj/hw==
 
-gifuct-js@^2.0.0, gifuct-js@^2.1.2:
+gifuct-js@^2.1.2:
   version "2.1.2"
   resolved "https://registry.npmjs.org/gifuct-js/-/gifuct-js-2.1.2.tgz#06152437ba30ec914db8398bd838bd0fbc8a6ecd"
   integrity sha512-rI2asw77u0mGgwhV3qA+OEgYqaDn5UNqgs+Bx0FGwSpuqfYn+Ir6RQY5ENNQ8SbIiG/m5gVa7CD5RriO4f4Lsg==
@@ -750,13 +743,11 @@ source-map-js@^1.0.2:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-super-image-cropper@1.0.9:
-  version "1.0.9"
-  resolved "https://registry.npmjs.org/super-image-cropper/-/super-image-cropper-1.0.9.tgz#fc3ada2943616536cfcec28fda3ef68bcb017365"
-  integrity sha512-q6W/ik0Zs3wv7fCye5MTtBgdxmhkzgLcoVqWH4Gk5VWyzO3wZXWWvzuqcjb3Wjn8X2Elb8Dec6a2unjwBCHPVA==
+super-image-cropper@../../packages/super-image-cropper:
+  version "1.0.13-beta.6"
   dependencies:
     cropperjs "^1.5.12"
-    gif-build-worker-js "^1.0.2"
+    gif-build-worker-js "workspace:*"
     gif.js "^0.2.0"
     gifuct-js "^2.1.2"
     image-type "^4.1.0"
