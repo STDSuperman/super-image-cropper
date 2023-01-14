@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Crop from 'react-cropper';
-import { SuperImageCropper, CustomCropper } from 'super-image-cropper';
+import { SuperImageCropper } from '../../../../../packages/super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
@@ -32,23 +32,12 @@ function ReactCropperjs() {
         },
         gifJsOptions: {
           // transparent: null
-        }
-      }).then((blobUrl: string) => {
-        // console.log(croppedImageList.concat(blobUrl));
-        setCroppedImageList(croppedImageList.concat(blobUrl));
-
-        // blob url to base64
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
-            const reader = new FileReader();
-            reader.onloadend = function() {
-                console.log('base64:', reader.result);
-            }
-            reader.readAsDataURL(xhr.response);
-        };
-        xhr.open('GET', blobUrl);
-        xhr.responseType = 'blob';
-        xhr.send();
+        },
+        // eslint-disable-next-line
+        outputType: 'blobURL'
+      }).then((blobUrl) => {
+        setCroppedImageList(croppedImageList.concat(blobUrl as any));
+        console.log('blobUrl', blobUrl);
       });
     },
     [croppedImageList, superImageCropperInstance, sourceImage]

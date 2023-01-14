@@ -556,7 +556,7 @@ gensync@^1.0.0-beta.2:
   resolved "https://registry.npmjs.org/gensync/-/gensync-1.0.0-beta.2.tgz#32a6ee76c3d7f52d46b2b1ae5d93fea8580a25e0"
   integrity sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==
 
-"gif-build-worker-js@workspace:*":
+gif-build-worker-js@^1.0.2:
   version "1.0.2"
   resolved "https://registry.npmmirror.com/gif-build-worker-js/-/gif-build-worker-js-1.0.2.tgz#b7217bb8cea0f06fbadfed94c3e2e5f70e57a16a"
   integrity sha512-LmWDYwHJ75dQgrwdfgGfN0H3BN1YGR2dvKIFVCK6JEs03ZBBwGBxLMydwWN/TbDi0DnagV202250VQ4DMTZIrA==
@@ -743,11 +743,13 @@ source-map-js@^1.0.2:
   resolved "https://registry.npmjs.org/source-map-js/-/source-map-js-1.0.2.tgz#adbc361d9c62df380125e7f161f71c826f1e490c"
   integrity sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==
 
-super-image-cropper@../../packages/super-image-cropper:
-  version "1.0.13-beta.6"
+super-image-cropper@1.0.9:
+  version "1.0.9"
+  resolved "https://registry.npmmirror.com/super-image-cropper/-/super-image-cropper-1.0.9.tgz#fc3ada2943616536cfcec28fda3ef68bcb017365"
+  integrity sha512-q6W/ik0Zs3wv7fCye5MTtBgdxmhkzgLcoVqWH4Gk5VWyzO3wZXWWvzuqcjb3Wjn8X2Elb8Dec6a2unjwBCHPVA==
   dependencies:
     cropperjs "^1.5.12"
-    gif-build-worker-js "workspace:*"
+    gif-build-worker-js "^1.0.2"
     gif.js "^0.2.0"
     gifuct-js "^2.1.2"
     image-type "^4.1.0"

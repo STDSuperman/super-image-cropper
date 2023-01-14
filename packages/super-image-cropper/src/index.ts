@@ -11,12 +11,20 @@ export interface CustomCropper extends Cropper {
   cropper?: HTMLDivElement
 }
 
+export enum OutputType {
+  BASE64 = 'base64',
+  BLOB = 'blob',
+  BLOB_URL = 'blobURL',
+}
+
+export type IOutputTypeUnion = `${OutputType}`;
 export interface ICropperOptions {
   cropperInstance?: CustomCropper | Cropper;
   src?: string;
   crossOrigin?: '' | 'anonymous' | 'use-credentials';
   cropperJsOpts?: ICropOpts;
   gifJsOptions?: IGifOpts;
+  outputType?: IOutputTypeUnion;
 }
 
 export interface IGifOpts {
@@ -71,7 +79,7 @@ export class SuperImageCropper {
 
   public async crop(
     inputCropperOptions: ICropperOptions
-  ): Promise<string> {
+  ): Promise<string | Blob> {
     this.inputCropperOptions = inputCropperOptions;
     await this.init();
     await this.decodeGIF();
@@ -112,7 +120,7 @@ export class SuperImageCropper {
     ;
 
     this.commonCropOptions = {
-      cropperJsOpts: this.cropDataInfoAdapter(targetConfig, imageData),
+      cropperJsOpts: this.imageDataFormat(targetConfig, imageData),
       imageData,
       cropBoxData: this.cropperJsInstance?.getCropBoxData() || targetConfig,
       withoutCropperJs: !this.cropperJsInstance
@@ -126,7 +134,7 @@ export class SuperImageCropper {
     // }
   }
 
-  private cropDataInfoAdapter(
+  private imageDataFormat(
     targetConfig: ICropOpts & Cropper.Data,
     imageData: IImageData
   ): Required<ICropOpts> {
@@ -207,7 +215,8 @@ export class SuperImageCropper {
       frames: resultFrames,
       commonCropOptions: this.commonCropOptions,
       frameDelays,
-      gifJsOptions: this.inputCropperOptions.gifJsOptions
+      gifJsOptions: this.inputCropperOptions.gifJsOptions,
+      outputType: this.inputCropperOptions.outputType,
     });
     return syntheticGIF.bootstrap();
   }
@@ -218,7 +227,7 @@ export class SuperImageCropper {
     return this.imageTypeInfo?.mime !== 'image/gif';
   }
 
-  private async handleStaticImage(): Promise<string> {
+  private async handleStaticImage(): Promise<string | Blob> {
     const imageInfo = await loadImage({
       src: this.inputCropperOptions.src,
       crossOrigin: this.inputCropperOptions.crossOrigin,
@@ -242,11 +251,21 @@ export class SuperImageCropper {
     ctx?.putImageData(croppedImageData, 0, 0);
 
     return new Promise((resolve, reject) => {
-      canvas.toBlob((blob) => {
-        if (!blob) return reject(null);
-        const blobUrl = window.URL.createObjectURL(blob);
-        resolve(blobUrl);
-      }, this.imageTypeInfo?.mime)
+      const { outputType = OutputType.BLOB_URL } = this.inputCropperOptions;
+
+      if (outputType === OutputType.BASE64) {
+        resolve(canvas.toDataURL(this.imageTypeInfo?.mime));
+      } else {
+        canvas.toBlob((blob) => {
+          if (!blob) return reject(null);
+          if (outputType === OutputType.BLOB) {
+            resolve(blob);
+          } else {
+            const blobUrl = window.URL.createObjectURL(blob);
+            resolve(blobUrl);
+          }
+        }, this.imageTypeInfo?.mime)
+      }
     })
   }
 }
