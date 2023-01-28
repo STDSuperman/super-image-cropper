@@ -6,7 +6,8 @@ import Cropper from 'cropperjs';
 const imgList = [
   '/dog.gif',
   '/kvy.jpg',
-  // '/test.gif'
+  '/UDy2.gif',
+  // '/test.gif'  
 ]
 
 let activeImageIndex = 0;

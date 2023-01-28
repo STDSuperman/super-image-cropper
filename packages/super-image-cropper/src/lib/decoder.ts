@@ -60,8 +60,9 @@ export class Decoder {
   ): ImageData[] {
     return frames.map((item, index) => {
       const frameDims = parsedFrames[index]?.dims;
+      const maxImageDataLength = frameDims.width * frameDims.height * 4;
       const image = new ImageData(frameDims.width, frameDims.height);
-      image.data.set(new Uint8ClampedArray(item));
+      image.data.set(new Uint8ClampedArray(item.slice(0, maxImageDataLength)));
       return image;
     })
   }
