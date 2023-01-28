@@ -77,15 +77,34 @@ const getBetaVersion = (curVersion: string): string => {
   return targetVersion;
 }
 
+const getCustomVersion = async (): Promise<string> => {
+  const { customVersion }: Record<'customVersion', string> = await prompt({
+    type: 'input',
+    name: 'customVersion',
+    message: 'Input custom version'
+  })
+
+  return `custom (${customVersion})`;
+}
+
 const selectTargetVersion = async (curVersion: string): Promise<string> => {
-  const { version }: Record<'version', string> = await prompt({
+  let { version }: Record<'version', string> = await prompt({
     type: 'select',
     name: 'version',
     message: 'Select release type',
     choices: RELEASE_TYPES
       .map(type => `${type} (${semver.inc(curVersion, type)})`)
-      .concat(`beta (${getBetaVersion(curVersion)})`)
+      .concat(
+        `beta (${getBetaVersion(curVersion)})`,
+        'custom'
+      )
   })
+
+  if (version === 'custom') {
+    const customVersion = await getCustomVersion();
+    version = customVersion || version;
+  }
+
   const releaseVersion = version?.match(/\((.*)\)/)?.[1] ?? '';
 
   if (semver.valid(releaseVersion)) {
@@ -137,7 +156,13 @@ const checkGitDiffAndCommit = async (
   
   if (!stdout) {
     Logger.warn('No commit changes found');
-    process.exit(0);
+    const { confirm }: Record<'confirm', string> = await prompt({
+      type: 'confirm',
+      name: 'confirm',
+      message: `No commit changes found. Continue publish?`,
+      initial: true,
+    })
+    !confirm && process.exit(0);
   }
 
   const { confirm }: Record<'confirm', string> = await prompt({
