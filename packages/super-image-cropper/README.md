@@ -59,10 +59,10 @@ Recommend for use with [cropperjs](https://github.com/fengyuanchen/cropperjs).
   - `scaleY`: the scaling factor to apply on the ordinate of the image.
   - `background`: GIF background color.
 - `gifJsOptions`: [gif.js](https://github.com/jnordberg/gif.js) options.
-- `outputType(default is blobURL)`: set output type.
-  - `base64`: output base64.
-  - `blob`: output blob object.
-  - `blobURL`: output blob url. (e.g: `blob:http://localhost:3000/8a583ca5-e87c-4750-93b0-da05f69b702a`)
+- `outputType`: Set output type.
+  - `base64`: Output base64.
+  - `blob`: Output blob object.
+  - `blobURL`: Output blob url. (e.g: `blob:http://localhost:3000/8a583ca5-e87c-4750-93b0-da05f69b702a`)
 #### Working with cropperjs
 
 ```html
