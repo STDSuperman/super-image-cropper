@@ -1,6 +1,6 @@
 {
   "name": "super-image-cropper",
-  "version": "1.0.15",
+  "version": "1.0.16",
   "main": "dist/index.js",
   "repository": "git@github.com:STDSuperman/super-image-cropper.git",
   "author": "STDSuperman <2750556766@qq.com>",
@@ -10,7 +10,12 @@
     "prebuild": "npm run clean",
     "build": "npm run clean && tsc",
     "dev": "tsc --watch",
-    "check": "tsc --noEmit"
+    "check": "tsc --noEmit",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
+  },
+  "publishConfig": {
+    "directory": "dist",
+    "linkDirectory": true
   },
   "devDependencies": {
     "@types/cropperjs": "^1.3.0",
@@ -22,7 +27,8 @@
     "prettier": "^2.3.2",
     "rimraf": "^3.0.2",
     "tslib": "^2.4.1",
-    "typescript": "^4.4.2"
+    "typescript": "^4.4.2",
+    "conventional-changelog-cli": "^2.2.2"
   },
   "dependencies": {
     "cropperjs": "^1.5.12",
