@@ -14,7 +14,8 @@
     "clean": "rimraf dist",
     "build": "turbo run build",
     "format": "prettier --check **/*.ts",
-    "release": "tsx ./scripts/release"
+    "release": "tsx ./scripts/release",
+    "changelog": "turbo run changelog --filter=gif-worker-js"
   },
   "devDependencies": {
     "@commitlint/cli": "^13.1.0",
