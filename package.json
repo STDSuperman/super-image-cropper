@@ -14,7 +14,6 @@
     "clean": "rimraf dist",
     "build": "turbo run build",
     "format": "prettier --check **/*.ts",
-    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s",
     "release": "tsx ./scripts/release"
   },
   "devDependencies": {
