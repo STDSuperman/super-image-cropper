@@ -4,6 +4,7 @@ import { SuperImageCropper } from '../../../../../packages/super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
+  '/black_cat.gif',
   '/dog.gif',
   '/kvy.jpg',
   '/UDy2.gif',
@@ -29,7 +30,7 @@ function ReactCropperjs() {
         cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
         cropperJsOpts: {
-          // background: "#fff",
+          background: "#000",
         },
         gifJsOptions: {
           // transparent: null

@@ -58,13 +58,21 @@ export class Decoder {
     frames: Uint8ClampedArray[],
     parsedFrames: ParsedFrame[],
   ): ImageData[] {
-    return frames.map((item, index) => {
-      const frameDims = parsedFrames[index]?.dims;
-      const maxImageDataLength = frameDims.width * frameDims.height * 4;
-      const image = new ImageData(frameDims.width, frameDims.height);
-      image.data.set(new Uint8ClampedArray(item.slice(0, maxImageDataLength)));
-      return image;
-    })
+    const maxDimsWidth = Math.max(...parsedFrames.map(item => item.dims.width))
+    const maxDimsHeight = Math.max(...parsedFrames.map(item => item.dims.height))
+    return frames
+      .map((item) => {
+        const maxImageDataLength = maxDimsWidth * maxDimsHeight * 4;
+        const image = new ImageData(maxDimsWidth, maxDimsHeight);
+
+        if (item.length > maxImageDataLength) {
+          return null;
+        } else {
+          image.data.set(item);
+          return image; 
+        }
+      })
+      .filter(item => !!item) as ImageData[];
   }
 
   /**
