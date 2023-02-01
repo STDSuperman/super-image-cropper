@@ -64,6 +64,7 @@ function ReactCropperjs() {
           cropperInstanceRef.current = instance;
         }}
       />
+      <div>Custom Image Url: <input onInput={(e: any) => setSourceImage(e.target.value)} className="image-input" /></div>
       <button onClick={() => onCrop()} className="btn">裁剪</button>
       <button onClick={() => {
         if (activeImageIndex >= imgList.length - 1) {

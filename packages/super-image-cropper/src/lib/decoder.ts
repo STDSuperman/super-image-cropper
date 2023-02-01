@@ -58,19 +58,14 @@ export class Decoder {
     frames: Uint8ClampedArray[],
     parsedFrames: ParsedFrame[],
   ): ImageData[] {
-    const maxDimsWidth = Math.max(...parsedFrames.map(item => item.dims.width))
-    const maxDimsHeight = Math.max(...parsedFrames.map(item => item.dims.height))
     return frames
-      .map((item) => {
-        const maxImageDataLength = maxDimsWidth * maxDimsHeight * 4;
-        const image = new ImageData(maxDimsWidth, maxDimsHeight);
-
-        if (item.length > maxImageDataLength) {
-          return null;
-        } else {
-          image.data.set(item);
-          return image; 
-        }
+      .map((item, index) => {
+        // https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif
+        const frameDims = parsedFrames[index]?.dims;
+        const options = this.parseGIF.lsd;
+        const image = new ImageData(options.width, options.height);
+        image.data.set(item);
+        return image;
       })
       .filter(item => !!item) as ImageData[];
   }
@@ -119,8 +114,8 @@ export class Decoder {
     return readyFrames;
   }
 
-  private putPixels(typedArray: any, frame: any, gifSize: any) {
-    if (!frame.dims) return;
+  private putPixels(typedArray: Uint8ClampedArray, frame: ParsedFrame, gifSize: ParsedGif['lsd']) {
+    if (!frame.dims) return typedArray;
     const { width, height, top: dy, left: dx } = frame.dims;
     const offset = dy * gifSize.width + dx;
     for (let y = 0; y < height; y++) {
@@ -133,7 +128,7 @@ export class Decoder {
         typedArray[taPos * 4] = color[0];
         typedArray[taPos * 4 + 1] = color[1];
         typedArray[taPos * 4 + 2] = color[2];
-        typedArray[taPos * 4 + 3] = 255;
+        typedArray[taPos * 4 + 3] = colorIndex !== frame.transparentIndex ? 255 : 0;
       }
     }
     return typedArray;

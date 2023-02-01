@@ -1,3 +1,8 @@
+.App {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
 .image-container {
   width: 100%;
   margin: 20px;
@@ -12,6 +17,7 @@
   overflow: hidden;
   margin: 10px;
   font-size: 0px;
+  text-align: center;
 }
 
 .image-container .item img {
@@ -38,4 +44,7 @@
   margin: 20px auto;
   display: block;
   cursor: pointer;
+}
+.image-input {
+  margin: 20px auto;
 }
