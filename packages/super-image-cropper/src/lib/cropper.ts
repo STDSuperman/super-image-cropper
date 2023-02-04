@@ -42,8 +42,11 @@ export class FrameCropper {
     let frameIdx = 0;
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
-      // 清理一下画板
-      this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
+      const currentFrameParseInfo = this.parsedFrames[frameIdx];
+      // disposalType 2 should clear canvas
+      if (currentFrameParseInfo.disposalType !== 1) {
+        this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
+      }
       // 添加gif背景颜色
       if(this.containerCtx.globalCompositeOperation && this.cropperJsOpts?.background) {
         this.containerCtx.fillStyle = this.cropperJsOpts?.background || "";

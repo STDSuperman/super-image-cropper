@@ -23,10 +23,7 @@ export class Decoder {
   public async decompressFrames(): Promise<IParsedFrameInfo> {
     if (!this.parseGIF) await this.decode();
     const parsedFrames = await decompressFrames(this.parseGIF, true);
-    const frames = this.generate2ImageData(
-      this.handlePixels(parsedFrames),
-      parsedFrames
-    );
+    const frames = this.generate2ImageData(parsedFrames);
     return {
       frames,
       delays: parsedFrames.map(item => item.delay),
@@ -55,19 +52,17 @@ export class Decoder {
    * @param frames 
    */
   private generate2ImageData(
-    frames: Uint8ClampedArray[],
     parsedFrames: ParsedFrame[],
   ): ImageData[] {
-    return frames
-      .map((item, index) => {
+    return parsedFrames
+      .map((item) => {
         // https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif
-        const frameDims = parsedFrames[index]?.dims;
+        const frameDims = item?.dims;
         const options = this.parseGIF.lsd;
-        const image = new ImageData(options.width, options.height);
-        image.data.set(item);
+        const image = new ImageData(frameDims.width, options.height);
+        image.data.set(item.patch);
         return image;
-      })
-      .filter(item => !!item) as ImageData[];
+      });
   }
 
   /**

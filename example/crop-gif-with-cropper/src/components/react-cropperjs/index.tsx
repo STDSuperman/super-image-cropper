@@ -8,7 +8,8 @@ const imgList = [
   '/dog.gif',
   '/kvy.jpg',
   '/UDy2.gif',
-  // '/test.gif'  
+  'https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif',
+  '/test.gif'  
 ]
 
 let activeImageIndex = 0;
@@ -36,10 +37,10 @@ function ReactCropperjs() {
           // transparent: null
         },
         // eslint-disable-next-line
-        outputType: 'blobURL'
-      }).then((blobUrl) => {
-        setCroppedImageList(croppedImageList.concat(blobUrl as any));
-        console.log('blobUrl', blobUrl);
+        outputType: 'base64'
+      }).then((base64Data) => {
+        setCroppedImageList(croppedImageList.concat(base64Data as any));
+        console.log('base64Data', base64Data);
       });
     },
     [croppedImageList, superImageCropperInstance, sourceImage]
