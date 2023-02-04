@@ -4,10 +4,12 @@ import { SuperImageCropper } from '../../../../../packages/super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
+  '/black_cat.gif',
   '/dog.gif',
   '/kvy.jpg',
   '/UDy2.gif',
-  // '/test.gif'  
+  'https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif',
+  '/test.gif'  
 ]
 
 let activeImageIndex = 0;
@@ -29,16 +31,16 @@ function ReactCropperjs() {
         cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
         cropperJsOpts: {
-          // background: "#fff",
+          background: "#000",
         },
         gifJsOptions: {
           // transparent: null
         },
         // eslint-disable-next-line
-        outputType: 'blobURL'
-      }).then((blobUrl) => {
-        setCroppedImageList(croppedImageList.concat(blobUrl as any));
-        console.log('blobUrl', blobUrl);
+        outputType: 'base64'
+      }).then((base64Data) => {
+        setCroppedImageList(croppedImageList.concat(base64Data as any));
+        console.log('base64Data', base64Data);
       });
     },
     [croppedImageList, superImageCropperInstance, sourceImage]
@@ -63,6 +65,7 @@ function ReactCropperjs() {
           cropperInstanceRef.current = instance;
         }}
       />
+      <div>Custom Image Url: <input onInput={(e: any) => setSourceImage(e.target.value)} className="image-input" /></div>
       <button onClick={() => onCrop()} className="btn">裁剪</button>
       <button onClick={() => {
         if (activeImageIndex >= imgList.length - 1) {

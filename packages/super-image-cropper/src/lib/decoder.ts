@@ -23,10 +23,7 @@ export class Decoder {
   public async decompressFrames(): Promise<IParsedFrameInfo> {
     if (!this.parseGIF) await this.decode();
     const parsedFrames = await decompressFrames(this.parseGIF, true);
-    const frames = this.generate2ImageData(
-      this.handlePixels(parsedFrames),
-      parsedFrames
-    );
+    const frames = this.generate2ImageData(parsedFrames);
     return {
       frames,
       delays: parsedFrames.map(item => item.delay),
@@ -55,16 +52,17 @@ export class Decoder {
    * @param frames 
    */
   private generate2ImageData(
-    frames: Uint8ClampedArray[],
     parsedFrames: ParsedFrame[],
   ): ImageData[] {
-    return frames.map((item, index) => {
-      const frameDims = parsedFrames[index]?.dims;
-      const maxImageDataLength = frameDims.width * frameDims.height * 4;
-      const image = new ImageData(frameDims.width, frameDims.height);
-      image.data.set(new Uint8ClampedArray(item.slice(0, maxImageDataLength)));
-      return image;
-    })
+    return parsedFrames
+      .map((item) => {
+        // https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif
+        const frameDims = item?.dims;
+        const options = this.parseGIF.lsd;
+        const image = new ImageData(frameDims.width, options.height);
+        image.data.set(item.patch);
+        return image;
+      });
   }
 
   /**
@@ -111,8 +109,8 @@ export class Decoder {
     return readyFrames;
   }
 
-  private putPixels(typedArray: any, frame: any, gifSize: any) {
-    if (!frame.dims) return;
+  private putPixels(typedArray: Uint8ClampedArray, frame: ParsedFrame, gifSize: ParsedGif['lsd']) {
+    if (!frame.dims) return typedArray;
     const { width, height, top: dy, left: dx } = frame.dims;
     const offset = dy * gifSize.width + dx;
     for (let y = 0; y < height; y++) {
@@ -125,7 +123,7 @@ export class Decoder {
         typedArray[taPos * 4] = color[0];
         typedArray[taPos * 4 + 1] = color[1];
         typedArray[taPos * 4 + 2] = color[2];
-        typedArray[taPos * 4 + 3] = 255;
+        typedArray[taPos * 4 + 3] = colorIndex !== frame.transparentIndex ? 255 : 0;
       }
     }
     return typedArray;

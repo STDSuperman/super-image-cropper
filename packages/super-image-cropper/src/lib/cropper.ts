@@ -42,8 +42,11 @@ export class FrameCropper {
     let frameIdx = 0;
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];
-      // 清理一下画板
-      this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
+      const currentFrameParseInfo = this.parsedFrames[frameIdx];
+      // disposalType 2 should clear canvas
+      if (currentFrameParseInfo.disposalType !== 1) {
+        this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
+      }
       // 添加gif背景颜色
       if(this.containerCtx.globalCompositeOperation && this.cropperJsOpts?.background) {
         this.containerCtx.fillStyle = this.cropperJsOpts?.background || "";
@@ -94,7 +97,40 @@ export class FrameCropper {
     const dims = this.parsedFrames[index]?.dims;
     this.convertCtx.clearRect(0, 0, this.convertorCanvas.width, this.convertorCanvas.height);
     this.convertCtx.putImageData(frame, dims.left, dims.top);
+
+    // debug
+    const isDebug = location.search.includes('isCropDebug=true')
+    isDebug && this.renderEachFrame(frame, index);
+
     return this.convertorCanvas;
+  }
+
+  private renderEachFrame(frame: ImageData, index: number): void {
+    const dims = this.parsedFrames[index]?.dims;
+    const eachCanvas = document.createElement('canvas');
+
+    // set w h
+    eachCanvas.width = this.convertorCanvas.width;
+    eachCanvas.height = this.convertorCanvas.height;
+
+    // put image
+    const ctx = eachCanvas.getContext('2d');
+    if (!ctx) return;
+    ctx?.putImageData(frame, dims.left, dims.top);
+
+    // write index
+    ctx.fillStyle = 'red'
+    ctx.strokeStyle = "blue";
+    ctx.lineWidth = 5;
+    ctx.save()
+    ctx.beginPath();
+    ctx.font = '70px orbitron'
+    ctx.fillText(String(index), 10, 50);
+    ctx.restore()
+    ctx.closePath();
+
+    // append to screen
+    document.body.appendChild(eachCanvas);
   }
 
   private setupCanvas() {
