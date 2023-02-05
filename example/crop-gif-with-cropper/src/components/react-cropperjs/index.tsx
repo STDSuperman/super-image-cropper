@@ -1,12 +1,12 @@
 import { useState, useEffect, useCallback, useRef } from 'react';
 import Crop from 'react-cropper';
-import { SuperImageCropper } from '../../../../../packages/super-image-cropper';
+import { SuperImageCropper } from 'super-image-cropper';
 import Cropper from 'cropperjs';
 
 const imgList = [
-  '/black_cat.gif',
   '/dog.gif',
   '/kvy.jpg',
+  '/black_cat.gif',
   '/UDy2.gif',
   'https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif',
   '/test.gif'  
@@ -39,7 +39,7 @@ function ReactCropperjs() {
         // eslint-disable-next-line
         outputType: 'base64'
       }).then((base64Data) => {
-        setCroppedImageList(croppedImageList.concat(base64Data as any));
+        setCroppedImageList(croppedImageList.concat(base64Data as string));
         console.log('base64Data', base64Data);
       });
     },

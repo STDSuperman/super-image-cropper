@@ -39,6 +39,7 @@ function PureCropperJs() {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
         src: targetGif,
+        outputType: 'base64',
         // cropperJsOpts: {
         //   width: 400,
         //   height: 240,
@@ -46,9 +47,9 @@ function PureCropperJs() {
         //   y: 0,
         //   x: 0,
         // }
-      }).then((blobUrl: string) => {
+      }).then((base64Data) => {
         // console.log(croppedImageList.concat(blobUrl));
-        setCroppedImageList(croppedImageList.concat(blobUrl));
+        setCroppedImageList(croppedImageList.concat(base64Data as string));
       });
     },
     [croppedImageList, superImageCropperInstance]
