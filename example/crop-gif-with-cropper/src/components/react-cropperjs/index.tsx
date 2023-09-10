@@ -33,10 +33,10 @@ function ReactCropperjs() {
         cropperJsOpts: {
           background: "#000",
           x: 100,
-          y: 10,
+          y: 100,
           width: 530,
           height: 530,
-          rotate: 140
+          rotate: 240
         },
         gifJsOptions: {
           // transparent: null
