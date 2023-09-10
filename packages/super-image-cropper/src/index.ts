@@ -126,16 +126,7 @@ export class SuperImageCropper {
       withoutCropperJs: !this.cropperJsInstance
     }
 
-    this.commonCropOptions.cropperJsOpts.rotate = this.normalizeRotate(this.commonCropOptions.cropperJsOpts.rotate)
-
-    /*
-      // ensure cropperInstance exist.
-      if (!this.inputCropperOptions.cropperInstance) {
-        this.cropperInstance = await this.createCropperInstance(this.cropperOptions);
-      } else {
-        this.cropperInstance = this.inputCropperOptions.cropperInstance;
-      }
-    */
+    this.commonCropOptions.cropperJsOpts.rotate = this.normalizeRotate(this.commonCropOptions.cropperJsOpts.rotate);
   }
 
   private normalizeRotate(rotation: number): number {
