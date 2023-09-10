@@ -72,8 +72,7 @@ export class FrameCropper {
   private transformFrame(canvasImageContainer: HTMLCanvasElement): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
-    const translateDirection = 1;
-    this.containerCtx.translate(this.containerCenterX * translateDirection, this.containerCenterY * translateDirection);
+    this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
     this.containerCtx.rotate((this.cropperJsOpts.rotate * Math.PI) / 180);
     this.containerCtx.scale(this.cropperJsOpts.scaleX, this.cropperJsOpts.scaleY);
 
