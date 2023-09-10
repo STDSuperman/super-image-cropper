@@ -72,7 +72,7 @@ export class FrameCropper {
   private transformFrame(canvasImageContainer: HTMLCanvasElement): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
-    const translateDirection = (this.cropperJsOpts.rotate % 360) >= 180 ? -1 : 1;
+    const translateDirection = 1;
     this.containerCtx.translate(this.containerCenterX * translateDirection, this.containerCenterY * translateDirection);
     this.containerCtx.rotate((this.cropperJsOpts.rotate * Math.PI) / 180);
     this.containerCtx.scale(this.cropperJsOpts.scaleX, this.cropperJsOpts.scaleY);
@@ -155,12 +155,12 @@ export class FrameCropper {
     const radian = (Math.PI / 180) * this.cropperJsOpts.rotate;
     const imageData = this.commonCropOptions.imageData;
     // 计算旋转后的容器宽高
-    const rotatedBoxWidth =
-      imageData.naturalWidth * Math.cos(radian) +
-      imageData.naturalHeight * Math.sin(radian);
-    const rotatedBoxHeight =
-      imageData.naturalHeight * Math.cos(radian) +
-      imageData.naturalWidth * Math.sin(radian);
+    const rotatedBoxWidth = imageData.naturalWidth;
+      // Math.abs(imageData.naturalWidth * Math.cos(radian)) +
+      // Math.abs(imageData.naturalHeight * Math.sin(radian));
+    const rotatedBoxHeight =  imageData.naturalHeight;
+      // Math.abs(imageData.naturalHeight * Math.cos(radian)) +
+      // Math.abs(imageData.naturalWidth * Math.sin(radian));
 
     // 计算偏移量
     this.offsetX = -Math.min(this.cropperJsOpts.x, 0);
