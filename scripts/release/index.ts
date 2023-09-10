@@ -71,7 +71,7 @@ const getBetaVersion = (curVersion: string): string => {
     const preVersion = +curVersion.split(betaKey)[1];
     targetVersion = curVersion.replace(/(-beta.)\d+/, `$1${preVersion + 1}`)
   } else {
-    targetVersion = `${curVersion + 1}-beta.0`
+    targetVersion = `${semver.inc(curVersion, ReleaseType.PATCH)}-beta.0`
   }
   
   return targetVersion;
