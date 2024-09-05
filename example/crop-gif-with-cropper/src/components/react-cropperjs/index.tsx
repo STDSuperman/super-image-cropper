@@ -8,7 +8,7 @@ const imgList = [
   '/kvy.jpg',
   '/black_cat.gif',
   '/UDy2.gif',
-  'https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif',
+  '/cat-rain.gif',
   '/test.gif'  
 ]
 
@@ -31,17 +31,16 @@ function ReactCropperjs() {
         // cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
         cropperJsOpts: {
-          background: "#000",
+          // background: "#000",
           x: 100,
           y: 100,
           width: 530,
           height: 530,
-          rotate: 240
+          // rotate: 240
         },
         gifJsOptions: {
           // transparent: null
         },
-        // eslint-disable-next-line
         outputType: 'blobURL'
       }).then((blob) => {
         setCroppedImageList(croppedImageList.concat(blob as string));

@@ -21,10 +21,10 @@ export class FrameCropper {
   private containerCenterY = 0;
   private resultFrames: ImageData[] = [];
   constructor(props: IFrameCropperProps) {
-    this.updateConfig(props);
+    this.init(props);
   }
 
-  public updateConfig({ commonCropOptions }: IFrameCropperProps) {
+  public init({ commonCropOptions }: IFrameCropperProps) {
     this.commonCropOptions = commonCropOptions;
     this.cropperJsOpts = commonCropOptions.cropperJsOpts;
     // 重置状态

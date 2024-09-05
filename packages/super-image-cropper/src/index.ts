@@ -80,7 +80,8 @@ export class SuperImageCropper {
   public async crop(
     inputCropperOptions: ICropperOptions
   ): Promise<string | Blob> {
-    this.inputCropperOptions = inputCropperOptions;
+    this.inputCropperOptions = this.cleanUserInput(inputCropperOptions);
+    this.userInputValidator(this.inputCropperOptions);
     await this.init();
     await this.decodeGIF();
     if (await this.checkIsStaticImage()) {
@@ -126,7 +127,91 @@ export class SuperImageCropper {
       withoutCropperJs: !this.cropperJsInstance
     }
 
-    this.commonCropOptions.cropperJsOpts.rotate = this.normalizeRotate(this.commonCropOptions.cropperJsOpts.rotate);
+    this.commonCropOptions.cropperJsOpts.rotate = this.normalizeRotate(
+      this.commonCropOptions.cropperJsOpts.rotate
+    );
+
+    console.log('origin', this.commonCropOptions, targetConfig)
+
+    // TODO: 测试
+    this.commonCropOptions = {
+      "cropperJsOpts": {
+          "width": 400.323,
+          "height": 240.323,
+          "scaleX": 1,
+          "scaleY": 1,
+          "x": 0,
+          "y": 0,
+          "rotate": 0,
+          "left": 0,
+          "top": 0
+      },
+      "imageData": {
+          "width": 256,
+          "height": 144,
+          "naturalWidth": 256,
+          "naturalHeight": 144
+      },
+      "cropBoxData": {
+          "width": 400.323,
+          "height": 240.323,
+          "scaleX": 1,
+          "scaleY": 1,
+          "x": 0,
+          "y": 0,
+          "rotate": 0,
+          "left": 0,
+          "top": 0
+      },
+      "withoutCropperJs": false
+  } as any;
+
+  this.commonCropOptions = {
+    "cropperJsOpts": {
+        "width": 227,
+        "height": 144,
+        "scaleX": 1,
+        "scaleY": 1,
+        "x": 0,
+        "y": 0,
+        "rotate": 0,
+        "left": 0,
+        "top": 0
+    },
+    "imageData": {
+        "naturalWidth": 256,
+        "naturalHeight": 144,
+        "aspectRatio": 1.7777777777777777,
+        "width": 942.2222222222222,
+        "height": 530,
+        "left": 0,
+        "top": 0
+    },
+    "cropBoxData": {},
+    "withoutCropperJs": false
+  } as any
+
+    console.log('this.commonCropOptions', this.commonCropOptions)
+  }
+
+  private cleanUserInput(cropperOptions: ICropperOptions) {
+    const { cropperInstance } = cropperOptions;
+    if (cropperInstance) {
+      delete cropperOptions['cropperJsOpts'];
+      delete cropperOptions['src']
+    }
+    return cropperOptions;
+  }
+
+  private userInputValidator(cropperOptions: ICropperOptions) {
+    const { cropperInstance, cropperJsOpts, src } = cropperOptions;
+    if (!cropperInstance) {
+      if (!cropperJsOpts) {
+        throw new Error('If cropperInstance is not specified, cropperJsOpts must be specified.')
+      } else if (!src) {
+        throw new Error('If cropperInstance is not specified, src must be specified.')
+      }
+    }
   }
 
   private normalizeRotate(rotation: number): number {
@@ -203,7 +288,7 @@ export class SuperImageCropper {
 
   private async cropFrames() {
     this.ensureFrameCropperExist();
-    this.frameCropperInstance.updateConfig({
+    this.frameCropperInstance.init({
       commonCropOptions: this.commonCropOptions
     });
     return this.frameCropperInstance.cropGif(this.parsedFrameInfo);
@@ -239,8 +324,8 @@ export class SuperImageCropper {
     ctx?.drawImage(imageInfo.imageInstance, 0, 0);
 
     this.ensureFrameCropperExist();
-    // 每次重新裁剪需要更新一下裁剪区域相关数据
-    this.frameCropperInstance.updateConfig({
+    // 每次重新裁剪需要初始化一下裁剪区域相关数据
+    this.frameCropperInstance.init({
       commonCropOptions: this.commonCropOptions
     });
     const croppedImageData = await this.frameCropperInstance.cropStaticImage(canvas);
