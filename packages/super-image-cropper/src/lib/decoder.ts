@@ -110,6 +110,7 @@ export class Decoder {
   }
 
   private putPixels(typedArray: Uint8ClampedArray, frame: ParsedFrame, gifSize: ParsedGif['lsd']) {
+    // 参考改造项目：https://github.com/Tz-george/webp2gif_demo/blob/master/src/App.vue
     if (!frame.dims) return typedArray;
     const { width, height, top: dy, left: dx } = frame.dims;
     const offset = dy * gifSize.width + dx;

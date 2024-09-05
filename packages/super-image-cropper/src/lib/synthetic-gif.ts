@@ -53,7 +53,7 @@ export class SyntheticGIF {
       });
 
       this.frames.forEach((frame, idx) => {
-        gif.addFrame(frame, { delay: this.frameDelays[idx] });
+        gif.addFrame(frame, { delay: this.frameDelays[idx], copy: true });
       });
 
       gif.render();

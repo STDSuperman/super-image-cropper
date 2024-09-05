@@ -39,6 +39,7 @@ export class FrameCropper {
     const { frames, parsedFrames } = parsedFrameInfo;
     this.frames = frames;
     this.parsedFrames = parsedFrames;
+    console.log(parsedFrameInfo)
     let frameIdx = 0;
     while (frameIdx < this.frames.length) {
       const currentFrame = this.frames[frameIdx];

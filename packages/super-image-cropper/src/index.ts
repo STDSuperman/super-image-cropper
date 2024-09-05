@@ -164,32 +164,32 @@ export class SuperImageCropper {
           "top": 0
       },
       "withoutCropperJs": false
-  } as any;
+    } as any;
 
-  this.commonCropOptions = {
-    "cropperJsOpts": {
-        "width": 227,
-        "height": 144,
-        "scaleX": 1,
-        "scaleY": 1,
-        "x": 0,
-        "y": 0,
-        "rotate": 0,
-        "left": 0,
-        "top": 0
-    },
-    "imageData": {
-        "naturalWidth": 256,
-        "naturalHeight": 144,
-        "aspectRatio": 1.7777777777777777,
-        "width": 942.2222222222222,
-        "height": 530,
-        "left": 0,
-        "top": 0
-    },
-    "cropBoxData": {},
-    "withoutCropperJs": false
-  } as any
+    this.commonCropOptions = {
+      "cropperJsOpts": {
+          "width": 256,
+          "height": 144,
+          "scaleX": 1,
+          "scaleY": 1,
+          "x": 0,
+          "y": 0,
+          "rotate": 0,
+          "left": 0,
+          "top": 0
+      },
+      "imageData": {
+          "naturalWidth": 256,
+          "naturalHeight": 144,
+          "aspectRatio": 1.7777777777777777,
+          "width": 942.2222222222222,
+          "height": 530,
+          "left": 0,
+          "top": 0
+      },
+      "cropBoxData": {},
+      "withoutCropperJs": false
+    } as any
 
     console.log('this.commonCropOptions', this.commonCropOptions)
   }
