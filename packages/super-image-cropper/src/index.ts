@@ -130,68 +130,6 @@ export class SuperImageCropper {
     this.commonCropOptions.cropperJsOpts.rotate = this.normalizeRotate(
       this.commonCropOptions.cropperJsOpts.rotate
     );
-
-    console.log('origin', this.commonCropOptions, targetConfig)
-
-    // TODO: 测试
-    this.commonCropOptions = {
-      "cropperJsOpts": {
-          "width": 400.323,
-          "height": 240.323,
-          "scaleX": 1,
-          "scaleY": 1,
-          "x": 0,
-          "y": 0,
-          "rotate": 0,
-          "left": 0,
-          "top": 0
-      },
-      "imageData": {
-          "width": 256,
-          "height": 144,
-          "naturalWidth": 256,
-          "naturalHeight": 144
-      },
-      "cropBoxData": {
-          "width": 400.323,
-          "height": 240.323,
-          "scaleX": 1,
-          "scaleY": 1,
-          "x": 0,
-          "y": 0,
-          "rotate": 0,
-          "left": 0,
-          "top": 0
-      },
-      "withoutCropperJs": false
-    } as any;
-
-    this.commonCropOptions = {
-      "cropperJsOpts": {
-          "width": 256,
-          "height": 144,
-          "scaleX": 1,
-          "scaleY": 1,
-          "x": 0,
-          "y": 0,
-          "rotate": 0,
-          "left": 0,
-          "top": 0
-      },
-      "imageData": {
-          "naturalWidth": 256,
-          "naturalHeight": 144,
-          "aspectRatio": 1.7777777777777777,
-          "width": 942.2222222222222,
-          "height": 530,
-          "left": 0,
-          "top": 0
-      },
-      "cropBoxData": {},
-      "withoutCropperJs": false
-    } as any
-
-    console.log('this.commonCropOptions', this.commonCropOptions)
   }
 
   private cleanUserInput(cropperOptions: ICropperOptions) {

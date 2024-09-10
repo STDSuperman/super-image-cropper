@@ -28,19 +28,19 @@ function ReactCropperjs() {
   const onCrop = useCallback(
     () => {
       superImageCropperInstance?.crop({
-        // cropperInstance: cropperInstanceRef.current,
+        cropperInstance: cropperInstanceRef.current,
         src: sourceImage,
-        cropperJsOpts: {
-          // background: "#000",
-          x: 100,
-          y: 100,
-          width: 530,
-          height: 530,
-          // rotate: 240
-        },
-        gifJsOptions: {
-          // transparent: null
-        },
+        // cropperJsOpts: {
+        //   // background: "#000",
+        //   x: 100,
+        //   y: 100,
+        //   width: 530,
+        //   height: 530,
+        //   // rotate: 240
+        // },
+        // gifJsOptions: {
+        //   // transparent: null
+        // },
         outputType: 'blobURL'
       }).then((blob) => {
         setCroppedImageList(croppedImageList.concat(blob as string));

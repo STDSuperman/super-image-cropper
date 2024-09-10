@@ -58,7 +58,13 @@ export class FrameCropper {
 
       // 裁剪转换当前帧
       if (!currentFrame) continue;
-      const imageData = this.transformFrame(this.drawImgDataToCanvas(currentFrame, frameIdx));
+      const imageData = this.transformFrame(
+        this.drawImgDataToCanvas(
+          currentFrame, 
+          frameIdx
+        ),
+        frameIdx
+      );
       this.resultFrames.push(imageData);
       frameIdx++;
     }
@@ -70,7 +76,7 @@ export class FrameCropper {
     return this.transformFrame(canvasImageContainer);
   }
 
-  private transformFrame(canvasImageContainer: HTMLCanvasElement): ImageData {
+  private transformFrame(canvasImageContainer: HTMLCanvasElement, index?: number): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
     this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
@@ -90,6 +96,9 @@ export class FrameCropper {
       this.cropperJsOpts.width,
       this.cropperJsOpts.height
     );
+
+    this.debugRender(imageData, index);
+
     return imageData;
   }
 
@@ -98,11 +107,13 @@ export class FrameCropper {
     this.convertCtx.clearRect(0, 0, this.convertorCanvas.width, this.convertorCanvas.height);
     this.convertCtx.putImageData(frame, dims.left, dims.top);
 
+    return this.convertorCanvas;
+  }
+
+  private debugRender(imageData: ImageData, index?: number) {
     // debug
     const isDebug = location.search.includes('isCropDebug=true')
-    isDebug && this.renderEachFrame(frame, index);
-
-    return this.convertorCanvas;
+    isDebug && index && this.renderEachFrame(imageData, index);
   }
 
   private renderEachFrame(frame: ImageData, index: number): void {
