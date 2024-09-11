@@ -39,7 +39,7 @@ export class Decoder {
   }
 
   /**
-   * 修复部分帧像素丢失
+   * Validates and fixes frames that have lost pixels.
    * @param gif 
    */
   private validateAndFixFrame = (gif:  any) => {
@@ -55,7 +55,7 @@ export class Decoder {
   };
 
   /**
-   * 包装生成 imageData
+   * Generates ImageData objects from parsed frames.
    * @param frames 
    */
   private generate2ImageData(
@@ -71,7 +71,7 @@ export class Decoder {
   }
 
   /**
-   * 转换被手动填充过样式的帧数据为图片数据
+   * Generates ImageData objects from frames with modified pixels.
    * @param frames 
    */
   private generate2ImageDataWithPixelsModified(
@@ -133,7 +133,6 @@ export class Decoder {
   }
 
   private putPixels(typedArray: Uint8ClampedArray, frame: ParsedFrame, gifSize: ParsedGif['lsd']) {
-    // 参考改造项目：https://github.com/Tz-george/webp2gif_demo/blob/master/src/App.vue
     if (!frame.dims) return typedArray;
     const { width, height, top: dy, left: dx } = frame.dims;
     const offset = dy * gifSize.width + dx;
