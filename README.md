@@ -16,7 +16,7 @@ Crop GIF / PNG / JPG / JPEG images using Javascript.
 
 - [Online Demo](https://gif-cropper-stdsuperman.vercel.app/)
 
-- CodeSandbox: [Use with cropperjs.](https://codesandbox.io/s/fragrant-field-rxvitm?file=/src/components/pure-cropperjs/index.tsx)
+- CodeSandbox: [Use with cropperjs.](https://codesandbox.io/p/github/STDSuperman/codesandbox-super-image-cropper/master?workspaceId=6d860bca-a1bd-4c35-9131-07f0c5450764)
 
 ### Preview
 
