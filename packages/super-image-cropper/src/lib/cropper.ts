@@ -62,9 +62,10 @@ export class FrameCropper {
           currentFrame, 
           frameIdx
         ),
-        frameIdx
       );
       this.resultFrames.push(imageData);
+      // debug
+      this.ifDebugRun(imageData, frameIdx);
       frameIdx++;
     }
 
@@ -75,7 +76,7 @@ export class FrameCropper {
     return this.transformFrame(canvasImageContainer);
   }
 
-  private transformFrame(canvasImageContainer: HTMLCanvasElement, index?: number): ImageData {
+  private transformFrame(canvasImageContainer: HTMLCanvasElement): ImageData {
     this.containerCtx.save();
     // 判断偏移方向
     this.containerCtx.translate(this.containerCenterX, this.containerCenterY);
@@ -96,8 +97,6 @@ export class FrameCropper {
       this.cropperJsOpts.height
     );
 
-    this.debugRender(imageData, index);
-
     return imageData;
   }
 
@@ -109,7 +108,7 @@ export class FrameCropper {
     return this.convertorCanvas;
   }
 
-  private debugRender(imageData: ImageData, index?: number) {
+  private ifDebugRun(imageData: ImageData, index?: number) {
     // debug
     const isDebug = location.search.includes('isCropDebug=true')
     isDebug && index && this.renderEachFrame(imageData, index);

@@ -80,8 +80,8 @@ export class SuperImageCropper {
   public async crop(
     inputCropperOptions: ICropperOptions
   ): Promise<string | Blob> {
+    this.userInputValidator(inputCropperOptions);
     this.inputCropperOptions = this.cleanUserInput(inputCropperOptions);
-    this.userInputValidator(this.inputCropperOptions);
     await this.init();
     await this.decodeGIF();
     if (await this.checkIsStaticImage()) {
