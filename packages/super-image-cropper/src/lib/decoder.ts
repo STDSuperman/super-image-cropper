@@ -23,7 +23,14 @@ export class Decoder {
   public async decompressFrames(): Promise<IParsedFrameInfo> {
     if (!this.parseGIF) await this.decode();
     const parsedFrames = await decompressFrames(this.parseGIF, true);
-    const frames = this.generate2ImageData(parsedFrames);
+    const frames = this.generate2ImageData(
+      parsedFrames
+    );
+    // const frames = this.generate2ImageDataWithPixelsModified(
+    //   this.handlePixels(parsedFrames),
+    //   parsedFrames
+    // )
+
     return {
       frames,
       delays: parsedFrames.map(item => item.delay),
@@ -32,7 +39,7 @@ export class Decoder {
   }
 
   /**
-   * 修复部分帧像素丢失
+   * Validates and fixes frames that have lost pixels.
    * @param gif 
    */
   private validateAndFixFrame = (gif:  any) => {
@@ -48,19 +55,35 @@ export class Decoder {
   };
 
   /**
-   * 包装生成 imageData
+   * Generates ImageData objects from parsed frames.
    * @param frames 
    */
   private generate2ImageData(
-    parsedFrames: ParsedFrame[],
+    parsedFrames: ParsedFrame[]
   ): ImageData[] {
     return parsedFrames
       .map((item) => {
-        // https://raw.githubusercontent.com/shanky-ced/StockWatchlist/main/trollge-we-do-a-little-trolling.gif
         const frameDims = item?.dims;
-        const options = this.parseGIF.lsd;
-        const image = new ImageData(frameDims.width, options.height);
+        const image = new ImageData(frameDims.width, frameDims.height);
         image.data.set(item.patch);
+        return image;
+      });
+  }
+
+  /**
+   * Generates ImageData objects from frames with modified pixels.
+   * @param frames 
+   */
+  private generate2ImageDataWithPixelsModified(
+    frames: Uint8ClampedArray[],
+    parsedFrames: ParsedFrame[]
+  ): ImageData[] {
+    return frames
+      .map((item, index) => {
+        const frameDims = parsedFrames[index]?.dims;
+        const lsd = this.parseGIF.lsd;
+        const image = new ImageData(lsd.width, lsd.height);
+        image.data.set(new Uint8ClampedArray(item));
         return image;
       });
   }
@@ -119,11 +142,17 @@ export class Decoder {
         const colorIndex = frame.pixels[pPos];
         const taPos = offset + y * gifSize.width + x;
         const color = frame.colorTable[colorIndex] || [0, 0, 0];
-        if (colorIndex === frame.transparentIndex) continue;
-        typedArray[taPos * 4] = color[0];
-        typedArray[taPos * 4 + 1] = color[1];
-        typedArray[taPos * 4 + 2] = color[2];
-        typedArray[taPos * 4 + 3] = colorIndex !== frame.transparentIndex ? 255 : 0;
+        if (colorIndex === frame.transparentIndex) {
+          typedArray[taPos * 4] = 0;
+          typedArray[taPos * 4 + 1] = 0;
+          typedArray[taPos * 4 + 2] = 0;
+          typedArray[taPos * 4 + 3] = 0;
+        } else {
+          typedArray[taPos * 4] = color[0];
+          typedArray[taPos * 4 + 1] = color[1];
+          typedArray[taPos * 4 + 2] = color[2];
+          typedArray[taPos * 4 + 3] = 255;
+        }
       }
     }
     return typedArray;

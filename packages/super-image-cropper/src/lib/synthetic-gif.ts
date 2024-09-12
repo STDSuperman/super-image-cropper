@@ -28,19 +28,18 @@ export class SyntheticGIF {
   public bootstrap(): Promise<string | Blob> {
     return new Promise((resolve, reject) => {
       const gifWorkerUrl = gifWorkerTransformToUrl();
-      const gif = new GIF(
-        Object.assign(
-          {
-            workers: 2,
-            quality: 10,
-            workerScript: gifWorkerUrl,
-            width: this.cropperJsOpts.width,
-            height: this.cropperJsOpts.height,
-            transparent: 'transparent',
-          },
-          this.gifJsOptions || {}
-        )
-      );
+      const gifOptions = Object.assign(
+        {
+          workers: 2,
+          quality: 10,
+          workerScript: gifWorkerUrl,
+          width: this.cropperJsOpts.width,
+          height: this.cropperJsOpts.height,
+          transparent: 'transparent',
+        },
+        this.gifJsOptions || {}
+      )
+      const gif = new GIF(gifOptions);
       gif.on('finished', (blob: Blob) => {
         if (this.outputType === OutputType.BLOB) {
           resolve(blob);
@@ -53,7 +52,7 @@ export class SyntheticGIF {
       });
 
       this.frames.forEach((frame, idx) => {
-        gif.addFrame(frame, { delay: this.frameDelays[idx] });
+        gif.addFrame(frame, { delay: this.frameDelays[idx], copy: true });
       });
 
       gif.render();

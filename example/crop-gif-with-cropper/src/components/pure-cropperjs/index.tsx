@@ -5,7 +5,7 @@ import Cropper from 'cropperjs';
 function PureCropperJs() {
   const cropperInstanceRef = useRef<Cropper>();
   const [targetGif] = useState(
-    '/dog.gif',
+    '/cat-rain.gif',
     // "/kvy.jpg"
   );
   const [superImageCropperInstance, setSuperImageCropperInstance] = useState<SuperImageCropper>();
@@ -38,12 +38,15 @@ function PureCropperJs() {
     () => {
       superImageCropperInstance?.crop({
         cropperInstance: cropperInstanceRef.current,
-        src: targetGif,
         outputType: 'base64',
+        gifJsOptions: {
+          // transparent: null,
+        },
+        // src: targetGif,
         // cropperJsOpts: {
-        //   width: 400,
-        //   height: 240,
-        //   rotate: 545,
+        //   width: 400.323,
+        //   height: 240.323,
+        //   // rotate: 545,
         //   y: 0,
         //   x: 0,
         // }
