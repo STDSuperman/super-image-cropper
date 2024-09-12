@@ -44,7 +44,7 @@ export class FrameCropper {
       const currentFrame = this.frames[frameIdx];
       const currentFrameParseInfo = this.parsedFrames[frameIdx];
       // disposalType 2 should clear canvas
-      if (currentFrameParseInfo.disposalType === 2) {
+      if (currentFrameParseInfo.disposalType !== 1) {
         this.containerCtx.clearRect(0, 0, this.containerCanvas.width, this.containerCanvas.height);
       }
       // 添加gif背景颜色

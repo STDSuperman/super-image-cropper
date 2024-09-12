@@ -6,8 +6,8 @@ import Cropper from 'cropperjs';
 const imgList = [
   '/dog.gif',
   '/kvy.jpg',
-  '/cat-rain.gif',
   '/black_cat.gif',
+  '/cat-rain.gif',
   '/UDy2.gif',
   '/test.gif'  
 ]
