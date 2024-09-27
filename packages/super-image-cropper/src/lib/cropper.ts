@@ -89,7 +89,7 @@ export class FrameCropper {
       -this.convertorCanvas.height / 2
     );
     this.containerCtx.restore();
-    const moveCropBoxDirection = this.commonCropOptions.withoutCropperJs ? -1 : 1;
+    const moveCropBoxDirection = 1;
     const imageData = this.containerCtx.getImageData(
       moveCropBoxDirection * this.cropperJsOpts.x + this.offsetX,
       moveCropBoxDirection * this.cropperJsOpts.y + this.offsetY,
