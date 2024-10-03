@@ -1,5 +1,5 @@
 import { parseGIF, decompressFrames, ParsedGif, ParsedFrame } from 'gifuct-js';
-import { GetArrTypeUnion } from './helper';
+import { GetArrTypeUnion } from './helper.js';
 
 export type IFrames = Pick<ParsedGif, 'frames'>['frames'];
 export type IFrame = GetArrTypeUnion<IFrames>;

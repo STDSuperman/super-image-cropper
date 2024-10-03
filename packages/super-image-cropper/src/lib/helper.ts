@@ -1,4 +1,4 @@
-import { IImageData } from '../index'
+import { IImageData } from '../index.js'
 import imageType from 'image-type'
 
 export type GetArrTypeUnion<T extends any[]> = T extends (infer I)[] ? I : never;
