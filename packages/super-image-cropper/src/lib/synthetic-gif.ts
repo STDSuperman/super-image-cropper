@@ -1,7 +1,7 @@
 import { transformToUrl as gifWorkerTransformToUrl } from 'gif-build-worker-js';
 import GIF from 'gif.js';
-import { ICommonCropOptions, ICropperOptions } from '../index';
-import { IOutputTypeUnion, OutputType } from '../index';
+import { ICommonCropOptions, ICropperOptions } from '../index.js';
+import { IOutputTypeUnion, OutputType } from '../index.js';
 
 export interface IFrameCropperProps {
   commonCropOptions: ICommonCropOptions;

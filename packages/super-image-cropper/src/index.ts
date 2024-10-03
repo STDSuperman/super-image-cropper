@@ -1,9 +1,9 @@
 import type Cropper from 'cropperjs';
-import { Decoder } from './lib/decoder';
-import { SyntheticGIF } from './lib/synthetic-gif';
-import { FrameCropper } from './lib/cropper';
-import { getImageInfo, loadImage, getImageType, IImageTypeInfo } from './lib/helper';
-import type { IParsedFrameInfo } from './lib/decoder';
+import { Decoder } from './lib/decoder.js';
+import { SyntheticGIF } from './lib/synthetic-gif.js';
+import { FrameCropper } from './lib/cropper.js';
+import { getImageInfo, loadImage, getImageType, IImageTypeInfo } from './lib/helper.js';
+import type { IParsedFrameInfo } from './lib/decoder.js';
 export interface CustomCropper extends Cropper {
   url: '';
   cropBoxData: Cropper.ImageData;

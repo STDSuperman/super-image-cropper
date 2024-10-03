@@ -1,6 +1,6 @@
-import { ICommonCropOptions, ICropOpts } from '../index';
+import { ICommonCropOptions, ICropOpts } from '../index.js';
 import { ParsedFrame } from 'gifuct-js';
-import type { IParsedFrameInfo } from './decoder';
+import type { IParsedFrameInfo } from './decoder.js';
 
 export interface IFrameCropperProps {
   commonCropOptions: ICommonCropOptions;

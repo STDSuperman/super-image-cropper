@@ -1,7 +1,7 @@
 {
   "name": "super-image-cropper",
   "version": "1.0.21",
-  "main": "dist/index.js",
+  "main": "./dist/commonjs/index.js",
   "repository": "git@github.com:STDSuperman/super-image-cropper.git",
   "author": "STDSuperman <2750556766@qq.com>",
   "license": "MIT",
@@ -11,8 +11,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "prebuild": "npm run clean",
-    "build": "npm run clean && tsc",
+    "prepare": "tshy",
     "dev": "tsc --watch",
     "check": "tsc --noEmit",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
@@ -36,5 +35,27 @@
     "gif.js": "^0.2.0",
     "gifuct-js": "^2.1.2",
     "image-type": "^4.1.0"
-  }
+  },
+  "type": "module",
+  "tshy": {
+    "exports": {
+      "./package.json": "./package.json",
+      ".": "./src/index.ts"
+    }
+  },
+  "exports": {
+    "./package.json": "./package.json",
+    ".": {
+      "import": {
+        "types": "./dist/esm/index.d.ts",
+        "default": "./dist/esm/index.js"
+      },
+      "require": {
+        "types": "./dist/commonjs/index.d.ts",
+        "default": "./dist/commonjs/index.js"
+      }
+    }
+  },
+  "types": "./dist/commonjs/index.d.ts",
+  "module": "./dist/esm/index.js"
 }

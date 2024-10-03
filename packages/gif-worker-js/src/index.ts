@@ -1,4 +1,4 @@
-import worker from './lib/gif.worker';
+import worker from './lib/gif.worker.js';
 
 export const transformToUrl = (): string => {
   const gifWorker2Blob = new Blob([GifWorker], {
