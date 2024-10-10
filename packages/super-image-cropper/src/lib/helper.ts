@@ -5,6 +5,7 @@ export type GetArrTypeUnion<T extends any[]> = T extends (infer I)[] ? I : never
 export type IImageLoadData = {
   imageInstance: HTMLImageElement;
   data: Event
+  imageType: IImageTypeInfo | null;
 }
 export interface IImageTypeInfo {
   ext: string;
@@ -33,6 +34,11 @@ export const getImageInfo = async (params: IGetImageParams): Promise<IImageData>
     };
 }
 
+export const getImageType = async (imageBufferData: ArrayBuffer): Promise<IImageTypeInfo | null> => {
+  const imageTypeInfo = imageType(new Uint8Array(imageBufferData));
+  return imageTypeInfo;
+}
+
 export const loadImage = (params: IGetImageParams): Promise<IImageLoadData> => {
   const { src = '', crossOrigin } = params;
   return new Promise((resolve, reject) => {
@@ -40,15 +46,37 @@ export const loadImage = (params: IGetImageParams): Promise<IImageLoadData> => {
     if (typeof crossOrigin !== 'undefined') {
       image.crossOrigin = crossOrigin;
     }
-    image.onload = function(data) {
+    image.onload = async (data) => {
       resolve({
         imageInstance: image,
-        data
+        data,
+        imageType: await getImageType(await transformImageData2ArrayBuffer(image))
       })
     }
     image.src = src;
     image.onerror = reject;
   })
+}
+
+export const transformImageData2ArrayBuffer = (image: HTMLImageElement) => {
+  const canvas = document.createElement('canvas');
+  canvas.width = image.width;
+  canvas.height = image.height;
+  const ctx = canvas.getContext('2d');
+  ctx?.drawImage(image, 0, 0);
+
+  const dataUrl = canvas.toDataURL();
+  const base64Data = dataUrl.split(',')[1];
+  const binaryData = atob(base64Data);
+  const len = binaryData.length;
+  const bytes = new Uint8Array(len);
+  
+  for (let i = 0; i < len; i++) {
+      bytes[i] = binaryData.charCodeAt(i);
+  }
+
+  return bytes.buffer;
+
 }
 
 export const getImageBufferFromRemote = (url: string = ''): Promise<ArrayBuffer> => {
@@ -64,10 +92,4 @@ export const getImageBufferFromRemote = (url: string = ''): Promise<ArrayBuffer>
 
     xhr.send();
   })
-}
-
-export const getImageType = async (url: string = ''): Promise<IImageTypeInfo | null> => {
-  const imageBufferData = await getImageBufferFromRemote(url);
-  const imageTypeInfo = imageType(new Uint8Array(imageBufferData));
-  return imageTypeInfo;
 }
