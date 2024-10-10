@@ -81,8 +81,10 @@ export class SuperImageCropper {
     this.inputCropperOptions = this.cleanUserInput(inputCropperOptions);
     await this.init();
     await this.decodeGIF();
-    if (await this.checkIsStaticImage()) {
-      return this.handleStaticImage()
+    
+    const checkResult = await this.checkIsStaticImage();
+    if (checkResult.isStatic) {
+      return this.handleStaticImage(checkResult.imageInfo.imageInstance)
     } else {
       const resultFrames = await this.cropFrames();
       return this.saveGif(resultFrames, this.parsedFrameInfo?.delays || []);
@@ -196,23 +198,25 @@ export class SuperImageCropper {
     return syntheticGIF.bootstrap();
   }
 
-  private async checkIsStaticImage(): Promise<boolean> {
+  private async checkIsStaticImage() {
     const url = this.cropperJsInstance?.url ?? this.inputCropperOptions?.src;
-    this.imageTypeInfo = await getImageType(url);
-    return this.imageTypeInfo?.mime !== 'image/gif';
-  }
-
-  private async handleStaticImage(): Promise<string | Blob> {
     const imageInfo = await loadImage({
-      src: this.inputCropperOptions.src,
+      src: url,
       crossOrigin: this.inputCropperOptions.crossOrigin,
     });
+    return {
+      isStatic: imageInfo?.imageType?.mime !== 'image/gif',
+      imageInfo,
+    };
+  }
+
+  private async handleStaticImage(imageInstance: HTMLImageElement): Promise<string | Blob> {
     const canvas = document.createElement('canvas');
     const ctx = canvas.getContext('2d');
 
-    canvas.width = imageInfo.imageInstance.width;
-    canvas.height = imageInfo.imageInstance.height;
-    ctx?.drawImage(imageInfo.imageInstance, 0, 0);
+    canvas.width = imageInstance.width;
+    canvas.height = imageInstance.height;
+    ctx?.drawImage(imageInstance, 0, 0);
 
     this.ensureFrameCropperExist();
     // 每次重新裁剪需要初始化一下裁剪区域相关数据
