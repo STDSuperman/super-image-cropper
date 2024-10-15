@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "ESNext",
     "useDefineForClassFields": true,
     "lib": ["DOM", "ESNext", "WebWorker"],
     "allowJs": false,

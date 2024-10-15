@@ -11,7 +11,7 @@
     "format:fix": "prettier --write **/*.ts",
     "husky-pre-commit": "husky set .husky/_/pre-commit 'npm run test'",
     "husky-commit-msg": "husky set .husky/_/commit-msg 'npm run commitlint --edit $1'",
-    "clean": "rimraf dist",
+    "clean": "turbo run clean",
     "build": "turbo run build",
     "format": "prettier --check **/*.ts",
     "release": "tsx ./scripts/release",

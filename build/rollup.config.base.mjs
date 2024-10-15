@@ -15,13 +15,14 @@ export const generateRollupConfig = (props) => {
     {
       input,
       output: {
-        file: `${cjsOutput}/index.js`,
+        dir: cjsOutput,
         format: 'cjs',
         sourcemap: true,
+        preserveModules: true,
+        preserveModulesRoot: 'src',
       },
       plugins: [
         del({ targets: `${cjsOutput}/*` }),
-        resolve(),
         commonjs(),
         typescript(),
         terser(),
@@ -31,13 +32,14 @@ export const generateRollupConfig = (props) => {
     {
       input,
       output: {
-        file: `${esmOutput}/index.js`,
-        format: 'esm',
+        dir: esmOutput,
+        format: 'es',
         sourcemap: true,
+        preserveModules: true,
+        preserveModulesRoot: 'src',
       },
       plugins: [
         del({ targets: `${esmOutput}/*` }),
-        resolve(),
         commonjs(),
         typescript(),
         terser(),
