@@ -17,6 +17,7 @@
   },
   "files": [
     "dist",
+    "esm",
     "package.json"
   ],
   "repository": "git@github.com:STDSuperman/super-image-cropper.git",
