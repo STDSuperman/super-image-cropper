@@ -39,23 +39,30 @@ export const getImageType = async (imageBufferData: ArrayBuffer): Promise<IImage
   return imageTypeInfo;
 }
 
-export const loadImage = (params: IGetImageParams): Promise<IImageLoadData> => {
+export const loadImage = async (params: IGetImageParams): Promise<IImageLoadData> => {
   const { src = '', crossOrigin } = params;
-  return new Promise((resolve, reject) => {
+  const imageInfo = await new Promise<Omit<IImageLoadData, 'imageType'>>((resolve, reject) => {
     const image = new Image();
     if (typeof crossOrigin !== 'undefined') {
       image.crossOrigin = crossOrigin;
     }
     image.onload = async (data) => {
+      console.log(data)
       resolve({
         imageInstance: image,
         data,
-        imageType: await getImageType(await transformImageData2ArrayBuffer(image))
       })
     }
     image.src = src;
     image.onerror = reject;
   })
+
+  const imageType = await getImageType(await getImageBufferFromRemote(src));
+
+  return {
+    ...imageInfo,
+    imageType
+  }
 }
 
 export const transformImageData2ArrayBuffer = (image: HTMLImageElement) => {
@@ -66,6 +73,7 @@ export const transformImageData2ArrayBuffer = (image: HTMLImageElement) => {
   ctx?.drawImage(image, 0, 0);
 
   const dataUrl = canvas.toDataURL();
+  console.log(dataUrl)
   const base64Data = dataUrl.split(',')[1];
   const binaryData = atob(base64Data);
   const len = binaryData.length;
