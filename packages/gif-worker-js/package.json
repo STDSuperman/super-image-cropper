@@ -1,16 +1,38 @@
 {
   "name": "gif-build-worker-js",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "dist/index.js",
+  "module": "esm/index.js",
+  "type": "module",
+  "types": "esm/index.d.ts",
+  "exports": {
+    "import": {
+      "types": "./esm/index.d.ts",
+      "default": "./esm/index.js"
+    },
+    "require": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "esm",
+    "package.json"
+  ],
   "license": "MIT",
   "scripts": {
-    "build": "tsc",
+    "build": "rollup -c",
     "clean": "rimraf dist",
+    "dev": "tsc --watch",
     "prebuild": "npm run clean",
     "prepublish": "npm run build"
   },
   "devDependencies": {
     "rimraf": "^3.0.2",
     "typescript": "^4.5.5"
+  },
+  "dependencies": {
+    "rollup": "^4.24.0"
   }
 }

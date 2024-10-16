@@ -11,7 +11,7 @@
     "format:fix": "prettier --write **/*.ts",
     "husky-pre-commit": "husky set .husky/_/pre-commit 'npm run test'",
     "husky-commit-msg": "husky set .husky/_/commit-msg 'npm run commitlint --edit $1'",
-    "clean": "rimraf dist",
+    "clean": "turbo run clean",
     "build": "turbo run build",
     "format": "prettier --check **/*.ts",
     "release": "tsx ./scripts/release",
@@ -51,5 +51,12 @@
     "commitizen": {
       "path": "node_modules/cz-customizable"
     }
+  },
+  "dependencies": {
+    "rollup": "^4.24.0",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-delete": "^2.1.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.36.0"
   }
 }
