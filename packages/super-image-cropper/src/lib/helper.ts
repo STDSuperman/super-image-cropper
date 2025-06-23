@@ -47,7 +47,6 @@ export const loadImage = async (params: IGetImageParams): Promise<IImageLoadData
       image.crossOrigin = crossOrigin;
     }
     image.onload = async (data) => {
-      console.log(data)
       resolve({
         imageInstance: image,
         data,
@@ -73,7 +72,6 @@ export const transformImageData2ArrayBuffer = (image: HTMLImageElement) => {
   ctx?.drawImage(image, 0, 0);
 
   const dataUrl = canvas.toDataURL();
-  console.log(dataUrl)
   const base64Data = dataUrl.split(',')[1];
   const binaryData = atob(base64Data);
   const len = binaryData.length;
