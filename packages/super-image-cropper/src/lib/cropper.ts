@@ -150,7 +150,7 @@ export class FrameCropper {
     containerCanvas.style.display = 'none';
     convertorCanvas.style.display = 'none';
 
-    const containerCtx = containerCanvas.getContext('2d');
+    const containerCtx = containerCanvas.getContext('2d', { willReadFrequently: true });
     const convertCtx = convertorCanvas.getContext('2d');
     containerCtx && (this.containerCtx = containerCtx);
     convertCtx && (this.convertCtx = convertCtx);
