@@ -1,10 +1,43 @@
 {
   "name": "super-image-cropper",
-  "version": "1.0.24",
+  "version": "1.0.27",
+  "description": "A powerful JavaScript image cropping library that supports GIF animations, PNG, JPG and other formats with CropperJS integration. Perfect for web developers who need to crop animated GIFs while preserving animation quality.",
   "main": "dist/index.js",
   "module": "esm/index.js",
   "type": "module",
   "types": "esm/index.d.ts",
+  "keywords": [
+    "image",
+    "cropper",
+    "gif",
+    "animation",
+    "crop",
+    "cropperjs",
+    "image-processing",
+    "canvas",
+    "javascript",
+    "typescript",
+    "web",
+    "browser",
+    "png",
+    "jpg",
+    "jpeg",
+    "image-editor",
+    "image-manipulation",
+    "frontend",
+    "react",
+    "vue",
+    "angular",
+    "gif-cropper",
+    "animated-gif",
+    "image-cropping",
+    "photo-editor",
+    "web-components"
+  ],
+  "homepage": "https://gif-cropper-stdsuperman.vercel.app/",
+  "bugs": {
+    "url": "https://github.com/STDSuperman/super-image-cropper/issues"
+  },
   "exports": {
     "import": {
       "types": "./esm/index.d.ts",
@@ -20,7 +53,10 @@
     "esm",
     "package.json"
   ],
-  "repository": "git@github.com:STDSuperman/super-image-cropper.git",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/STDSuperman/super-image-cropper.git"
+  },
   "author": "STDSuperman <2750556766@qq.com>",
   "license": "MIT",
   "scripts": {
