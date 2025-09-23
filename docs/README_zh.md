@@ -1,4 +1,8 @@
+<div align="center">
+
 # 🖼️ Super Image Cropper
+
+</div>
 
 <div align="center">
 
