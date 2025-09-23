@@ -6,7 +6,7 @@ A powerful JavaScript image cropping library that supports GIF animations, PNG, 
 
 [![npm version](https://img.shields.io/npm/v/super-image-cropper)](https://www.npmjs.com/package/super-image-cropper) [![npm downloads](https://img.shields.io/npm/dw/super-image-cropper)](https://www.npmjs.com/package/super-image-cropper) [![GitHub license](https://img.shields.io/github/license/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/blob/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/stargazers) [![GitHub issues](https://img.shields.io/github/issues/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/issues) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-[🌟 Live Demo](https://gif-cropper-stdsuperman.vercel.app/) | [📖 Documentation](#documentation) | [🚀 Quick Start](#quick-start) | [🇨🇳 中文文档](./docs/README_zh.md)
+[🌟 Live Demo](https://gif-cropper-stdsuperman.vercel.app/) | [📖 Documentation](#documentation) | [🇨🇳 中文文档](./docs/README_zh.md)
 
 </div>
 

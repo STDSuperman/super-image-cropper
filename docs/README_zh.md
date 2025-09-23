@@ -6,7 +6,7 @@
 
 [![npm version](https://img.shields.io/npm/v/super-image-cropper)](https://www.npmjs.com/package/super-image-cropper) [![npm downloads](https://img.shields.io/npm/dw/super-image-cropper)](https://www.npmjs.com/package/super-image-cropper) [![GitHub license](https://img.shields.io/github/license/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/blob/master/LICENSE) [![GitHub stars](https://img.shields.io/github/stars/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/stargazers) [![GitHub issues](https://img.shields.io/github/issues/STDSuperman/super-image-cropper)](https://github.com/STDSuperman/super-image-cropper/issues) [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-[🌟 在线演示](https://gif-cropper-stdsuperman.vercel.app/) | [📖 文档](#文档) | [🚀 快速开始](#快速开始) | [🇺🇸 English](../README.md)
+[🌟 在线演示](https://gif-cropper-stdsuperman.vercel.app/) | [📖 文档](#文档) | [🇺🇸 English](../README.md)
 
 </div>
 
